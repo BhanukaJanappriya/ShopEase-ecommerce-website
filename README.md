@@ -74,6 +74,7 @@ ShopEase/
 │   └── js/
 │       └── script.js (Assuming you'll add JavaScript here)
 ├── index.html
+├── blog.html
 └── README.md
 ```
 
