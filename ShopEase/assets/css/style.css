@@ -891,6 +891,7 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 h2, p{
   color: #fff;
+  font-family: 'poppins', sans-serif;
 }
 
 #blog{
