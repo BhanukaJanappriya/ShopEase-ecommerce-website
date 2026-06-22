@@ -86,3 +86,61 @@ for (let i = 0; i < accordionBtn.length; i++) {
   });
 
 }
+
+// --- Animation on Scroll ---
+const revealElements = document.querySelectorAll('.banner, .category, .product-main, .showcase, .blog-card, .sidebar, .product-minimal, .testimonial-card, .cta-container, .service-container');
+
+const revealOptions = {
+  threshold: 0.1,
+  rootMargin: "0px 0px -50px 0px"
+};
+
+const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) {
+      return;
+    } else {
+      entry.target.classList.add("aos-active");
+      observer.unobserve(entry.target);
+    }
+  });
+}, revealOptions);
+
+revealElements.forEach(el => {
+  el.classList.add("aos-init");
+  revealOnScroll.observe(el);
+});
+
+// --- Countdown Timer ---
+const countdownElements = document.querySelectorAll('.countdown');
+
+countdownElements.forEach(countdown => {
+  const displayNumbers = countdown.querySelectorAll('.display-number');
+  
+  if (displayNumbers.length === 4) {
+    let days = parseInt(displayNumbers[0].textContent, 10);
+    let hours = parseInt(displayNumbers[1].textContent, 10);
+    let minutes = parseInt(displayNumbers[2].textContent, 10);
+    let seconds = parseInt(displayNumbers[3].textContent, 10);
+
+    let totalSeconds = days * 86400 + hours * 3600 + minutes * 60 + seconds;
+
+    const timer = setInterval(() => {
+      if (totalSeconds <= 0) {
+        clearInterval(timer);
+        return;
+      }
+      totalSeconds--;
+
+      const d = Math.floor(totalSeconds / 86400);
+      const h = Math.floor((totalSeconds % 86400) / 3600);
+      const m = Math.floor((totalSeconds % 3600) / 60);
+      const s = totalSeconds % 60;
+
+      displayNumbers[0].textContent = d;
+      displayNumbers[1].textContent = h < 10 ? '0' + h : h;
+      displayNumbers[2].textContent = m < 10 ? '0' + m : m;
+      displayNumbers[3].textContent = s < 10 ? '0' + s : s;
+    }, 1000);
+  }
+});
