@@ -4,7 +4,7 @@ Here's a `README.md` file description for your ShopEase e-commerce website, form
 
 # ShopEase 🛍️
 
-**ShopEase** is a modern and responsive e-commerce website built using HTML, CSS, and JavaScript. It provides a seamless shopping experience for users, featuring a clean design and essential functionalities. Testing YOLO achievement
+**ShopEase** is a modern and responsive e-commerce website built using HTML, CSS, and JavaScript. It provides a seamless shopping experience for users, featuring a clean design and essential functionalities.
 
 -----
 
