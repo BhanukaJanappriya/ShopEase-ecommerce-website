@@ -1,5 +1,11 @@
 # ShopEase 🛍️
 
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![E-Commerce](https://img.shields.io/badge/E--Commerce-FF69B4?style=for-the-badge&logo=shopify&logoColor=white)](#)
+[![Responsive](https://img.shields.io/badge/Responsive--Design-blueviolet?style=for-the-badge)](#)
+
 **ShopEase** is a modern, premium, and fully responsive e-commerce website built using HTML, CSS, and JavaScript. Featuring a curated pink-themed aesthetic, sleek glassmorphic UI elements, interactive checkout systems, and a complete blogging platform, it delivers a state-of-the-art online shopping demonstration.
 
 ---
