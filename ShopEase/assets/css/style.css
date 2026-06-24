@@ -941,140 +941,225 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 
 /* ------Blog CSS------ */
-.blog-header{
-  background-image: url(/assets/images/banner/b19.jpg);
+.blog-header {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(../images/banner/b19.jpg);
   width: 100%;
-  height: 40vh;
+  height: 35vh;
   background-size: cover;
+  background-position: center;
   display: flex;
   justify-content: center;
+  align-items: center;
   text-align: center;
   flex-direction: column;
-  padding: 14px;
-  
+  padding: 20px;
 }
 
-h2, p{
-  color: #fff;
-  font-family: 'poppins', sans-serif;
+.blog-header h2 {
+  font-size: var(--fs-1);
+  font-weight: 800;
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
 }
 
-#blog{
-  padding: 150px 150px 0px 150px;
-
+.blog-header p {
+  font-size: var(--fs-6);
+  color: #ddd;
+  font-weight: 400;
 }
-#blog .blog-box{
+
+/* Redesigned Blog Grid Section */
+.blog-container {
+  padding: 60px 150px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.blog-post-card {
+  background: var(--white);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--cultured);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.blog-post-img-box {
+  position: relative;
+  overflow: hidden;
+}
+
+.blog-post-img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.blog-post-card:hover .blog-post-img {
+  transform: scale(1.08);
+}
+
+.blog-post-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: var(--salmon-pink);
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: var(--border-radius-sm);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.5px;
+}
+
+.blog-post-content {
+  padding: 25px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-post-meta {
   display: flex;
   align-items: center;
-  width: 100%;
-  position: relative;
-  padding-bottom: 90px;
+  font-size: var(--fs-9);
+  color: var(--sonic-silver);
+  margin-bottom: 12px;
+  font-weight: 500;
 }
 
-#blog .blog-img{
-  width: 50%;
-  margin-right: 4rem;
+.blog-post-meta .meta-dot {
+  margin: 0 8px;
+  color: var(--salmon-pink);
 }
 
-#blog img{
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-}
-#blog p{
-  color: grey;
-}
-
-#blog .blog-details{
-  width: 50%;
+.blog-post-title {
+  font-size: var(--fs-5);
+  font-weight: 700;
+  color: var(--eerie-black);
+  margin-bottom: 12px;
+  line-height: 1.3;
+  transition: color 0.3s;
 }
 
-#blog .blog-details a{
+.blog-post-card:hover .blog-post-title {
+  color: var(--salmon-pink);
+}
+
+.blog-post-desc {
+  font-size: var(--fs-7);
+  color: var(--sonic-silver);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.blog-read-more {
+  font-size: var(--fs-8);
+  font-weight: 700;
+  color: var(--eerie-black);
   text-decoration: none;
-  font-size: 11px;
-  color:#000;
-  font-weight: 700;
-  position: relative;
-  transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+  width: max-content;
 }
 
-#blog .blog-details a::after{
-  content: "";
-  width: 50px;
-  height: 1px;
-  position: absolute;
-  top: 4px;
-  right: -60px;
+.blog-read-more ion-icon {
+  font-size: 16px;
+  transition: transform 0.3s ease;
 }
 
-#blog .blog-details a{
-  color: #088178;
+.blog-read-more:hover {
+  color: var(--salmon-pink);
 }
 
-#blog .blog-details a:hover::after{
-  background-color: #088178;
-} 
-
-#blog .blog-box h1{
-  position: absolute;
-  top: -70px;
-  left: 0;
-  font-weight: 700;
-  font-size: 70px;
-  color: #c9cbce;
-  z-index: -9;
+.blog-read-more:hover ion-icon {
+  transform: translateX(5px);
 }
 
-/* ======== Mobile Responsive ======== */
+/* Featured Post Layout */
+.featured-post {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 0;
+  margin-bottom: 40px;
+}
+
+.featured-post .blog-post-img-box {
+  height: 100%;
+}
+
+.featured-post .blog-post-img {
+  height: 100%;
+  min-height: 380px;
+}
+
+.featured-post .blog-post-content {
+  padding: 40px;
+  justify-content: center;
+}
+
+.featured-post .blog-post-title {
+  font-size: var(--fs-3);
+  margin-bottom: 15px;
+}
+
+/* Grid for standard posts */
+.blog-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+/* Responsive Overrides */
+@media (max-width: 1200px) {
+  .blog-container {
+    padding: 50px 60px;
+  }
+}
+
+@media (max-width: 992px) {
+  .featured-post {
+    grid-template-columns: 1fr;
+  }
+  .featured-post .blog-post-img {
+    height: 300px;
+    min-height: auto;
+  }
+  .featured-post .blog-post-content {
+    padding: 25px;
+  }
+}
+
 @media (max-width: 768px) {
-  /* Reduce padding */
-  #blog {
-    padding: 50px 20px 0px 20px;
+  .blog-container {
+    padding: 40px 20px;
   }
-
-  /* Stack blog content vertically */
-  #blog .blog-box {
-    flex-direction: column;
-    align-items: flex-start;
-    padding-bottom: 50px;
+  .blog-posts-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
-
-  /* Full width images on mobile */
-  #blog .blog-img {
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 20px;
+  .blog-header {
+    height: 25vh;
   }
-
-  /* Full width blog details */
-  #blog .blog-details {
-    width: 100%;
-  }
-
-  /* Reduce font sizes */
-  #blog .blog-box h1 {
-    font-size: 40px;
-    top: -40px;
-  }
-
-  #blog .blog-details a {
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  /* Even smaller devices adjustments */
-  #blog {
-    padding: 30px 15px 0px 15px;
-  }
-
-  #blog img {
-    height: 180px;
-  }
-
-  #blog .blog-box h1 {
-    font-size: 30px;
-    top: -30px;
+  .blog-header h2 {
+    font-size: var(--fs-3);
   }
 }
 
