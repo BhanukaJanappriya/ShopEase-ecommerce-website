@@ -100,7 +100,7 @@ for (let i = 0; i < accordionBtn.length; i++) {
 }
 
 // --- Animation on Scroll ---
-const revealElements = document.querySelectorAll('.banner, .category, .product-main, .showcase, .blog-card, .blog-box, .sidebar, .product-minimal, .testimonial-card, .cta-container, .service-container');
+const revealElements = document.querySelectorAll('.banner, .category, .product-main, .showcase, .blog-card, .blog-box, .blog-post-card, .sidebar, .product-minimal, .testimonial-card, .cta-container, .service-container');
 
 const revealOptions = {
   threshold: 0.1,

@@ -37,9 +37,9 @@
 
   <body>
     <div class="overlay" data-overlay></div>
-    <section id="page-header" class="blog-header">
-      <h2>#readmore</h2>
-      <p>Read all case studies about our products!</p>
+    <section id="detailHeader" class="blog-header">
+      <h2 id="detailBlogTitle">#readmore</h2>
+      <p id="detailBlogMeta">Read all case studies about our products!</p>
     </section>
 
     <header>
@@ -545,120 +545,22 @@
         </div>
       </nav>
     </header>
-    <section id="blog" class="blog-container">
-      <!-- Featured Blog Post (Full Width / Wide layout) -->
-      <div class="blog-post-card featured-post">
-        <div class="blog-post-img-box">
-          <img src="./assets/images/blog/b1.jpg" alt="The Cotton-Jersey Zip-Up Hoodie" class="blog-post-img" />
-          <span class="blog-post-badge">Trends</span>
+    <article class="blog-detail-container" id="blogDetailContainer">
+      <div class="blog-detail-card">
+        <div class="blog-detail-img-box">
+          <img src="" alt="Featured Image" id="detailBlogImg" />
+          <span class="blog-post-badge" id="detailBlogBadge">Trends</span>
         </div>
-        <div class="blog-post-content">
-          <div class="blog-post-meta">
-            <span>By Sarah Jenkins</span>
-            <span class="meta-dot">•</span>
-            <span>Jan 13, 2026</span>
-            <span class="meta-dot">•</span>
-            <span>5 min read</span>
+        <div class="blog-detail-content">
+          <div class="blog-detail-body" id="detailBlogBody">
+            <!-- Populated by JavaScript -->
           </div>
-          <h3 class="blog-post-title">The Cotton-Jersey Zip-Up Hoodie</h3>
-          <p class="blog-post-desc">
-            Kickstarter man braid godard coloring book. Raclette waistcoat selfies yr wolf chartreuse hexagon irony, godard wolf. A perfect blend of street style and casual comfort for the upcoming season.
-          </p>
-          <a href="blog-detail.html?id=hoodie" class="blog-read-more">CONTINUE READING <ion-icon name="arrow-forward-outline"></ion-icon></a>
-        </div>
-      </div>
-
-      <!-- Grid for standard posts -->
-      <div class="blog-posts-grid">
-        <!-- Post 2 -->
-        <div class="blog-post-card standard-post">
-          <div class="blog-post-img-box">
-            <img src="./assets/images/blog/b2.jpg" alt="How to Style a Quiff" class="blog-post-img" />
-            <span class="blog-post-badge">Hairstyle</span>
-          </div>
-          <div class="blog-post-content">
-            <div class="blog-post-meta">
-              <span>By Alex Carter</span>
-              <span class="meta-dot">•</span>
-              <span>Jan 10, 2026</span>
-              <span class="meta-dot">•</span>
-              <span>4 min read</span>
-            </div>
-            <h3 class="blog-post-title">How to Style a Quiff</h3>
-            <p class="blog-post-desc">
-              Kickstarter man braid godard coloring book. Raclette waistcoat selfies yr wolf chartreuse hexagon irony, godard. Discover the steps to styling the perfect modern quiff.
-            </p>
-            <a href="blog-detail.html?id=quiff" class="blog-read-more">CONTINUE READING <ion-icon name="arrow-forward-outline"></ion-icon></a>
-          </div>
-        </div>
-
-        <!-- Post 3 -->
-        <div class="blog-post-card standard-post">
-          <div class="blog-post-img-box">
-            <img src="./assets/images/blog/b3.jpg" alt="Must-Have Skater Girl Items" class="blog-post-img" />
-            <span class="blog-post-badge">Streetwear</span>
-          </div>
-          <div class="blog-post-content">
-            <div class="blog-post-meta">
-              <span>By Emma Watson</span>
-              <span class="meta-dot">•</span>
-              <span>Jan 08, 2026</span>
-              <span class="meta-dot">•</span>
-              <span>6 min read</span>
-            </div>
-            <h3 class="blog-post-title">Must-Have Skater Girl Items</h3>
-            <p class="blog-post-desc">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorem accusamus accusamus voluptatem sit ea vitae laudantium voluptates. Essential pieces for the ultimate skater look.
-            </p>
-            <a href="blog-detail.html?id=skater" class="blog-read-more">CONTINUE READING <ion-icon name="arrow-forward-outline"></ion-icon></a>
-          </div>
-        </div>
-
-        <!-- Post 4 -->
-        <div class="blog-post-card standard-post">
-          <div class="blog-post-img-box">
-            <img src="./assets/images/blog/b4.jpg" alt="Runway-Inspired Trends" class="blog-post-img" />
-            <span class="blog-post-badge">Runway</span>
-          </div>
-          <div class="blog-post-content">
-            <div class="blog-post-meta">
-              <span>By Michael Cole</span>
-              <span class="meta-dot">•</span>
-              <span>Jan 05, 2026</span>
-              <span class="meta-dot">•</span>
-              <span>5 min read</span>
-            </div>
-            <h3 class="blog-post-title">Runway-Inspired Trends</h3>
-            <p class="blog-post-desc">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia obcaecati voluptatem sit ea vitae laudantium voluptates ducimus rerum aliquam.
-            </p>
-            <a href="blog-detail.html?id=runway" class="blog-read-more">CONTINUE READING <ion-icon name="arrow-forward-outline"></ion-icon></a>
-          </div>
-        </div>
-
-        <!-- Post 5 -->
-        <div class="blog-post-card standard-post">
-          <div class="blog-post-img-box">
-            <img src="./assets/images/blog/b6.jpg" alt="AW26 Menswear Trends" class="blog-post-img" />
-            <span class="blog-post-badge">Menswear</span>
-          </div>
-          <div class="blog-post-content">
-            <div class="blog-post-meta">
-              <span>By Liam Neeson</span>
-              <span class="meta-dot">•</span>
-              <span>Jan 02, 2026</span>
-              <span class="meta-dot">•</span>
-              <span>5 min read</span>
-            </div>
-            <h3 class="blog-post-title">AW26 Menswear Trends</h3>
-            <p class="blog-post-desc">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam sit maiores non quaerat cupiditate et. The ultimate style guide for winter.
-            </p>
-            <a href="blog-detail.html?id=menswear" class="blog-read-more">CONTINUE READING <ion-icon name="arrow-forward-outline"></ion-icon></a>
+          <div class="blog-detail-actions">
+            <a href="blog.html" class="blog-read-more"><ion-icon name="arrow-back-outline"></ion-icon> BACK TO BLOGS</a>
           </div>
         </div>
       </div>
-    </section>
+    </article>
 
     <section id="pagination" class="section-p1"></section>
     <section id="newsletter" class="section-p1 section-m1"></section>
@@ -927,6 +829,36 @@
       </div>
     </footer>
 
+    <script src="./assets/js/blog-data.js"></script>
     <script src="./assets/js/script.js"></script>
+    <script>
+      // Read the query parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id') || 'hoodie';
+
+      // Retrieve post from database
+      const post = blogPosts[postId];
+
+      if (post) {
+        document.title = post.title + " - ShopEase Blog";
+        document.getElementById('detailHeader').style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${post.image})`;
+        document.getElementById('detailBlogTitle').textContent = post.title;
+        document.getElementById('detailBlogMeta').innerHTML = `By <strong>${post.author}</strong> &bull; ${post.date} &bull; ${post.readTime}`;
+        document.getElementById('detailBlogImg').src = post.image;
+        document.getElementById('detailBlogImg').alt = post.title;
+        document.getElementById('detailBlogBadge').textContent = post.category;
+        document.getElementById('detailBlogBody').innerHTML = post.content;
+      } else {
+        document.getElementById('detailBlogTitle').textContent = "Article Not Found";
+        document.getElementById('detailBlogMeta').textContent = "The requested blog post could not be loaded.";
+        document.getElementById('blogDetailContainer').innerHTML = `
+          <div class="blog-detail-card" style="text-align: center; padding: 50px;">
+            <h2>Oops! Article Not Found</h2>
+            <p>We couldn't find the article you were looking for.</p>
+            <a href="blog.html" class="blog-read-more" style="margin-top: 20px; display: inline-flex;"><ion-icon name="arrow-back-outline"></ion-icon> BACK TO BLOGS</a>
+          </div>
+        `;
+      }
+    </script>
   </body>
 </html>
