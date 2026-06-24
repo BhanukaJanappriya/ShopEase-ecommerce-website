@@ -36,6 +36,7 @@
   </head>
 
   <body>
+    <div class="overlay" data-overlay></div>
     <section id="page-header" class="blog-header">
       <h2>#readmore</h2>
       <p>Read all case studies about our products!</p>
@@ -886,28 +887,6 @@
       </div>
     </footer>
 
-    <script src="script.js"></script>
-    <script>
-      // Select elements
-      const mobileMenu = document.querySelector("[data-mobile-menu]");
-      const openMenuBtns = document.querySelectorAll(
-        "[data-mobile-menu-open-btn]"
-      );
-      const closeMenuBtn = document.querySelector(
-        "[data-mobile-menu-close-btn]"
-      );
-
-      // Open menu
-      openMenuBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          mobileMenu.classList.add("active");
-        });
-      });
-
-      // Close menu
-      closeMenuBtn.addEventListener("click", () => {
-        mobileMenu.classList.remove("active");
-      });
-    </script>
+    <script src="./assets/js/script.js"></script>
   </body>
 </html>
