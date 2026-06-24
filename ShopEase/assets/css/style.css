@@ -891,7 +891,11 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 }
 
 .banner-content {
-  background: hsla(0, 0%, 100%, 0.8);
+  background: hsla(0, 0%, 100%, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
   position: absolute;
   bottom: 25px;
   left: 25px;
@@ -2581,7 +2585,7 @@ footer {
 
   .slider-item { aspect-ratio: 4 / 2; }
 
-  .banner-content { background: none; }
+
 
 
 
