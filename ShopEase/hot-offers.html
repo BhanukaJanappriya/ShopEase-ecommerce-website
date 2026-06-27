@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopEase - Hot Offers 🔥</title>
+
+  <!-- favicon-->
+  <link rel="shortcut icon" href="./assets/images/logo/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <!-- google font link -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* Custom Hot Offers Page CSS */
+    .hot-offers-header {
+      background-image: linear-gradient(135deg, rgba(255, 105, 180, 0.75), rgba(220, 20, 60, 0.8)), url(./assets/images/banner/a6.jpg);
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 70px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 2px solid var(--salmon-pink);
+    }
+
+    .hot-offers-header h2 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+      animation: slideDown 0.8s ease-out;
+    }
+
+    .hot-offers-header p {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 25px;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1.2s ease-in;
+    }
+
+    .deal-countdown-container {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 15px 30px;
+      border-radius: var(--border-radius-md);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+      animation: zoomIn 0.8s ease-out;
+    }
+
+    .timer-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 10px !important;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .countdown-timer {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .time-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--eerie-black);
+      padding: 8px 12px;
+      border-radius: var(--border-radius-sm);
+      min-width: 60px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transform: translateY(0);
+      transition: transform 0.2s ease;
+    }
+
+    .time-block:hover {
+      transform: translateY(-3px);
+    }
+
+    .time-block .number {
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .time-block .label {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--sonic-silver);
+      margin-top: 3px;
+    }
+
+    .hot-offers-main {
+      padding: 60px 0;
+      background: #faf9f6;
+    }
+
+    .hot-section-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .hot-section-title h2 {
+      font-size: 2rem;
+      color: var(--eerie-black);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 15px;
+    }
+
+    .hot-section-title h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 4px;
+      background: var(--salmon-pink);
+      border-radius: 2px;
+    }
+
+    .hot-offers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    /* Responsive Grid */
+    @media (max-width: 1024px) {
+      .hot-offers-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .hot-offers-grid {
+        grid-template-columns: 1fr;
+      }
+      .hot-offers-header h2 {
+        font-size: 1.8rem;
+      }
+    }
+
+    .hot-showcase {
+      background: white;
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+      border: 1px solid var(--cultured);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .hot-showcase:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(255, 105, 180, 0.12);
+    }
+
+    .showcase-badge-flash {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: linear-gradient(135deg, #ff0055, #ff5500);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: var(--border-radius-sm);
+      z-index: 2;
+      box-shadow: 0 4px 10px rgba(255, 0, 85, 0.3);
+      animation: pulseBadge 1.5s infinite alternate;
+    }
+
+    @keyframes pulseBadge {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.08); }
+    }
+
+    .deal-progress-container {
+      margin: 15px 0 10px 0;
+    }
+
+    .progress-text-flex {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--fs-9);
+      color: var(--sonic-silver);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background: var(--cultured);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--salmon-pink), #ff0055);
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .progress-bar-fill.pulse::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Coupon Styles */
+    .coupon-section {
+      background: white;
+      padding: 50px 30px;
+      border-radius: var(--border-radius-md);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+      border: 1px solid var(--cultured);
+      margin-top: 60px;
+    }
+
+    .coupon-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .coupon-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .coupon-card {
+      border: 2px dashed var(--salmon-pink);
+      border-radius: var(--border-radius-md);
+      padding: 25px;
+      background: #fff5f6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .coupon-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 20px rgba(255, 105, 180, 0.08);
+    }
+
+    .coupon-info h3 {
+      font-size: 1.2rem;
+      color: var(--eerie-black);
+      margin-bottom: 5px;
+    }
+
+    .coupon-info p {
+      color: var(--sonic-silver);
+      font-size: var(--fs-9);
+      margin-bottom: 10px;
+    }
+
+    .coupon-code {
+      display: inline-block;
+      background: white;
+      border: 1px solid var(--salmon-pink);
+      color: var(--salmon-pink);
+      font-family: monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 4px 10px;
+      border-radius: var(--border-radius-sm);
+    }
+
+    .coupon-btn {
+      background: var(--salmon-pink);
+      color: white;
+      font-size: var(--fs-9);
+      font-weight: var(--weight-700);
+      text-transform: uppercase;
+      padding: 10px 20px;
+      border-radius: var(--border-radius-sm);
+      transition: background 0.2s ease, color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .coupon-btn:hover {
+      background: var(--eerie-black);
+    }
+
+    /* Animations */
+    @keyframes slideDown {
+      0% { transform: translateY(-50px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes zoomIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay" data-overlay></div>
+
+  <!--
+    - HEADER
+  -->
+  <header>
+    <div class="header-top">
+      <div class="container">
+        <ul class="header-social-container">
+          <li><a href="#" class="social-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-instagram"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+        </ul>
+
+        <div class="header-alert-news">
+          <p>
+            <b>Free Shipping</b>
+            This Week Order Over - LKR 2000.00
+          </p>
+        </div>
+
+        <div class="header-top-actions">
+          <select name="currency">
+            <option value="lkr">LKR රු</option>
+            <option value="usd">USD &dollar;</option>
+          </select>
+
+          <select name="language">
+            <option value="en-US">English</option>
+            <option value="si">Sinhala</option>
+            <option value="ta">Tamil</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="header-logo">
+          <img src="./assets/images/logo/logo.jpg" alt="ShopEase's logo" width="120" height="120" style="border-radius: 20px; object-fit: contain; aspect-ratio: 1 / 1;">
+        </a>
+
+        <div class="header-search-container">
+          <input type="search" name="search" class="search-field" placeholder="Enter your product name...">
+          <button class="search-btn">
+            <ion-icon name="search-outline"></ion-icon>
+          </button>
+        </div>
+
+        <div class="header-user-actions">
+          <button class="action-btn">
+            <ion-icon name="person-outline"></ion-icon>
+          </button>
+
+          <button class="action-btn">
+            <ion-icon name="heart-outline"></ion-icon>
+            <span class="count">0</span>
+          </button>
+
+          <button class="action-btn">
+            <ion-icon name="bag-handle-outline"></ion-icon>
+            <span class="count">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="desktop-navigation-menu">
+      <div class="container">
+        <ul class="desktop-menu-category-list">
+          <li class="menu-category">
+            <a href="index.html" class="menu-title">Home</a>
+          </li>
+
+          <li class="menu-category">
+            <a href="#" class="menu-title">Categories</a>
+            <div class="dropdown-panel">
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Electronics</a></li>
+                <li class="panel-list-item"><a href="#">Desktop</a></li>
+                <li class="panel-list-item"><a href="#">Laptop</a></li>
+                <li class="panel-list-item"><a href="#">Camera</a></li>
+                <li class="panel-list-item"><a href="#">Tablet</a></li>
+                <li class="panel-list-item"><a href="#">Headphone</a></li>
+                <li class="panel-list-item">
+                  <a href="#">
+                    <img src="./assets/images/banner-2.jpg" alt="headphone collection" width="250" height="119" />
+                  </a>
+                </li>
+              </ul>
+
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Men's</a></li>
+                <li class="panel-list-item"><a href="#">Formal</a></li>
+                <li class="panel-list-item"><a href="#">Casual</a></li>
+                <li class="panel-list-item"><a href="#">Sports</a></li>
+                <li class="panel-list-item"><a href="#">Jacket</a></li>
+                <li class="panel-list-item"><a href="#">Sunglasses</a></li>
+                <li class="panel-list-item">
+                  <a href="#">
+                    <img src="./assets/images/mens-banner.jpg" alt="men's fashion" width="250" height="119" />
+                  </a>
+                </li>
+              </ul>
+
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Women's</a></li>
+                <li class="panel-list-item"><a href="#">Formal</a></li>
+                <li class="panel-list-item"><a href="#">Casual</a></li>
+                <li class="panel-list-item"><a href="#">Perfume</a></li>
+                <li class="panel-list-item"><a href="#">Cosmetics</a></li>
+                <li class="panel-list-item"><a href="#">Bags</a></li>
+                <li class="panel-list-item">
+                  <a href="#">
+                    <img src="./assets/images/womens-banner.jpg" alt="women's fashion" width="250" height="119" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="menu-category">
+            <a href="blog.html" class="menu-title">Blog</a>
+          </li>
+
+          <li class="menu-category">
+            <a href="hot-offers.html" class="menu-title">Hot Offers</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-bottom-navigation">
+      <button class="action-btn" data-mobile-menu-open-btn>
+        <ion-icon name="menu-outline"></ion-icon>
+      </button>
+
+      <button class="action-btn">
+        <ion-icon name="bag-handle-outline"></ion-icon>
+        <span class="count">0</span>
+      </button>
+
+      <button class="action-btn">
+        <ion-icon name="home-outline"></ion-icon>
+      </button>
+
+      <button class="action-btn">
+        <ion-icon name="heart-outline"></ion-icon>
+        <span class="count">0</span>
+      </button>
+
+      <button class="action-btn" data-mobile-menu-open-btn>
+        <ion-icon name="grid-outline"></ion-icon>
+      </button>
+    </div>
+
+    <div class="mobile-navigation-menu  has-scrollbar" data-mobile-menu>
+      <div class="menu-top">
+        <h2 class="menu-title">Menu</h2>
+        <button class="menu-close-btn" data-mobile-menu-close-btn>
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+
+      <ul class="mobile-menu-category-list">
+        <li class="menu-category">
+          <a href="index.html" class="menu-title">Home</a>
+        </li>
+
+        <li class="menu-category">
+          <button class="accordion-menu" data-accordion-btn>
+            <p class="menu-title">Categories</p>
+            <div>
+              <ion-icon name="add-outline" class="add-icon"></ion-icon>
+              <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+            </div>
+          </button>
+
+          <ul class="submenu-category-list" data-accordion>
+            <li class="submenu-category"><a href="#" class="submenu-title">Electronics</a></li>
+            <li class="submenu-category"><a href="#" class="submenu-title">Men's Fashion</a></li>
+            <li class="submenu-category"><a href="#" class="submenu-title">Women's Fashion</a></li>
+          </ul>
+        </li>
+
+        <li class="menu-category">
+          <a href="blog.html" class="menu-title">Blog</a>
+        </li>
+
+        <li class="menu-category">
+          <a href="hot-offers.html" class="menu-title">Hot Offers</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!--
+    - HOT OFFERS BANNER
+  -->
+  <section class="hot-offers-header">
+    <h2>#hotoffers</h2>
+    <p>Premium limited-time deals with massive savings! Get yours before stock runs dry.</p>
+    
+    <div class="deal-countdown-container">
+      <p class="timer-title">Flash Sale Ends In:</p>
+      <div class="countdown-timer" id="hotOffersCountdown">
+        <div class="time-block"><span class="number" id="timerDays">02</span><span class="label">Days</span></div>
+        <div class="time-block"><span class="number" id="timerHours">14</span><span class="label">Hours</span></div>
+        <div class="time-block"><span class="number" id="timerMins">36</span><span class="label">Mins</span></div>
+        <div class="time-block"><span class="number" id="timerSecs">05</span><span class="label">Secs</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    - MAIN LAYOUT SECTION
+  -->
+  <main class="hot-offers-main">
+    <div class="container">
+      <div class="hot-section-title">
+        <h2>Unmissable Flash Deals</h2>
+      </div>
+
+      <div class="hot-offers-grid">
+        <!-- Showcase 1 -->
+        <div class="hot-showcase">
+          <span class="showcase-badge-flash">50% OFF</span>
+          <div class="showcase-banner">
+            <img src="./assets/images/products/jacket-4.jpg" alt="Mens Leather Jacket" class="product-img default" width="300">
+            <img src="./assets/images/products/jacket-5.jpg" alt="Mens Leather Jacket" class="product-img hover" width="300">
+            
+            <div class="showcase-actions">
+              <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
+            </div>
+          </div>
+
+          <div class="showcase-content" style="padding: 20px;">
+            <a href="#" class="showcase-category">jacket</a>
+            <a href="#"><h3 class="showcase-title">Mens Winter Leathers Jackets</h3></a>
+            
+            <div class="showcase-rating">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star-outline"></ion-icon>
+              <ion-icon name="star-outline"></ion-icon>
+            </div>
+
+            <div class="price-box">
+              <p class="price">LKR 2500.00</p>
+              <del>LKR 5000.00</del>
+            </div>
+
+            <div class="deal-progress-container">
+              <div class="progress-text-flex">
+                <span>84% Claimed</span>
+                <span>16 Left</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill pulse" style="width: 84%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Showcase 2 -->
+        <div class="hot-showcase">
+          <span class="showcase-badge-flash">BOGO DEAL</span>
+          <div class="showcase-banner">
+            <img src="./assets/images/products/watch-1.webp" alt="Smart Watch" class="product-img default" width="300">
+            <img src="./assets/images/products/watch-2.jpg" alt="Smart Watch" class="product-img hover" width="300">
+
+            <div class="showcase-actions">
+              <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
+            </div>
+          </div>
+
+          <div class="showcase-content" style="padding: 20px;">
+            <a href="#" class="showcase-category">watches</a>
+            <a href="#"><h3 class="showcase-title">Smart Watch Pro Series 7</h3></a>
+            
+            <div class="showcase-rating">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star-outline"></ion-icon>
+            </div>
+
+            <div class="price-box">
+              <p class="price">LKR 12000.00</p>
+              <del>LKR 24000.00</del>
+            </div>
+
+            <div class="deal-progress-container">
+              <div class="progress-text-flex">
+                <span>91% Claimed</span>
+                <span>9 Left</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill pulse" style="width: 91%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Showcase 3 -->
+        <div class="hot-showcase">
+          <span class="showcase-badge-flash">50% OFF</span>
+          <div class="showcase-banner">
+            <img src="./assets/images/products/4.jpg" alt="Woolen Hat" class="product-img default" width="300">
+            <img src="./assets/images/products/clothes-2.jpg" alt="Woolen Hat" class="product-img hover" width="300">
+
+            <div class="showcase-actions">
+              <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
+            </div>
+          </div>
+
+          <div class="showcase-content" style="padding: 20px;">
+            <a href="#" class="showcase-category">hat & caps</a>
+            <a href="#"><h3 class="showcase-title">Woolen Hat For Men</h3></a>
+            
+            <div class="showcase-rating">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+            </div>
+
+            <div class="price-box">
+              <p class="price">LKR 600.00</p>
+              <del>LKR 1200.00</del>
+            </div>
+
+            <div class="deal-progress-container">
+              <div class="progress-text-flex">
+                <span>62% Claimed</span>
+                <span>38 Left</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill pulse" style="width: 62%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Showcase 4 -->
+        <div class="hot-showcase">
+          <span class="showcase-badge-flash">45% OFF</span>
+          <div class="showcase-banner">
+            <img src="./assets/images/products/clothes-1.jpg" alt="Summer Dress" class="product-img default" width="300">
+            <img src="./assets/images/products/clothes-3.webp" alt="Summer Dress" class="product-img hover" width="300">
+
+            <div class="showcase-actions">
+              <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
+            </div>
+          </div>
+
+          <div class="showcase-content" style="padding: 20px;">
+            <a href="#" class="showcase-category">dress & frock</a>
+            <a href="#"><h3 class="showcase-title">Floral Summer Dress</h3></a>
+            
+            <div class="showcase-rating">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star-outline"></ion-icon>
+              <ion-icon name="star-outline"></ion-icon>
+            </div>
+
+            <div class="price-box">
+              <p class="price">LKR 2199.00</p>
+              <del>LKR 3999.00</del>
+            </div>
+
+            <div class="deal-progress-container">
+              <div class="progress-text-flex">
+                <span>78% Claimed</span>
+                <span>22 Left</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill pulse" style="width: 78%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Showcase 5 -->
+        <div class="hot-showcase">
+          <span class="showcase-badge-flash">40% OFF</span>
+          <div class="showcase-banner">
+            <img src="./assets/images/products/perfume.jpg" alt="Perfume" class="product-img default" width="300">
+            <img src="./assets/images/products/shampoo.jpg" alt="Perfume" class="product-img hover" width="300">
+
+            <div class="showcase-actions">
+              <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
+            </div>
+          </div>
+
+          <div class="showcase-content" style="padding: 20px;">
+            <a href="#" class="showcase-category">perfume</a>
+            <a href="#"><h3 class="showcase-title">French Floral Fragrance 100ml</h3></a>
+            
+            <div class="showcase-rating">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star-outline"></ion-icon>
+            </div>
+
+            <div class="price-box">
+              <p class="price">LKR 4800.00</p>
+              <del>LKR 8000.00</del>
+            </div>
+
+            <div class="deal-progress-container">
+              <div class="progress-text-flex">
+                <span>51% Claimed</span>
+                <span>49 Left</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill pulse" style="width: 51%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Showcase 6 -->
+        <div class="hot-showcase">
+          <span class="showcase-badge-flash">55% OFF</span>
+          <div class="showcase-banner">
+            <img src="./assets/images/products/jewellery-1.jpg" alt="Jewellery" class="product-img default" width="300">
+            <img src="./assets/images/products/jewellery-2.jpg" alt="Jewellery" class="product-img hover" width="300">
+
+            <div class="showcase-actions">
+              <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
+              <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
+            </div>
+          </div>
+
+          <div class="showcase-content" style="padding: 20px;">
+            <a href="#" class="showcase-category">jewellery</a>
+            <a href="#"><h3 class="showcase-title">Gothic Rose Gold Necklace Set</h3></a>
+            
+            <div class="showcase-rating">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+            </div>
+
+            <div class="price-box">
+              <p class="price">LKR 4275.00</p>
+              <del>LKR 9500.00</del>
+            </div>
+
+            <div class="deal-progress-container">
+              <div class="progress-text-flex">
+                <span>73% Claimed</span>
+                <span>27 Left</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill pulse" style="width: 73%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--
+        - INTERACTIVE PROMO COUPONS
+      -->
+      <div class="coupon-section">
+        <div class="hot-section-title" style="margin-bottom: 40px;">
+          <h2>Exclusive ShopEase Coupons</h2>
+        </div>
+
+        <div class="coupon-grid">
+          <!-- Coupon 1 -->
+          <div class="coupon-card">
+            <div class="coupon-info">
+              <h3>Extra 20% OFF</h3>
+              <p>For orders above LKR 5000.00</p>
+              <span class="coupon-code" id="code20">SHOPSMART20</span>
+            </div>
+            <button class="coupon-btn" onclick="copyCouponCode('SHOPSMART20', this)">Copy Code</button>
+          </div>
+
+          <!-- Coupon 2 -->
+          <div class="coupon-card">
+            <div class="coupon-info">
+              <h3>Flat LKR 1000 OFF</h3>
+              <p>Special pink-themed launch discount</p>
+              <span class="coupon-code" id="codeFlat">PINKFRIDAY</span>
+            </div>
+            <button class="coupon-btn" onclick="copyCouponCode('PINKFRIDAY', this)">Copy Code</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!--
+    - FOOTER
+  -->
+  <footer>
+    <div class="footer-nav">
+      <div class="container">
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Popular Categories</h2></li>
+          <li><a href="#" class="footer-nav-link">Fashion</a></li>
+          <li><a href="#" class="footer-nav-link">Electronic</a></li>
+          <li><a href="#" class="footer-nav-link">Cosmetic</a></li>
+          <li><a href="#" class="footer-nav-link">Jewelry</a></li>
+        </ul>
+
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Our Company</h2></li>
+          <li><a href="#" class="footer-nav-link">Delivery</a></li>
+          <li><a href="#" class="footer-nav-link">About us</a></li>
+          <li><a href="#" class="footer-nav-link">Secure payment</a></li>
+          <li><a href="#" class="footer-nav-link">Contact us</a></li>
+        </ul>
+
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Contact</h2></li>
+          <li class="footer-nav-item flex">
+            <div class="icon-box"><ion-icon name="location-outline"></ion-icon></div>
+            <address class="content">419 Galle Road, Colombo 03, Sri Lanka.</address>
+          </li>
+          <li class="footer-nav-item flex">
+            <div class="icon-box"><ion-icon name="call-outline"></ion-icon></div>
+            <a href="tel:+94112345678" class="footer-nav-link">+94 11 234 5678</a>
+          </li>
+          <li class="footer-nav-item flex">
+            <div class="icon-box"><ion-icon name="mail-outline"></ion-icon></div>
+            <a href="mailto:contact@company.lk" class="footer-nav-link">contact@company.lk</a>
+          </li>
+        </ul>
+
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Follow Us</h2></li>
+          <li>
+            <ul class="social-link">
+              <li class="footer-nav-item"><a href="#" class="footer-nav-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+              <li class="footer-nav-item"><a href="#" class="footer-nav-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+              <li class="footer-nav-item"><a href="#" class="footer-nav-link"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+              <li class="footer-nav-item"><a href="#" class="footer-nav-link"><ion-icon name="logo-instagram"></ion-icon></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <img src="./assets/images/payment.png" alt="payment method" class="payment-img">
+        <p class="copyright">
+          Copyright &copy; <a href="#">ShopEase</a> all rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="./assets/js/script.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <script>
+    // Copy Coupon Logic
+    function copyCouponCode(code, btn) {
+      navigator.clipboard.writeText(code).then(() => {
+        const originalText = btn.textContent;
+        btn.textContent = 'COPIED!';
+        btn.style.backgroundColor = '#111';
+        btn.style.borderColor = '#111';
+        btn.style.color = '#fff';
+        
+        // Push notification toast
+        const toast = document.getElementById('dbNotification');
+        const toastMsg = document.getElementById('dbNotificationMessage');
+        if (toast && toastMsg) {
+          toastMsg.textContent = `Coupon "${code}" copied to clipboard!`;
+          toast.classList.add('active');
+          setTimeout(() => toast.classList.remove('active'), 3500);
+        }
+
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.backgroundColor = '';
+          btn.style.borderColor = '';
+          btn.style.color = '';
+        }, 2000);
+      }).catch(err => {
+        alert('Failed to copy code: ' + err);
+      });
+    }
+
+    // Dynamic countdown timer for Hot Offers
+    (function runHotOffersTimer() {
+      const displayDays = document.getElementById('timerDays');
+      const displayHours = document.getElementById('timerHours');
+      const displayMins = document.getElementById('timerMins');
+      const displaySecs = document.getElementById('timerSecs');
+
+      let totalSeconds = 2 * 86400 + 14 * 3600 + 36 * 60 + 5; // 2d 14h 36m 5s
+
+      const timer = setInterval(() => {
+        if (totalSeconds <= 0) {
+          clearInterval(timer);
+          return;
+        }
+        totalSeconds--;
+
+        const d = Math.floor(totalSeconds / 86400);
+        const h = Math.floor((totalSeconds % 86400) / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+
+        if (displayDays) displayDays.textContent = d < 10 ? '0' + d : d;
+        if (displayHours) displayHours.textContent = h < 10 ? '0' + h : h;
+        if (displayMins) displayMins.textContent = m < 10 ? '0' + m : m;
+        if (displaySecs) displaySecs.textContent = s < 10 ? '0' + s : s;
+      }, 1000);
+    })();
+  </script>
+</body>
+
+</html>
