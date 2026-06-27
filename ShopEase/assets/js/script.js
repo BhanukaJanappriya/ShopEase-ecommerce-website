@@ -1093,4 +1093,155 @@ countdownElements.forEach(countdown => {
       }
     });
   });
+})();
+
+// ==========================================
+// LINKED LIST PRODUCT SEARCH SYSTEM
+// ==========================================
+(function initLinkedListSearch() {
+  class Node {
+    constructor(data) {
+      this.data = data; // { title: string, category: string, element: HTMLElement }
+      this.next = null;
+    }
+  }
+
+  class LinkedList {
+    constructor() {
+      this.head = null;
+    }
+
+    append(data) {
+      const newNode = new Node(data);
+      if (!this.head) {
+        this.head = newNode;
+        return;
+      }
+      let current = this.head;
+      while (current.next) {
+        current = current.next;
+      }
+      current.next = newNode;
+    }
+
+    // Traverse the LinkedList searching for matches case-insensitively
+    search(query) {
+      const results = [];
+      const lowerQuery = query.toLowerCase().trim();
+      let current = this.head;
+
+      while (current) {
+        const title = current.data.title.toLowerCase();
+        const category = current.data.category.toLowerCase();
+
+        if (title.includes(lowerQuery) || category.includes(lowerQuery)) {
+          results.push(current.data);
+        }
+        current = current.next;
+      }
+      return results;
+    }
+  }
+
+  const productList = new LinkedList();
+  const showcases = document.querySelectorAll('.product-grid .showcase, .product-featured .showcase, .product-featured .showcase-container');
+
+  // Populate Linked List with DOM references of all products on the current page
+  showcases.forEach(showcase => {
+    const titleEl = showcase.querySelector('.showcase-title');
+    const catEl = showcase.querySelector('.showcase-category');
+    if (titleEl) {
+      productList.append({
+        title: titleEl.textContent.trim(),
+        category: catEl ? catEl.textContent.trim() : '',
+        element: showcase
+      });
+    }
+  });
+
+  // Perform search UI filtering using the LinkedList matches
+  function executeSearch(query) {
+    const productGridTitle = document.getElementById('productGridTitle') || document.querySelector('.product-main .title');
+    const clearFilterBtn = document.getElementById('clearCategoryFilterBtn');
+    const productMain = document.querySelector('.product-main');
+
+    if (!query) {
+      showcases.forEach(sc => sc.style.display = 'block');
+      if (productGridTitle) productGridTitle.textContent = 'New Products';
+      if (clearFilterBtn) clearFilterBtn.style.display = 'none';
+      return;
+    }
+
+    const matches = productList.search(query);
+
+    showcases.forEach(sc => {
+      sc.style.display = 'none';
+    });
+
+    matches.forEach(match => {
+      match.element.style.display = 'block';
+      match.element.classList.remove('aos-active');
+      setTimeout(() => match.element.classList.add('aos-active'), 50);
+    });
+
+    if (productGridTitle) {
+      productGridTitle.textContent = `Search: "${query}" (${matches.length} matches)`;
+    }
+
+    if (clearFilterBtn) {
+      clearFilterBtn.style.display = 'block';
+    }
+
+    if (productMain) {
+      productMain.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // Bind to header search controls
+  const searchInput = document.querySelector('.search-field');
+  const searchBtn = document.querySelector('.search-btn');
+
+  if (searchInput) {
+    function performSearch() {
+      const query = searchInput.value.trim();
+      if (!query) return;
+
+      const hasGrid = document.querySelector('.product-grid') !== null;
+      if (hasGrid) {
+        executeSearch(query);
+      } else {
+        // Redirect to homepage with search query parameter
+        window.location.href = `index.html?search=${encodeURIComponent(query)}`;
+      }
+    }
+
+    searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        performSearch();
+      }
+    });
+
+    if (searchBtn) {
+      searchBtn.addEventListener('click', performSearch);
+    }
+  }
+
+  // Handle clear filter clicks (reset search display)
+  const clearFilterBtn = document.getElementById('clearCategoryFilterBtn');
+  if (clearFilterBtn) {
+    clearFilterBtn.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      executeSearch('');
+    });
+  }
+
+  // Run on page load if search parameter is present in URL query string
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchQuery = urlParams.get('search');
+  if (searchQuery) {
+    if (searchInput) searchInput.value = searchQuery;
+    setTimeout(() => {
+      executeSearch(searchQuery);
+    }, 300);
+  }
 })();
