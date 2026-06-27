@@ -707,4 +707,234 @@ countdownElements.forEach(countdown => {
 
   // Watch for dynamic DOM changes (just in case they render late)
   setTimeout(setupCartTriggers, 1000);
+})();
+
+// ==========================================
+// INTERACTIVE STAR RATING SYSTEM
+// ==========================================
+(function initStarRating() {
+  const ratingContainers = document.querySelectorAll('.showcase-rating');
+
+  ratingContainers.forEach(container => {
+    // Find the product title associated with this rating
+    const showcase = container.closest('.showcase') || container.closest('.showcase-container');
+    if (!showcase) return;
+
+    const titleEl = showcase.querySelector('.showcase-title');
+    if (!titleEl) return;
+
+    const productKey = 'rating_' + titleEl.textContent.trim().toLowerCase().replace(/\s+/g, '_');
+
+    // Retrieve saved rating from LocalStorage
+    const savedRating = localStorage.getItem(productKey);
+    const stars = container.querySelectorAll('ion-icon');
+
+    // Record original state of rating stars on page load
+    const originalStates = [];
+    stars.forEach(star => {
+      originalStates.push({
+        name: star.getAttribute('name'),
+        color: star.style.color || ''
+      });
+    });
+
+    if (savedRating) {
+      const ratingVal = parseInt(savedRating, 10);
+      stars.forEach((star, idx) => {
+        if (idx < ratingVal) {
+          star.setAttribute('name', 'star');
+          star.style.color = '#ffb300';
+        } else {
+          star.setAttribute('name', 'star-outline');
+          star.style.color = '';
+        }
+      });
+    }
+
+    // Set interactive styles and events for stars
+    stars.forEach((star, index) => {
+      star.style.cursor = 'pointer';
+      star.style.transition = 'transform 0.15s ease';
+      
+      // Hover feedback (mouseenter)
+      star.addEventListener('mouseenter', () => {
+        stars.forEach((s, idx) => {
+          if (idx <= index) {
+            s.setAttribute('name', 'star');
+            s.style.color = '#ffcc00';
+            s.style.transform = 'scale(1.2)';
+          } else {
+            s.setAttribute('name', 'star-outline');
+            s.style.color = '';
+            s.style.transform = '';
+          }
+        });
+      });
+
+      // Rating save (click)
+      star.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const ratingVal = index + 1;
+        localStorage.setItem(productKey, ratingVal);
+
+        // Update UI
+        stars.forEach((s, idx) => {
+          if (idx < ratingVal) {
+            s.setAttribute('name', 'star');
+            s.style.color = '#ffb300';
+          } else {
+            s.setAttribute('name', 'star-outline');
+            s.style.color = '';
+          }
+        });
+
+        // Trigger database notification toast
+        const prodName = titleEl.textContent.trim();
+        showFeedbackNotification(`Thank you! You rated "${prodName}" ${ratingVal} out of 5 stars.`);
+      });
+    });
+
+    // Reset stars layout on container mouseleave
+    container.addEventListener('mouseleave', () => {
+      const activeRating = parseInt(localStorage.getItem(productKey) || '0', 10);
+      stars.forEach((s, idx) => {
+        s.style.transform = '';
+        if (activeRating > 0) {
+          if (idx < activeRating) {
+            s.setAttribute('name', 'star');
+            s.style.color = '#ffb300';
+          } else {
+            s.setAttribute('name', 'star-outline');
+            s.style.color = '';
+          }
+        } else {
+          s.setAttribute('name', originalStates[idx].name);
+          s.style.color = originalStates[idx].color;
+        }
+      });
+    });
+  });
+
+  // Re-use or define notification toast helper
+  function showFeedbackNotification(message) {
+    const dbNotif = document.getElementById('dbNotification');
+    const dbNotifMsg = document.getElementById('dbNotificationMessage');
+    if (dbNotif && dbNotifMsg) {
+      dbNotifMsg.textContent = message;
+      dbNotif.classList.add('active');
+      setTimeout(() => {
+        dbNotif.classList.remove('active');
+      }, 3500);
+    }
+  }
+})();
+
+// ==========================================
+// CATEGORY FILTER & REDIRECT SYSTEM
+// ==========================================
+(function initCategoryFilter() {
+  const categoryItems = document.querySelectorAll('.category-item');
+  const productMain = document.querySelector('.product-main');
+  const productGridTitle = document.getElementById('productGridTitle');
+  const clearFilterBtn = document.getElementById('clearCategoryFilterBtn');
+  const productGrid = document.querySelector('.product-grid');
+  
+  if (!productMain || !productGrid) return;
+  
+  const showcases = productGrid.querySelectorAll('.showcase');
+
+  // Category mapping to product showcase categories (all lowercase match)
+  const categoryMap = {
+    "dress & frock": ["skirt", "party wear", "dress & frock", "clothes"],
+    "winter wear": ["jacket", "jackets", "winter wear", "coat"],
+    "glasses & lens": ["glasses", "lens", "sunglasses", "glasses & lens"],
+    "shorts & jeans": ["shorts", "jeans", "shorts & jeans"],
+    "t-shirts": ["shirt", "t-shirt", "t-shirts", "tee"],
+    "jacket": ["jacket", "jackets"],
+    "watch": ["watch", "watches"],
+    "hat & caps": ["hat", "caps", "hat & caps"]
+  };
+
+  function applyCategoryFilter(categoryName) {
+    const query = categoryName.toLowerCase().trim();
+    const targetCategories = categoryMap[query] || [query];
+
+    showcases.forEach(showcase => {
+      const catEl = showcase.querySelector('.showcase-category');
+      if (catEl) {
+        const productCat = catEl.textContent.trim().toLowerCase();
+        const isMatch = targetCategories.some(target => productCat.includes(target) || target.includes(productCat));
+        
+        if (isMatch) {
+          showcase.style.display = 'block';
+          // Ensure fade-in animation triggers
+          showcase.classList.remove('aos-active');
+          setTimeout(() => showcase.classList.add('aos-active'), 50);
+        } else {
+          showcase.style.display = 'none';
+        }
+      }
+    });
+
+    if (productGridTitle) {
+      productGridTitle.textContent = `Category: ${categoryName}`;
+    }
+    if (clearFilterBtn) {
+      clearFilterBtn.style.display = 'block';
+    }
+
+    // Scroll to Product Section smoothly
+    productMain.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function resetCategoryFilter() {
+    showcases.forEach(showcase => {
+      showcase.style.display = 'block';
+    });
+
+    if (productGridTitle) {
+      productGridTitle.textContent = 'New Products';
+    }
+    if (clearFilterBtn) {
+      clearFilterBtn.style.display = 'none';
+    }
+  }
+
+  // Bind click events to category slider cards
+  categoryItems.forEach(item => {
+    const titleEl = item.querySelector('.category-item-title');
+    const categoryName = titleEl ? titleEl.textContent.trim() : '';
+    
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A' || e.target.classList.contains('category-btn')) {
+        e.preventDefault();
+      }
+      if (categoryName) {
+        applyCategoryFilter(categoryName);
+      }
+    });
+  });
+
+  // Bind click event to Clear Filter button
+  if (clearFilterBtn) {
+    clearFilterBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      resetCategoryFilter();
+    });
+  }
+
+  // Bind clicking sidebar category links or other menu links
+  const sidebarSubmenus = document.querySelectorAll('.sidebar-submenu-title');
+  sidebarSubmenus.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const nameEl = link.querySelector('.product-name');
+      if (nameEl) {
+        applyCategoryFilter(nameEl.textContent.trim());
+      }
+    });
+  });
 })();
