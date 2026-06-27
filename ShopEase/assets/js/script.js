@@ -528,6 +528,9 @@ countdownElements.forEach(countdown => {
     const orders = getOrders();
     if (dbCountBadge) dbCountBadge.textContent = orders.length;
 
+    syncBadges();
+    syncStockProgress();
+
     if (orders.length === 0) {
       if (dbTableBody) dbTableBody.innerHTML = '';
       if (dbEmptyState) dbEmptyState.style.display = 'block';
@@ -701,12 +704,165 @@ countdownElements.forEach(countdown => {
     });
   }
 
+  // Sync header badges (cart quantity & wishlist items)
+  function syncBadges() {
+    const orders = getOrders();
+    const totalCartQty = orders.reduce((sum, order) => sum + (order.quantity || 1), 0);
+
+    const wishlist = JSON.parse(localStorage.getItem('shopEaseWishlist')) || [];
+    const totalWishlistCount = wishlist.length;
+
+    // Update all matching elements
+    document.querySelectorAll('.action-btn ion-icon[name="bag-handle-outline"] + .count, .action-btn ion-icon[name="bag-handle"] + .count').forEach(badge => {
+      badge.textContent = totalCartQty;
+    });
+
+    document.querySelectorAll('.action-btn ion-icon[name="heart-outline"] + .count, .action-btn ion-icon[name="heart"] + .count').forEach(badge => {
+      badge.textContent = totalWishlistCount;
+    });
+  }
+
+  // Sync claim stock indicators dynamically
+  function syncStockProgress() {
+    const orders = getOrders();
+    const showcases = document.querySelectorAll('.showcase, .showcase-container');
+    showcases.forEach(showcase => {
+      const titleEl = showcase.querySelector('.showcase-title');
+      if (!titleEl) return;
+      const title = titleEl.textContent.trim().toLowerCase();
+
+      let soldQty = 0;
+      orders.forEach(order => {
+        if (order.product.name.toLowerCase() === title) {
+          soldQty += order.quantity;
+        }
+      });
+
+      let baseSold = 84;
+      let baseAvail = 16;
+      if (title.includes('shampoo')) {
+        baseSold = 50;
+        baseAvail = 90;
+      } else if (title.includes('watch')) {
+        baseSold = 91;
+        baseAvail = 9;
+      } else if (title.includes('hat')) {
+        baseSold = 62;
+        baseAvail = 38;
+      } else if (title.includes('dress') || title.includes('frock')) {
+        baseSold = 78;
+        baseAvail = 22;
+      } else if (title.includes('perfume')) {
+        baseSold = 51;
+        baseAvail = 49;
+      } else if (title.includes('necklace') || title.includes('jewellery')) {
+        baseSold = 73;
+        baseAvail = 27;
+      }
+
+      const currentSold = baseSold + soldQty;
+      const currentAvail = Math.max(0, baseAvail - soldQty);
+      const total = currentSold + currentAvail;
+      const percent = total > 0 ? Math.round((currentSold / total) * 100) : 0;
+
+      const soldEl = showcase.querySelector('.showcase-status .wrapper p:nth-child(1) b, .deal-progress-container .progress-text-flex span:nth-child(1)');
+      const availEl = showcase.querySelector('.showcase-status .wrapper p:nth-child(2) b, .deal-progress-container .progress-text-flex span:nth-child(2)');
+      const barEl = showcase.querySelector('.showcase-status-bar, .progress-bar-fill');
+
+      if (soldEl) {
+        if (soldEl.textContent.includes('%')) {
+          soldEl.textContent = `${percent}% Claimed`;
+        } else {
+          soldEl.textContent = currentSold;
+        }
+      }
+      if (availEl) {
+        if (availEl.textContent.includes('Left')) {
+          availEl.textContent = `${currentAvail} Left`;
+        } else {
+          availEl.textContent = currentAvail;
+        }
+      }
+      if (barEl) {
+        barEl.style.width = percent + '%';
+      }
+    });
+  }
+
+  // Highlight wishlisted products
+  function highlightWishlist() {
+    const wishlist = JSON.parse(localStorage.getItem('shopEaseWishlist')) || [];
+    document.querySelectorAll('.btn-action').forEach(btn => {
+      const icon = btn.querySelector('ion-icon');
+      if (icon && (icon.getAttribute('name') === 'heart-outline' || icon.getAttribute('name') === 'heart')) {
+        const showcase = btn.closest('.showcase') || btn.closest('.showcase-container');
+        if (!showcase) return;
+        const titleEl = showcase.querySelector('.showcase-title');
+        if (!titleEl) return;
+        const title = titleEl.textContent.trim();
+
+        if (wishlist.includes(title)) {
+          icon.setAttribute('name', 'heart');
+          icon.style.color = 'var(--salmon-pink)';
+        } else {
+          icon.setAttribute('name', 'heart-outline');
+          icon.style.color = '';
+        }
+      }
+    });
+  }
+
+  // Setup wishlist triggers
+  function setupWishlistTriggers() {
+    document.querySelectorAll('.btn-action').forEach(btn => {
+      const icon = btn.querySelector('ion-icon');
+      if (icon && (icon.getAttribute('name') === 'heart-outline' || icon.getAttribute('name') === 'heart')) {
+        if (btn.getAttribute('data-wishlist-bound')) return;
+        btn.setAttribute('data-wishlist-bound', 'true');
+
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const showcase = btn.closest('.showcase') || btn.closest('.showcase-container');
+          if (!showcase) return;
+
+          const titleEl = showcase.querySelector('.showcase-title');
+          if (!titleEl) return;
+          const title = titleEl.textContent.trim();
+
+          let wishlist = JSON.parse(localStorage.getItem('shopEaseWishlist')) || [];
+          if (wishlist.includes(title)) {
+            wishlist = wishlist.filter(item => item !== title);
+            icon.setAttribute('name', 'heart-outline');
+            icon.style.color = '';
+            showNotification(`"${title}" removed from wishlist.`);
+          } else {
+            wishlist.push(title);
+            icon.setAttribute('name', 'heart');
+            icon.style.color = 'var(--salmon-pink)';
+            showNotification(`"${title}" added to wishlist!`);
+          }
+
+          localStorage.setItem('shopEaseWishlist', JSON.stringify(wishlist));
+          syncBadges();
+        });
+      }
+    });
+  }
+
   // Initial runs
   setupCartTriggers();
   updateDatabaseViewer();
+  highlightWishlist();
+  setupWishlistTriggers();
 
   // Watch for dynamic DOM changes (just in case they render late)
-  setTimeout(setupCartTriggers, 1000);
+  setTimeout(() => {
+    setupCartTriggers();
+    setupWishlistTriggers();
+    highlightWishlist();
+  }, 1000);
 })();
 
 // ==========================================
