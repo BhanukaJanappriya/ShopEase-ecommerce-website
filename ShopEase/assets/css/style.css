@@ -4254,3 +4254,12 @@ footer {
     padding: 25px;
   }
 }
+
+/* --- Category Filter & Rating Styles --- */
+.clear-filter-btn:hover {
+  background: var(--eerie-black) !important;
+}
+
+.showcase-rating ion-icon {
+  transition: transform 0.15s ease, color 0.15s ease;
+}

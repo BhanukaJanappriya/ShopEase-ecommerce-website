@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopEase - Track Order 🚚</title>
+
+  <!-- favicon-->
+  <link rel="shortcut icon" href="./assets/images/logo/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <!-- google font link -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* Custom Tracker Styles matching homepage styling */
+    .tracker-box {
+      background: #fff;
+      border: 1px solid var(--cultured);
+      border-radius: var(--border-radius-md);
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.01);
+    }
+
+    .tracker-search-container {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .tracker-input {
+      flex: 1;
+      padding: 12px 20px;
+      border: 1px solid var(--cultured);
+      border-radius: var(--border-radius-sm);
+      font-size: var(--fs-7);
+      color: var(--onyx);
+      outline: none;
+      transition: var(--transition-timing);
+    }
+
+    .tracker-input:focus {
+      border-color: var(--salmon-pink);
+    }
+
+    .tracker-btn {
+      background: var(--salmon-pink);
+      color: var(--white);
+      font-size: var(--fs-7);
+      font-weight: var(--weight-600);
+      text-transform: uppercase;
+      padding: 12px 30px;
+      border-radius: var(--border-radius-sm);
+      transition: var(--transition-timing);
+      cursor: pointer;
+      border: none;
+    }
+
+    .tracker-btn:hover {
+      background: var(--eerie-black);
+    }
+
+    .tracker-suggestions {
+      margin-top: -15px;
+      margin-bottom: 30px;
+      font-size: var(--fs-8);
+      color: var(--sonic-silver);
+    }
+
+    .tracker-suggestion-link {
+      color: var(--salmon-pink);
+      cursor: pointer;
+      text-decoration: underline;
+      margin-left: 5px;
+      font-weight: var(--weight-600);
+    }
+
+    /* Timeline Steps */
+    .timeline-container {
+      position: relative;
+      margin-top: 40px;
+      padding-left: 40px;
+    }
+
+    .timeline-container::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 10px;
+      bottom: 10px;
+      width: 4px;
+      background: var(--cultured);
+      z-index: 1;
+    }
+
+    .timeline-step {
+      position: relative;
+      margin-bottom: 35px;
+      z-index: 2;
+    }
+
+    .timeline-step:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-bubble {
+      position: absolute;
+      left: -40px;
+      top: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--cultured);
+      border: 3px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sonic-silver);
+      font-size: 20px;
+      transition: var(--transition-timing);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .timeline-content {
+      padding-left: 15px;
+      padding-top: 5px;
+    }
+
+    .timeline-title {
+      font-size: var(--fs-6);
+      font-weight: var(--weight-700);
+      color: var(--sonic-silver);
+      margin-bottom: 3px;
+      transition: var(--transition-timing);
+    }
+
+    .timeline-desc {
+      font-size: var(--fs-8);
+      color: var(--sonic-silver);
+    }
+
+    .timeline-time {
+      font-size: var(--fs-9);
+      color: var(--sonic-silver);
+      font-weight: var(--weight-600);
+      margin-top: 3px;
+      display: block;
+    }
+
+    /* Active Step Styling */
+    .timeline-step.active .timeline-bubble {
+      background: var(--salmon-pink);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(255, 105, 180, 0.4);
+    }
+
+    .timeline-step.active .timeline-title {
+      color: var(--eerie-black);
+    }
+
+    .timeline-step.active .timeline-desc {
+      color: var(--onyx);
+    }
+
+    .timeline-step.completed .timeline-bubble {
+      background: #4caf50;
+      color: #fff;
+    }
+
+    .timeline-step.completed .timeline-title {
+      color: var(--eerie-black);
+    }
+
+    /* Timeline connecting active line */
+    .timeline-progress-line {
+      position: absolute;
+      left: 19px;
+      top: 10px;
+      width: 4px;
+      background: var(--salmon-pink);
+      z-index: 1;
+      transition: height 0.5s ease;
+      height: 0%;
+    }
+
+    .tracker-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 1px solid var(--cultured);
+    }
+
+    @media (max-width: 768px) {
+      .tracker-details-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .detail-card {
+      background: var(--cultured);
+      border-radius: var(--border-radius-sm);
+      padding: 20px;
+    }
+
+    .detail-card h4 {
+      font-size: var(--fs-6);
+      font-weight: var(--weight-700);
+      color: var(--eerie-black);
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding-bottom: 8px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: var(--fs-8);
+      color: var(--onyx);
+    }
+
+    .detail-row strong {
+      color: var(--eerie-black);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay" data-overlay></div>
+
+  <!--
+    - HEADER
+  -->
+  <header>
+    <div class="header-top">
+      <div class="container">
+        <ul class="header-social-container">
+          <li><a href="#" class="social-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-instagram"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+        </ul>
+
+        <div class="header-alert-news">
+          <p>
+            <b>Free Shipping</b>
+            This Week Order Over - LKR 2000.00
+          </p>
+        </div>
+
+        <div class="header-top-actions">
+          <select name="currency">
+            <option value="lkr">LKR රු</option>
+            <option value="usd">USD &dollar;</option>
+          </select>
+
+          <select name="language">
+            <option value="en-US">English</option>
+            <option value="si">Sinhala</option>
+            <option value="ta">Tamil</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="header-logo">
+          <img src="./assets/images/logo/logo.jpg" alt="ShopEase's logo" width="120" height="120" style="border-radius: 20px; object-fit: contain; aspect-ratio: 1 / 1;">
+        </a>
+
+        <div class="header-search-container">
+          <input type="search" name="search" class="search-field" placeholder="Enter your product name...">
+          <button class="search-btn">
+            <ion-icon name="search-outline"></ion-icon>
+          </button>
+        </div>
+
+        <div class="header-user-actions">
+          <button class="action-btn">
+            <ion-icon name="person-outline"></ion-icon>
+          </button>
+
+          <button class="action-btn">
+            <ion-icon name="heart-outline"></ion-icon>
+            <span class="count">0</span>
+          </button>
+
+          <button class="action-btn">
+            <ion-icon name="bag-handle-outline"></ion-icon>
+            <span class="count">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="desktop-navigation-menu">
+      <div class="container">
+        <ul class="desktop-menu-category-list">
+          <li class="menu-category">
+            <a href="index.html" class="menu-title">Home</a>
+          </li>
+
+          <li class="menu-category">
+            <a href="#" class="menu-title">Categories</a>
+            <div class="dropdown-panel">
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Electronics</a></li>
+                <li class="panel-list-item"><a href="#">Desktop</a></li>
+                <li class="panel-list-item"><a href="#">Laptop</a></li>
+                <li class="panel-list-item"><a href="#">Camera</a></li>
+                <li class="panel-list-item"><a href="#">Tablet</a></li>
+                <li class="panel-list-item"><a href="#">Headphone</a></li>
+                <li class="panel-list-item">
+                  <a href="#">
+                    <img src="./assets/images/banner-2.jpg" alt="headphone collection" width="250" height="119" />
+                  </a>
+                </li>
+              </ul>
+
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Men's</a></li>
+                <li class="panel-list-item"><a href="#">Formal</a></li>
+                <li class="panel-list-item"><a href="#">Casual</a></li>
+                <li class="panel-list-item"><a href="#">Sports</a></li>
+                <li class="panel-list-item"><a href="#">Jacket</a></li>
+                <li class="panel-list-item"><a href="#">Sunglasses</a></li>
+                <li class="panel-list-item">
+                  <a href="#">
+                    <img src="./assets/images/mens-banner.jpg" alt="men's fashion" width="250" height="119" />
+                  </a>
+                </li>
+              </ul>
+
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Women's</a></li>
+                <li class="panel-list-item"><a href="#">Formal</a></li>
+                <li class="panel-list-item"><a href="#">Casual</a></li>
+                <li class="panel-list-item"><a href="#">Perfume</a></li>
+                <li class="panel-list-item"><a href="#">Cosmetics</a></li>
+                <li class="panel-list-item"><a href="#">Bags</a></li>
+                <li class="panel-list-item">
+                  <a href="#">
+                    <img src="./assets/images/womens-banner.jpg" alt="women's fashion" width="250" height="119" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="menu-category">
+            <a href="blog.html" class="menu-title">Blog</a>
+          </li>
+
+          <li class="menu-category">
+            <a href="hot-offers.html" class="menu-title">Hot Offers</a>
+          </li>
+
+          <li class="menu-category">
+            <a href="track-order.html" class="menu-title">Track Order</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-bottom-navigation">
+      <button class="action-btn" data-mobile-menu-open-btn>
+        <ion-icon name="menu-outline"></ion-icon>
+      </button>
+
+      <button class="action-btn">
+        <ion-icon name="bag-handle-outline"></ion-icon>
+        <span class="count">0</span>
+      </button>
+
+      <button class="action-btn">
+        <ion-icon name="home-outline"></ion-icon>
+      </button>
+
+      <button class="action-btn">
+        <ion-icon name="heart-outline"></ion-icon>
+        <span class="count">0</span>
+      </button>
+
+      <button class="action-btn" data-mobile-menu-open-btn>
+        <ion-icon name="grid-outline"></ion-icon>
+      </button>
+    </div>
+
+    <div class="mobile-navigation-menu  has-scrollbar" data-mobile-menu>
+      <div class="menu-top">
+        <h2 class="menu-title">Menu</h2>
+        <button class="menu-close-btn" data-mobile-menu-close-btn>
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+
+      <ul class="mobile-menu-category-list">
+        <li class="menu-category">
+          <a href="index.html" class="menu-title">Home</a>
+        </li>
+
+        <li class="menu-category">
+          <button class="accordion-menu" data-accordion-btn>
+            <p class="menu-title">Categories</p>
+            <div>
+              <ion-icon name="add-outline" class="add-icon"></ion-icon>
+              <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+            </div>
+          </button>
+
+          <ul class="submenu-category-list" data-accordion>
+            <li class="submenu-category"><a href="#" class="submenu-title">Electronics</a></li>
+            <li class="submenu-category"><a href="#" class="submenu-title">Men's Fashion</a></li>
+            <li class="submenu-category"><a href="#" class="submenu-title">Women's Fashion</a></li>
+          </ul>
+        </li>
+
+        <li class="menu-category">
+          <a href="blog.html" class="menu-title">Blog</a>
+        </li>
+
+        <li class="menu-category">
+          <a href="hot-offers.html" class="menu-title">Hot Offers</a>
+        </li>
+
+        <li class="menu-category">
+          <a href="track-order.html" class="menu-title">Track Order</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!--
+    - MAIN SECTION
+  -->
+  <main>
+    <div class="product-container">
+      <div class="container">
+        
+        <!--
+          - SIDEBAR
+        -->
+        <div class="sidebar has-scrollbar" data-mobile-menu>
+          <div class="sidebar-category">
+            <div class="sidebar-top">
+              <h2 class="sidebar-title">Category</h2>
+              <button class="sidebar-close-btn" data-mobile-menu-close-btn>
+                <ion-icon name="close-outline"></ion-icon>
+              </button>
+            </div>
+
+            <ul class="sidebar-menu-category-list">
+              <li class="sidebar-menu-category">
+                <button class="sidebar-accordion-menu" data-accordion-btn>
+                  <div class="menu-title-flex">
+                    <img src="./assets/images/icons/dress.svg" alt="clothes" width="20" height="20" class="menu-title-img">
+                    <p class="menu-title">Clothes</p>
+                  </div>
+                  <div>
+                    <ion-icon name="add-outline" class="add-icon"></ion-icon>
+                    <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+                  </div>
+                </button>
+                <ul class="sidebar-submenu-category-list" data-accordion>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Shirt</p>
+                      <data value="300" class="stock" title="Available Stock">300</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">shorts & jeans</p>
+                      <data value="60" class="stock" title="Available Stock">60</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">jacket</p>
+                      <data value="50" class="stock" title="Available Stock">50</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">dress & frock</p>
+                      <data value="87" class="stock" title="Available Stock">87</data>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="sidebar-menu-category">
+                <button class="sidebar-accordion-menu" data-accordion-btn>
+                  <div class="menu-title-flex">
+                    <img src="./assets/images/icons/shoes.svg" alt="footwear" class="menu-title-img" width="20" height="20">
+                    <p class="menu-title">Footwear</p>
+                  </div>
+                  <div>
+                    <ion-icon name="add-outline" class="add-icon"></ion-icon>
+                    <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+                  </div>
+                </button>
+                <ul class="sidebar-submenu-category-list" data-accordion>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Sports</p>
+                      <data value="45" class="stock" title="Available Stock">45</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Formal</p>
+                      <data value="75" class="stock" title="Available Stock">75</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Casual</p>
+                      <data value="35" class="stock" title="Available Stock">35</data>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!--
+          - PRODUCT BOX (on the right)
+        -->
+        <div class="product-box">
+          
+          <div class="tracker-box">
+            <h2 class="title" style="border-bottom: none; padding-bottom: 0; margin-bottom: 20px;">Order Delivery Tracker</h2>
+            
+            <div class="tracker-search-container">
+              <input type="text" class="tracker-input" id="trackerInput" placeholder="Enter your Order ID (e.g. ORD-123456-789)">
+              <button class="tracker-btn" onclick="trackOrder()">Track</button>
+            </div>
+
+            <div class="tracker-suggestions" id="trackerSuggestions">
+              <!-- Dynamically Populated with recent orders -->
+            </div>
+
+            <!-- Tracker Output Board (Hidden by default) -->
+            <div id="trackerOutputBoard" style="display: none; margin-top: 30px;">
+              <h3 class="showcase-title" style="font-size: var(--fs-4); font-weight: var(--weight-700); margin-bottom: 20px; color: var(--eerie-black);">
+                Live Shipment Timeline
+              </h3>
+
+              <div class="timeline-container">
+                <div class="timeline-progress-line" id="timelineProgressLine"></div>
+
+                <!-- Step 1 -->
+                <div class="timeline-step" id="step1">
+                  <div class="timeline-bubble"><ion-icon name="checkmark-outline"></ion-icon></div>
+                  <div class="timeline-content">
+                    <h4 class="timeline-title">Order Placed</h4>
+                    <p class="timeline-desc">Your order has been logged and confirmed in our local e-commerce database.</p>
+                    <span class="timeline-time" id="time1">-</span>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="timeline-step" id="step2">
+                  <div class="timeline-bubble"><ion-icon name="cube-outline"></ion-icon></div>
+                  <div class="timeline-content">
+                    <h4 class="timeline-title">Processing & Packing</h4>
+                    <p class="timeline-desc">The item is verified, packaged, and prepared at our Colombo fulfillment center.</p>
+                    <span class="timeline-time" id="time2">-</span>
+                  </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="timeline-step" id="step3">
+                  <div class="timeline-bubble"><ion-icon name="airplane-outline"></ion-icon></div>
+                  <div class="timeline-content">
+                    <h4 class="timeline-title">Shipped & In Transit</h4>
+                    <p class="timeline-desc">Handed to carrier agent. Dispatched on main freight line to delivery station.</p>
+                    <span class="timeline-time" id="time3">-</span>
+                  </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="timeline-step" id="step4">
+                  <div class="timeline-bubble"><ion-icon name="bicycle-outline"></ion-icon></div>
+                  <div class="timeline-content">
+                    <h4 class="timeline-title">Out for Delivery</h4>
+                    <p class="timeline-desc">Local courier delivery agent has picked up parcel and is en route to address.</p>
+                    <span class="timeline-time" id="time4">-</span>
+                  </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="timeline-step" id="step5">
+                  <div class="timeline-bubble"><ion-icon name="home-outline"></ion-icon></div>
+                  <div class="timeline-content">
+                    <h4 class="timeline-title">Delivered</h4>
+                    <p class="timeline-desc">Parcel successfully delivered to consignee. Thank you for shopping with ShopEase!</p>
+                    <span class="timeline-time" id="time5">-</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Order & Product Details Grid -->
+              <div class="tracker-details-grid">
+                <div class="detail-card">
+                  <h4>Product Details</h4>
+                  <div class="detail-row"><span>Product:</span><strong id="detProduct">-</strong></div>
+                  <div class="detail-row"><span>Quantity:</span><strong id="detQty">-</strong></div>
+                  <div class="detail-row"><span>Spec:</span><strong id="detSpec">-</strong></div>
+                  <div class="detail-row"><span>Total Cost:</span><strong id="detPrice">-</strong></div>
+                </div>
+
+                <div class="detail-card">
+                  <h4>Delivery Details</h4>
+                  <div class="detail-row"><span>Customer:</span><strong id="detCustomer">-</strong></div>
+                  <div class="detail-row"><span>Delivery Address:</span><strong id="detAddress">-</strong></div>
+                  <div class="detail-row"><span>Shipping Method:</span><strong id="detMethod">-</strong></div>
+                  <div class="detail-row"><span>Payment Mode:</span><strong id="detPayment">-</strong></div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Empty State / Welcome tracker -->
+            <div id="trackerWelcomeState" style="text-align: center; padding: 40px 0; color: var(--sonic-silver);">
+              <ion-icon name="locate-outline" style="font-size: 50px; color: var(--salmon-pink); margin-bottom: 15px;"></ion-icon>
+              <p style="font-size: var(--fs-7);">Enter an Order ID above to see live GPS shipment logs.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!--
+    - FOOTER
+  -->
+  <footer>
+    <div class="footer-nav">
+      <div class="container">
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Popular Categories</h2></li>
+          <li><a href="#" class="footer-nav-link">Fashion</a></li>
+          <li><a href="#" class="footer-nav-link">Electronic</a></li>
+          <li><a href="#" class="footer-nav-link">Cosmetic</a></li>
+          <li><a href="#" class="footer-nav-link">Jewelry</a></li>
+        </ul>
+
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Our Company</h2></li>
+          <li><a href="#" class="footer-nav-link">Delivery</a></li>
+          <li><a href="#" class="footer-nav-link">About us</a></li>
+          <li><a href="#" class="footer-nav-link">Secure payment</a></li>
+          <li><a href="#" class="footer-nav-link">Contact us</a></li>
+        </ul>
+
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Contact</h2></li>
+          <li class="footer-nav-item flex">
+            <div class="icon-box"><ion-icon name="location-outline"></ion-icon></div>
+            <address class="content">419 Galle Road, Colombo 03, Sri Lanka.</address>
+          </li>
+          <li class="footer-nav-item flex">
+            <div class="icon-box"><ion-icon name="call-outline"></ion-icon></div>
+            <a href="tel:+94112345678" class="footer-nav-link">+94 11 234 5678</a>
+          </li>
+          <li class="footer-nav-item flex">
+            <div class="icon-box"><ion-icon name="mail-outline"></ion-icon></div>
+            <a href="mailto:contact@company.lk" class="footer-nav-link">contact@company.lk</a>
+          </li>
+        </ul>
+
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Follow Us</h2></li>
+          <li>
+            <ul class="social-link">
+              <li class="footer-nav-item"><a href="#" class="footer-nav-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+              <li class="footer-nav-item"><a href="#" class="footer-nav-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+              <li class="footer-nav-item"><a href="#" class="footer-nav-link"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+              <li class="footer-nav-item"><a href="#" class="footer-nav-link"><ion-icon name="logo-instagram"></ion-icon></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <img src="./assets/images/payment.png" alt="payment method" class="payment-img">
+        <p class="copyright">
+          Copyright &copy; <a href="#">ShopEase</a> all rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="./assets/js/script.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <script>
+    // Load recent orders from localStorage as suggestions
+    (function initSuggestions() {
+      const orders = JSON.parse(localStorage.getItem('shopEaseOrders')) || [];
+      const suggestionsEl = document.getElementById('trackerSuggestions');
+      if (!suggestionsEl) return;
+
+      if (orders.length === 0) {
+        suggestionsEl.innerHTML = 'No recent orders found. Add items to cart to place one!';
+        return;
+      }
+
+      // Display the last 3 orders as clickable links
+      const recent = orders.slice(-3).reverse();
+      let html = 'Recent orders: ';
+      recent.forEach((ord, index) => {
+        html += `<span class="tracker-suggestion-link" onclick="fillAndTrack('${ord.orderId}')">${ord.orderId}</span>${index < recent.length - 1 ? ', ' : ''}`;
+      });
+      suggestionsEl.innerHTML = html;
+    })();
+
+    function fillAndTrack(id) {
+      document.getElementById('trackerInput').value = id;
+      trackOrder();
+    }
+
+    let trackInterval;
+
+    function trackOrder() {
+      const inputVal = document.getElementById('trackerInput').value.trim();
+      const welcomeState = document.getElementById('trackerWelcomeState');
+      const outputBoard = document.getElementById('trackerOutputBoard');
+
+      if (!inputVal) {
+        alert('Please enter a valid Order ID.');
+        return;
+      }
+
+      const orders = JSON.parse(localStorage.getItem('shopEaseOrders')) || [];
+      const order = orders.find(o => o.orderId === inputVal);
+
+      if (!order) {
+        alert(`Order "${inputVal}" was not found in the LocalStorage database.`);
+        return;
+      }
+
+      // Clear any previous interval
+      if (trackInterval) clearInterval(trackInterval);
+
+      // Populate Details
+      document.getElementById('detProduct').textContent = order.product.name;
+      document.getElementById('detQty').textContent = order.quantity;
+      document.getElementById('detSpec').textContent = `Size: ${order.size} | Color: ${order.color}`;
+      
+      const rawPrice = order.product.price.replace(/[^\d.]/g, '');
+      const priceVal = parseFloat(rawPrice) || 0;
+      document.getElementById('detPrice').textContent = `LKR ${(priceVal * order.quantity).toFixed(2)}`;
+
+      document.getElementById('detCustomer').textContent = order.customer.name;
+      document.getElementById('detAddress').textContent = order.customer.address;
+      document.getElementById('detMethod').textContent = order.customer.deliveryMethod;
+      document.getElementById('detPayment').textContent = order.customer.paymentMethod;
+
+      // Show board
+      welcomeState.style.display = 'none';
+      outputBoard.style.display = 'block';
+
+      // Update function to run periodically to simulate live delivery tracking
+      function updateTrackingTimeline() {
+        const createdTime = new Date(order.timestamp).getTime();
+        const elapsedSecs = (Date.now() - createdTime) / 1000;
+
+        const datePlaced = new Date(createdTime);
+        document.getElementById('time1').textContent = datePlaced.toLocaleTimeString() + ' | ' + datePlaced.toLocaleDateString();
+
+        // Remove statuses classes
+        for (let i = 1; i <= 5; i++) {
+          const el = document.getElementById(`step${i}`);
+          el.classList.remove('active', 'completed');
+          document.getElementById(`time${i}`).textContent = '-';
+        }
+
+        let progressHeight = 0;
+
+        if (elapsedSecs < 30) {
+          // Placed
+          document.getElementById('step1').classList.add('active');
+          progressHeight = 0;
+        } else if (elapsedSecs < 90) {
+          // Packing
+          document.getElementById('step1').classList.add('completed');
+          document.getElementById('step2').classList.add('active');
+          document.getElementById('time2').textContent = new Date(createdTime + 30000).toLocaleTimeString();
+          progressHeight = 25;
+        } else if (elapsedSecs < 240) {
+          // Shipped
+          document.getElementById('step1').classList.add('completed');
+          document.getElementById('step2').classList.add('completed');
+          document.getElementById('step3').classList.add('active');
+          document.getElementById('time2').textContent = new Date(createdTime + 30000).toLocaleTimeString();
+          document.getElementById('time3').textContent = new Date(createdTime + 90000).toLocaleTimeString();
+          progressHeight = 50;
+        } else if (elapsedSecs < 480) {
+          // Out for delivery
+          document.getElementById('step1').classList.add('completed');
+          document.getElementById('step2').classList.add('completed');
+          document.getElementById('step3').classList.add('completed');
+          document.getElementById('step4').classList.add('active');
+          document.getElementById('time2').textContent = new Date(createdTime + 30000).toLocaleTimeString();
+          document.getElementById('time3').textContent = new Date(createdTime + 90000).toLocaleTimeString();
+          document.getElementById('time4').textContent = new Date(createdTime + 240000).toLocaleTimeString();
+          progressHeight = 75;
+        } else {
+          // Delivered
+          document.getElementById('step1').classList.add('completed');
+          document.getElementById('step2').classList.add('completed');
+          document.getElementById('step3').classList.add('completed');
+          document.getElementById('step4').classList.add('completed');
+          document.getElementById('step5').classList.add('completed');
+          document.getElementById('time2').textContent = new Date(createdTime + 30000).toLocaleTimeString();
+          document.getElementById('time3').textContent = new Date(createdTime + 90000).toLocaleTimeString();
+          document.getElementById('time4').textContent = new Date(createdTime + 240000).toLocaleTimeString();
+          document.getElementById('time5').textContent = new Date(createdTime + 480000).toLocaleTimeString();
+          progressHeight = 100;
+        }
+
+        document.getElementById('timelineProgressLine').style.height = progressHeight + '%';
+      }
+
+      updateTrackingTimeline();
+      // Keep checking and updating every 5 seconds
+      trackInterval = setInterval(updateTrackingTimeline, 5000);
+    }
+  </script>
+</body>
+
+</html>
