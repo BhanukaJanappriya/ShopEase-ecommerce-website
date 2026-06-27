@@ -869,107 +869,137 @@ countdownElements.forEach(countdown => {
 // INTERACTIVE STAR RATING SYSTEM
 // ==========================================
 (function initStarRating() {
+  const ratingBaselines = {
+    "mens winter leathers jackets": { count: 14, sum: 62 },
+    "smart watch pro series 7": { count: 28, sum: 126 },
+    "woolen hat for men": { count: 8, sum: 38 },
+    "floral summer dress": { count: 22, sum: 92 },
+    "french floral fragrance 100ml": { count: 15, sum: 63 },
+    "gothic rose gold necklace set": { count: 19, sum: 91 },
+    "shampoo, conditioner & facewash packs": { count: 32, sum: 121 },
+    "baby fabric shoes": { count: 11, sum: 55 },
+    "men's hoodies t-shirt": { count: 41, sum: 172 },
+    "girls t-shirt": { count: 25, sum: 110 }
+  };
+
+  function getProductRatings(title) {
+    const cleanTitle = title.toLowerCase().trim();
+    const allRatings = JSON.parse(localStorage.getItem('shopEaseRatings')) || {};
+    
+    if (!allRatings[cleanTitle]) {
+      const base = ratingBaselines[cleanTitle] || { count: 5, sum: 20 };
+      allRatings[cleanTitle] = {
+        count: base.count,
+        sum: base.sum,
+        userRating: 0
+      };
+      localStorage.setItem('shopEaseRatings', JSON.stringify(allRatings));
+    }
+    return allRatings[cleanTitle];
+  }
+
+  function saveProductRating(title, newRating) {
+    const cleanTitle = title.toLowerCase().trim();
+    const allRatings = JSON.parse(localStorage.getItem('shopEaseRatings')) || {};
+    const item = allRatings[cleanTitle] || { count: 5, sum: 20, userRating: 0 };
+    
+    if (item.userRating > 0) {
+      // User is adjusting their previous rating
+      item.sum = item.sum - item.userRating + newRating;
+      item.userRating = newRating;
+    } else {
+      // New rating from user
+      item.count += 1;
+      item.sum += newRating;
+      item.userRating = newRating;
+    }
+    
+    allRatings[cleanTitle] = item;
+    localStorage.setItem('shopEaseRatings', JSON.stringify(allRatings));
+    return item;
+  }
+
   const ratingContainers = document.querySelectorAll('.showcase-rating');
 
   ratingContainers.forEach(container => {
-    // Find the product title associated with this rating
     const showcase = container.closest('.showcase') || container.closest('.showcase-container');
     if (!showcase) return;
 
     const titleEl = showcase.querySelector('.showcase-title');
     if (!titleEl) return;
+    const title = titleEl.textContent.trim();
 
-    const productKey = 'rating_' + titleEl.textContent.trim().toLowerCase().replace(/\s+/g, '_');
-
-    // Retrieve saved rating from LocalStorage
-    const savedRating = localStorage.getItem(productKey);
     const stars = container.querySelectorAll('ion-icon');
 
-    // Record original state of rating stars on page load
-    const originalStates = [];
-    stars.forEach(star => {
-      originalStates.push({
-        name: star.getAttribute('name'),
-        color: star.style.color || ''
-      });
-    });
+    // Create or find rates text container next to the stars container
+    let ratingText = container.querySelector('.rating-text-label');
+    if (!ratingText) {
+      ratingText = document.createElement('span');
+      ratingText.className = 'rating-text-label';
+      ratingText.style.color = 'var(--sonic-silver)';
+      ratingText.style.fontSize = 'var(--fs-8)';
+      ratingText.style.fontWeight = '500';
+      ratingText.style.marginLeft = '8px';
+      container.appendChild(ratingText);
+    }
 
-    if (savedRating) {
-      const ratingVal = parseInt(savedRating, 10);
+    // Function to render stars based on average score (full, half, empty)
+    function renderStars(ratingData) {
+      const average = ratingData.count > 0 ? (ratingData.sum / ratingData.count) : 0;
       stars.forEach((star, idx) => {
-        if (idx < ratingVal) {
+        const starVal = idx + 1;
+        if (starVal <= average) {
           star.setAttribute('name', 'star');
+          star.style.color = '#ffb300';
+        } else if (starVal - 0.5 <= average) {
+          star.setAttribute('name', 'star-half');
           star.style.color = '#ffb300';
         } else {
           star.setAttribute('name', 'star-outline');
           star.style.color = '';
         }
       });
+      ratingText.textContent = `${average.toFixed(1)} (${ratingData.count} rates)`;
     }
 
-    // Set interactive styles and events for stars
+    // Fetch initial ratings
+    const ratingData = getProductRatings(title);
+    renderStars(ratingData);
+
+    // Mouse interactive events
     stars.forEach((star, index) => {
       star.style.cursor = 'pointer';
       star.style.transition = 'transform 0.15s ease';
-      
-      // Hover feedback (mouseenter)
+
       star.addEventListener('mouseenter', () => {
         stars.forEach((s, idx) => {
+          s.style.transform = idx <= index ? 'scale(1.2)' : '';
           if (idx <= index) {
             s.setAttribute('name', 'star');
             s.style.color = '#ffcc00';
-            s.style.transform = 'scale(1.2)';
           } else {
             s.setAttribute('name', 'star-outline');
             s.style.color = '';
-            s.style.transform = '';
           }
         });
       });
 
-      // Rating save (click)
       star.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        
+
         const ratingVal = index + 1;
-        localStorage.setItem(productKey, ratingVal);
+        const updatedData = saveProductRating(title, ratingVal);
+        renderStars(updatedData);
 
-        // Update UI
-        stars.forEach((s, idx) => {
-          if (idx < ratingVal) {
-            s.setAttribute('name', 'star');
-            s.style.color = '#ffb300';
-          } else {
-            s.setAttribute('name', 'star-outline');
-            s.style.color = '';
-          }
-        });
-
-        // Trigger database notification toast
-        const prodName = titleEl.textContent.trim();
-        showFeedbackNotification(`Thank you! You rated "${prodName}" ${ratingVal} out of 5 stars.`);
+        showFeedbackNotification(`Thank you! You rated "${title}" ${ratingVal} stars. Current Average: ${(updatedData.sum / updatedData.count).toFixed(1)} stars.`);
       });
     });
 
-    // Reset stars layout on container mouseleave
     container.addEventListener('mouseleave', () => {
-      const activeRating = parseInt(localStorage.getItem(productKey) || '0', 10);
-      stars.forEach((s, idx) => {
-        s.style.transform = '';
-        if (activeRating > 0) {
-          if (idx < activeRating) {
-            s.setAttribute('name', 'star');
-            s.style.color = '#ffb300';
-          } else {
-            s.setAttribute('name', 'star-outline');
-            s.style.color = '';
-          }
-        } else {
-          s.setAttribute('name', originalStates[idx].name);
-          s.style.color = originalStates[idx].color;
-        }
-      });
+      stars.forEach(s => s.style.transform = '');
+      const currentData = getProductRatings(title);
+      renderStars(currentData);
     });
   });
 
