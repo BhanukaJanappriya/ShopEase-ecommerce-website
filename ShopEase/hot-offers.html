@@ -19,322 +19,75 @@
     rel="stylesheet">
 
   <style>
-    /* Custom Hot Offers Page CSS */
-    .hot-offers-header {
-      background-image: linear-gradient(135deg, rgba(255, 105, 180, 0.75), rgba(220, 20, 60, 0.8)), url(./assets/images/banner/a6.jpg);
-      background-size: cover;
-      background-position: center;
-      color: white;
-      padding: 70px 20px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      border-bottom: 2px solid var(--salmon-pink);
+    /* Styling for Coupon Card to match Homepage */
+    .hot-offers-coupon-section {
+      margin-top: 50px;
+      border-top: 1px solid var(--cultured);
+      padding-top: 40px;
     }
-
-    .hot-offers-header h2 {
-      font-size: 2.8rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-      animation: slideDown 0.8s ease-out;
-    }
-
-    .hot-offers-header p {
-      font-size: 1.1rem;
-      font-weight: 500;
-      margin-bottom: 25px;
-      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-      animation: fadeIn 1.2s ease-in;
-    }
-
-    .deal-countdown-container {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      padding: 15px 30px;
-      border-radius: var(--border-radius-md);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
-      animation: zoomIn 0.8s ease-out;
-    }
-
-    .timer-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      margin-bottom: 10px !important;
-      color: #fff;
-      text-transform: uppercase;
-    }
-
-    .countdown-timer {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-    }
-
-    .time-block {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.9);
-      color: var(--eerie-black);
-      padding: 8px 12px;
-      border-radius: var(--border-radius-sm);
-      min-width: 60px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      transform: translateY(0);
-      transition: transform 0.2s ease;
-    }
-
-    .time-block:hover {
-      transform: translateY(-3px);
-    }
-
-    .time-block .number {
-      font-size: 1.5rem;
-      font-weight: 800;
-      line-height: 1;
-    }
-
-    .time-block .label {
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: var(--sonic-silver);
-      margin-top: 3px;
-    }
-
-    .hot-offers-main {
-      padding: 60px 0;
-      background: #faf9f6;
-    }
-
-    .hot-section-title {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .hot-section-title h2 {
-      font-size: 2rem;
-      color: var(--eerie-black);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      position: relative;
-      display: inline-block;
-      padding-bottom: 15px;
-    }
-
-    .hot-section-title h2::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 70px;
-      height: 4px;
-      background: var(--salmon-pink);
-      border-radius: 2px;
-    }
-
-    .hot-offers-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
-      margin-bottom: 60px;
-    }
-
-    /* Responsive Grid */
-    @media (max-width: 1024px) {
-      .hot-offers-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    @media (max-width: 768px) {
-      .hot-offers-grid {
-        grid-template-columns: 1fr;
-      }
-      .hot-offers-header h2 {
-        font-size: 1.8rem;
-      }
-    }
-
-    .hot-showcase {
-      background: white;
-      border-radius: var(--border-radius-md);
-      overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.03);
-      border: 1px solid var(--cultured);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-    }
-
-    .hot-showcase:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 35px rgba(255, 105, 180, 0.12);
-    }
-
-    .showcase-badge-flash {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      background: linear-gradient(135deg, #ff0055, #ff5500);
-      color: white;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 5px 12px;
-      border-radius: var(--border-radius-sm);
-      z-index: 2;
-      box-shadow: 0 4px 10px rgba(255, 0, 85, 0.3);
-      animation: pulseBadge 1.5s infinite alternate;
-    }
-
-    @keyframes pulseBadge {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.08); }
-    }
-
-    .deal-progress-container {
-      margin: 15px 0 10px 0;
-    }
-
-    .progress-text-flex {
-      display: flex;
-      justify-content: space-between;
-      font-size: var(--fs-9);
-      color: var(--sonic-silver);
-      font-weight: 500;
-      margin-bottom: 6px;
-    }
-
-    .progress-bar-track {
-      width: 100%;
-      height: 8px;
-      background: var(--cultured);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--salmon-pink), #ff0055);
-      border-radius: 4px;
-      position: relative;
-    }
-
-    .progress-bar-fill.pulse::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
-      animation: shimmer 1.5s infinite;
-    }
-
-    @keyframes shimmer {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-
-    /* Coupon Styles */
-    .coupon-section {
-      background: white;
-      padding: 50px 30px;
-      border-radius: var(--border-radius-md);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.02);
-      border: 1px solid var(--cultured);
-      margin-top: 60px;
-    }
-
+    
     .coupon-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap: 30px;
     }
-
+    
     @media (max-width: 768px) {
       .coupon-grid {
         grid-template-columns: 1fr;
       }
     }
-
+    
     .coupon-card {
-      border: 2px dashed var(--salmon-pink);
+      background: #fff;
+      border: 1px dashed var(--salmon-pink);
       border-radius: var(--border-radius-md);
       padding: 25px;
-      background: #fff5f6;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
     }
-
-    .coupon-card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 8px 20px rgba(255, 105, 180, 0.08);
-    }
-
+    
     .coupon-info h3 {
-      font-size: 1.2rem;
+      font-size: var(--fs-4);
       color: var(--eerie-black);
+      font-weight: var(--weight-700);
       margin-bottom: 5px;
     }
-
+    
     .coupon-info p {
+      font-size: var(--fs-7);
       color: var(--sonic-silver);
-      font-size: var(--fs-9);
       margin-bottom: 10px;
     }
-
+    
     .coupon-code {
       display: inline-block;
-      background: white;
-      border: 1px solid var(--salmon-pink);
-      color: var(--salmon-pink);
+      background: var(--cultured);
+      color: var(--onyx);
       font-family: monospace;
       font-weight: 700;
-      font-size: 1rem;
+      font-size: var(--fs-6);
       padding: 4px 10px;
       border-radius: var(--border-radius-sm);
     }
-
+    
     .coupon-btn {
       background: var(--salmon-pink);
-      color: white;
+      color: var(--white);
       font-size: var(--fs-9);
-      font-weight: var(--weight-700);
+      font-weight: var(--weight-600);
       text-transform: uppercase;
-      padding: 10px 20px;
+      padding: 8px 16px;
       border-radius: var(--border-radius-sm);
-      transition: background 0.2s ease, color 0.2s ease;
+      transition: var(--transition-timing);
       cursor: pointer;
+      border: none;
     }
-
+    
     .coupon-btn:hover {
       background: var(--eerie-black);
-    }
-
-    /* Animations */
-    @keyframes slideDown {
-      0% { transform: translateY(-50px); opacity: 0; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
-
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    @keyframes zoomIn {
-      0% { transform: scale(0.9); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
@@ -539,327 +292,466 @@
   </header>
 
   <!--
-    - HOT OFFERS BANNER
+    - MAIN SECTION
   -->
-  <section class="hot-offers-header">
-    <h2>#hotoffers</h2>
-    <p>Premium limited-time deals with massive savings! Get yours before stock runs dry.</p>
-    
-    <div class="deal-countdown-container">
-      <p class="timer-title">Flash Sale Ends In:</p>
-      <div class="countdown-timer" id="hotOffersCountdown">
-        <div class="time-block"><span class="number" id="timerDays">02</span><span class="label">Days</span></div>
-        <div class="time-block"><span class="number" id="timerHours">14</span><span class="label">Hours</span></div>
-        <div class="time-block"><span class="number" id="timerMins">36</span><span class="label">Mins</span></div>
-        <div class="time-block"><span class="number" id="timerSecs">05</span><span class="label">Secs</span></div>
-      </div>
-    </div>
-  </section>
+  <main>
+    <div class="product-container">
+      <div class="container">
+        
+        <!--
+          - SIDEBAR
+        -->
+        <div class="sidebar has-scrollbar" data-mobile-menu>
+          <div class="sidebar-category">
+            <div class="sidebar-top">
+              <h2 class="sidebar-title">Category</h2>
+              <button class="sidebar-close-btn" data-mobile-menu-close-btn>
+                <ion-icon name="close-outline"></ion-icon>
+              </button>
+            </div>
 
-  <!--
-    - MAIN LAYOUT SECTION
-  -->
-  <main class="hot-offers-main">
-    <div class="container">
-      <div class="hot-section-title">
-        <h2>Unmissable Flash Deals</h2>
-      </div>
+            <ul class="sidebar-menu-category-list">
+              <li class="sidebar-menu-category">
+                <button class="sidebar-accordion-menu" data-accordion-btn>
+                  <div class="menu-title-flex">
+                    <img src="./assets/images/icons/dress.svg" alt="clothes" width="20" height="20" class="menu-title-img">
+                    <p class="menu-title">Clothes</p>
+                  </div>
+                  <div>
+                    <ion-icon name="add-outline" class="add-icon"></ion-icon>
+                    <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+                  </div>
+                </button>
+                <ul class="sidebar-submenu-category-list" data-accordion>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Shirt</p>
+                      <data value="300" class="stock" title="Available Stock">300</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">shorts & jeans</p>
+                      <data value="60" class="stock" title="Available Stock">60</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">jacket</p>
+                      <data value="50" class="stock" title="Available Stock">50</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">dress & frock</p>
+                      <data value="87" class="stock" title="Available Stock">87</data>
+                    </a>
+                  </li>
+                </ul>
+              </li>
 
-      <div class="hot-offers-grid">
-        <!-- Showcase 1 -->
-        <div class="hot-showcase">
-          <span class="showcase-badge-flash">50% OFF</span>
-          <div class="showcase-banner">
-            <img src="./assets/images/products/jacket-4.jpg" alt="Mens Leather Jacket" class="product-img default" width="300">
-            <img src="./assets/images/products/jacket-5.jpg" alt="Mens Leather Jacket" class="product-img hover" width="300">
+              <li class="sidebar-menu-category">
+                <button class="sidebar-accordion-menu" data-accordion-btn>
+                  <div class="menu-title-flex">
+                    <img src="./assets/images/icons/shoes.svg" alt="footwear" class="menu-title-img" width="20" height="20">
+                    <p class="menu-title">Footwear</p>
+                  </div>
+                  <div>
+                    <ion-icon name="add-outline" class="add-icon"></ion-icon>
+                    <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+                  </div>
+                </button>
+                <ul class="sidebar-submenu-category-list" data-accordion>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Sports</p>
+                      <data value="45" class="stock" title="Available Stock">45</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Formal</p>
+                      <data value="75" class="stock" title="Available Stock">75</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Casual</p>
+                      <data value="35" class="stock" title="Available Stock">35</data>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="sidebar-menu-category">
+                <button class="sidebar-accordion-menu" data-accordion-btn>
+                  <div class="menu-title-flex">
+                    <img src="./assets/images/icons/jewelry.svg" alt="clothes" class="menu-title-img" width="20" height="20">
+                    <p class="menu-title">Jewelry</p>
+                  </div>
+                  <div>
+                    <ion-icon name="add-outline" class="add-icon"></ion-icon>
+                    <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+                  </div>
+                </button>
+                <ul class="sidebar-submenu-category-list" data-accordion>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Earrings</p>
+                      <data value="46" class="stock" title="Available Stock">46</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Couple Rings</p>
+                      <data value="73" class="stock" title="Available Stock">73</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Necklace</p>
+                      <data value="61" class="stock" title="Available Stock">61</data>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="sidebar-menu-category">
+                <button class="sidebar-accordion-menu" data-accordion-btn>
+                  <div class="menu-title-flex">
+                    <img src="./assets/images/icons/perfume.svg" alt="perfume" class="menu-title-img" width="20" height="20">
+                    <p class="menu-title">Perfume</p>
+                  </div>
+                  <div>
+                    <ion-icon name="add-outline" class="add-icon"></ion-icon>
+                    <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+                  </div>
+                </button>
+                <ul class="sidebar-submenu-category-list" data-accordion>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Clothes Perfume</p>
+                      <data value="12" class="stock" title="Available Stock">12 pcs</data>
+                    </a>
+                  </li>
+                  <li class="sidebar-submenu-category">
+                    <a href="#" class="sidebar-submenu-title">
+                      <p class="product-name">Deodorant</p>
+                      <data value="60" class="stock" title="Available Stock">60 pcs</data>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!--
+          - PRODUCT BOX (on the right)
+        -->
+        <div class="product-box">
+          
+          <!--
+            - PRODUCT FEATURED (Deal of the Day section)
+          -->
+          <div class="product-featured">
+            <h2 class="title">Deal of the day</h2>
+
+            <div class="showcase-wrapper has-scrollbar">
+              
+              <!-- Slide 1: Winter Jacket -->
+              <div class="showcase-container">
+                <div class="showcase">
+                  <div class="showcase-banner">
+                    <img src="./assets/images/products/jacket-4.jpg" alt="Mens Winter Leathers Jackets" class="showcase-img">
+                  </div>
+
+                  <div class="showcase-content">
+                    <div class="showcase-rating">
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star-outline"></ion-icon>
+                      <ion-icon name="star-outline"></ion-icon>
+                    </div>
+
+                    <a href="#">
+                      <h3 class="showcase-title">Mens Winter Leathers Jackets</h3>
+                    </a>
+
+                    <p class="showcase-desc">
+                      Premium grade genuine leather winter jackets designed to provide supreme insulation, longevity, and modern street aesthetics.
+                    </p>
+
+                    <div class="price-box">
+                      <p class="price">LKR 2500.00</p>
+                      <del>LKR 5000.00</del>
+                    </div>
+
+                    <button class="add-cart-btn">add to cart</button>
+
+                    <div class="showcase-status">
+                      <div class="wrapper">
+                        <p>already sold: <b>84</b></p>
+                        <p>available: <b>16</b></p>
+                      </div>
+                      <div class="showcase-status-bar" style="width: 84%;"></div>
+                    </div>
+
+                    <div class="countdown-box">
+                      <p class="countdown-desc">Hurry Up! Offer ends in:</p>
+                      <div class="countdown">
+                        <div class="countdown-content">
+                          <p class="display-number" id="feat1-days">02</p>
+                          <p class="display-text">Days</p>
+                        </div>
+                        <div class="countdown-content">
+                          <p class="display-number" id="feat1-hours">14</p>
+                          <p class="display-text">Hours</p>
+                        </div>
+                        <div class="countdown-content">
+                          <p class="display-number" id="feat1-mins">36</p>
+                          <p class="display-text">Min</p>
+                        </div>
+                        <div class="countdown-content">
+                          <p class="display-number" id="feat1-secs">05</p>
+                          <p class="display-text">Sec</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 2: Smart Watch -->
+              <div class="showcase-container">
+                <div class="showcase">
+                  <div class="showcase-banner">
+                    <img src="./assets/images/products/watch-1.webp" alt="Smart Watch Pro Series 7" class="showcase-img">
+                  </div>
+
+                  <div class="showcase-content">
+                    <div class="showcase-rating">
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star"></ion-icon>
+                      <ion-icon name="star-outline"></ion-icon>
+                    </div>
+
+                    <a href="#">
+                      <h3 class="showcase-title">Smart Watch Pro Series 7</h3>
+                    </a>
+
+                    <p class="showcase-desc">
+                      Premium smart watch featuring high-definition curved touch display, blood oxygen tracking, heart rate monitor, and sports tracking.
+                    </p>
+
+                    <div class="price-box">
+                      <p class="price">LKR 12000.00</p>
+                      <del>LKR 24000.00</del>
+                    </div>
+
+                    <button class="add-cart-btn">add to cart</button>
+
+                    <div class="showcase-status">
+                      <div class="wrapper">
+                        <p>already sold: <b>91</b></p>
+                        <p>available: <b>9</b></p>
+                      </div>
+                      <div class="showcase-status-bar" style="width: 91%;"></div>
+                    </div>
+
+                    <div class="countdown-box">
+                      <p class="countdown-desc">Hurry Up! Offer ends in:</p>
+                      <div class="countdown">
+                        <div class="countdown-content">
+                          <p class="display-number" id="feat2-days">02</p>
+                          <p class="display-text">Days</p>
+                        </div>
+                        <div class="countdown-content">
+                          <p class="display-number" id="feat2-hours">14</p>
+                          <p class="display-text">Hours</p>
+                        </div>
+                        <div class="countdown-content">
+                          <p class="display-number" id="feat2-mins">36</p>
+                          <p class="display-text">Min</p>
+                        </div>
+                        <div class="countdown-content">
+                          <p class="display-number" id="feat2-secs">05</p>
+                          <p class="display-text">Sec</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!--
+            - PRODUCT GRID (New Products grid layout)
+          -->
+          <div class="product-main">
+            <h2 class="title">Flash Discount Offers</h2>
+
+            <div class="product-grid">
+              
+              <!-- Product 1: Woolen Hat -->
+              <div class="showcase">
+                <div class="showcase-banner">
+                  <img src="./assets/images/products/4.jpg" alt="Woolen Hat For Men" class="product-img default" width="300">
+                  <img src="./assets/images/products/clothes-2.jpg" alt="Woolen Hat For Men" class="product-img hover" width="300">
+                  <p class="showcase-badge">50%</p>
+                  <div class="showcase-actions">
+                    <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
+                    <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
+                    <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
+                    <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
+                  </div>
+                </div>
+                <div class="showcase-content">
+                  <a href="#" class="showcase-category">hat & caps</a>
+                  <a href="#"><h3 class="showcase-title">Woolen Hat For Men</h3></a>
+                  <div class="showcase-rating">
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                  </div>
+                  <div class="price-box">
+                    <p class="price">LKR 600.00</p>
+                    <del>LKR 1200.00</del>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Product 2: Floral Summer Dress -->
+              <div class="showcase">
+                <div class="showcase-banner">
+                  <img src="./assets/images/products/clothes-1.jpg" alt="Floral Summer Dress" class="product-img default" width="300">
+                  <img src="./assets/images/products/clothes-3.webp" alt="Floral Summer Dress" class="product-img hover" width="300">
+                  <p class="showcase-badge">45%</p>
+                  <div class="showcase-actions">
+                    <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
+                    <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
+                    <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
+                    <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
+                  </div>
+                </div>
+                <div class="showcase-content">
+                  <a href="#" class="showcase-category">dress & frock</a>
+                  <a href="#"><h3 class="showcase-title">Floral Summer Dress</h3></a>
+                  <div class="showcase-rating">
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star-outline"></ion-icon>
+                    <ion-icon name="star-outline"></ion-icon>
+                  </div>
+                  <div class="price-box">
+                    <p class="price">LKR 2199.00</p>
+                    <del>LKR 3999.00</del>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Product 3: Perfume -->
+              <div class="showcase">
+                <div class="showcase-banner">
+                  <img src="./assets/images/products/perfume.jpg" alt="French Floral Fragrance 100ml" class="product-img default" width="300">
+                  <img src="./assets/images/products/shampoo.jpg" alt="French Floral Fragrance 100ml" class="product-img hover" width="300">
+                  <p class="showcase-badge">40%</p>
+                  <div class="showcase-actions">
+                    <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
+                    <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
+                    <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
+                    <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
+                  </div>
+                </div>
+                <div class="showcase-content">
+                  <a href="#" class="showcase-category">perfume</a>
+                  <a href="#"><h3 class="showcase-title">French Floral Fragrance 100ml</h3></a>
+                  <div class="showcase-rating">
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star-outline"></ion-icon>
+                  </div>
+                  <div class="price-box">
+                    <p class="price">LKR 4800.00</p>
+                    <del>LKR 8000.00</del>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Product 4: Gothic Rose Gold Necklace Set -->
+              <div class="showcase">
+                <div class="showcase-banner">
+                  <img src="./assets/images/products/jewellery-1.jpg" alt="Gothic Rose Gold Necklace Set" class="product-img default" width="300">
+                  <img src="./assets/images/products/jewellery-2.jpg" alt="Gothic Rose Gold Necklace Set" class="product-img hover" width="300">
+                  <p class="showcase-badge">55%</p>
+                  <div class="showcase-actions">
+                    <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
+                    <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
+                    <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
+                    <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
+                  </div>
+                </div>
+                <div class="showcase-content">
+                  <a href="#" class="showcase-category">jewellery</a>
+                  <a href="#"><h3 class="showcase-title">Gothic Rose Gold Necklace Set</h3></a>
+                  <div class="showcase-rating">
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                  </div>
+                  <div class="price-box">
+                    <p class="price">LKR 4275.00</p>
+                    <del>LKR 9500.00</del>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!--
+            - INTERACTIVE PROMO COUPONS
+          -->
+          <div class="hot-offers-coupon-section">
+            <h2 class="title">Exclusive ShopEase Coupons</h2>
             
-            <div class="showcase-actions">
-              <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
-            </div>
-          </div>
-
-          <div class="showcase-content" style="padding: 20px;">
-            <a href="#" class="showcase-category">jacket</a>
-            <a href="#"><h3 class="showcase-title">Mens Winter Leathers Jackets</h3></a>
-            
-            <div class="showcase-rating">
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star-outline"></ion-icon>
-              <ion-icon name="star-outline"></ion-icon>
-            </div>
-
-            <div class="price-box">
-              <p class="price">LKR 2500.00</p>
-              <del>LKR 5000.00</del>
-            </div>
-
-            <div class="deal-progress-container">
-              <div class="progress-text-flex">
-                <span>84% Claimed</span>
-                <span>16 Left</span>
+            <div class="coupon-grid">
+              <!-- Coupon 1 -->
+              <div class="coupon-card">
+                <div class="coupon-info">
+                  <h3>Extra 20% OFF</h3>
+                  <p>For orders above LKR 5000.00</p>
+                  <span class="coupon-code">SHOPSMART20</span>
+                </div>
+                <button class="coupon-btn" onclick="copyCouponCode('SHOPSMART20', this)">Copy Code</button>
               </div>
-              <div class="progress-bar-track">
-                <div class="progress-bar-fill pulse" style="width: 84%;"></div>
+
+              <!-- Coupon 2 -->
+              <div class="coupon-card">
+                <div class="coupon-info">
+                  <h3>Flat LKR 1000 OFF</h3>
+                  <p>Special pink-themed launch discount</p>
+                  <span class="coupon-code">PINKFRIDAY</span>
+                </div>
+                <button class="coupon-btn" onclick="copyCouponCode('PINKFRIDAY', this)">Copy Code</button>
               </div>
             </div>
           </div>
+
         </div>
 
-        <!-- Showcase 2 -->
-        <div class="hot-showcase">
-          <span class="showcase-badge-flash">BOGO DEAL</span>
-          <div class="showcase-banner">
-            <img src="./assets/images/products/watch-1.webp" alt="Smart Watch" class="product-img default" width="300">
-            <img src="./assets/images/products/watch-2.jpg" alt="Smart Watch" class="product-img hover" width="300">
-
-            <div class="showcase-actions">
-              <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
-            </div>
-          </div>
-
-          <div class="showcase-content" style="padding: 20px;">
-            <a href="#" class="showcase-category">watches</a>
-            <a href="#"><h3 class="showcase-title">Smart Watch Pro Series 7</h3></a>
-            
-            <div class="showcase-rating">
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star-outline"></ion-icon>
-            </div>
-
-            <div class="price-box">
-              <p class="price">LKR 12000.00</p>
-              <del>LKR 24000.00</del>
-            </div>
-
-            <div class="deal-progress-container">
-              <div class="progress-text-flex">
-                <span>91% Claimed</span>
-                <span>9 Left</span>
-              </div>
-              <div class="progress-bar-track">
-                <div class="progress-bar-fill pulse" style="width: 91%;"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Showcase 3 -->
-        <div class="hot-showcase">
-          <span class="showcase-badge-flash">50% OFF</span>
-          <div class="showcase-banner">
-            <img src="./assets/images/products/4.jpg" alt="Woolen Hat" class="product-img default" width="300">
-            <img src="./assets/images/products/clothes-2.jpg" alt="Woolen Hat" class="product-img hover" width="300">
-
-            <div class="showcase-actions">
-              <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
-            </div>
-          </div>
-
-          <div class="showcase-content" style="padding: 20px;">
-            <a href="#" class="showcase-category">hat & caps</a>
-            <a href="#"><h3 class="showcase-title">Woolen Hat For Men</h3></a>
-            
-            <div class="showcase-rating">
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-            </div>
-
-            <div class="price-box">
-              <p class="price">LKR 600.00</p>
-              <del>LKR 1200.00</del>
-            </div>
-
-            <div class="deal-progress-container">
-              <div class="progress-text-flex">
-                <span>62% Claimed</span>
-                <span>38 Left</span>
-              </div>
-              <div class="progress-bar-track">
-                <div class="progress-bar-fill pulse" style="width: 62%;"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Showcase 4 -->
-        <div class="hot-showcase">
-          <span class="showcase-badge-flash">45% OFF</span>
-          <div class="showcase-banner">
-            <img src="./assets/images/products/clothes-1.jpg" alt="Summer Dress" class="product-img default" width="300">
-            <img src="./assets/images/products/clothes-3.webp" alt="Summer Dress" class="product-img hover" width="300">
-
-            <div class="showcase-actions">
-              <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
-            </div>
-          </div>
-
-          <div class="showcase-content" style="padding: 20px;">
-            <a href="#" class="showcase-category">dress & frock</a>
-            <a href="#"><h3 class="showcase-title">Floral Summer Dress</h3></a>
-            
-            <div class="showcase-rating">
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star-outline"></ion-icon>
-              <ion-icon name="star-outline"></ion-icon>
-            </div>
-
-            <div class="price-box">
-              <p class="price">LKR 2199.00</p>
-              <del>LKR 3999.00</del>
-            </div>
-
-            <div class="deal-progress-container">
-              <div class="progress-text-flex">
-                <span>78% Claimed</span>
-                <span>22 Left</span>
-              </div>
-              <div class="progress-bar-track">
-                <div class="progress-bar-fill pulse" style="width: 78%;"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Showcase 5 -->
-        <div class="hot-showcase">
-          <span class="showcase-badge-flash">40% OFF</span>
-          <div class="showcase-banner">
-            <img src="./assets/images/products/perfume.jpg" alt="Perfume" class="product-img default" width="300">
-            <img src="./assets/images/products/shampoo.jpg" alt="Perfume" class="product-img hover" width="300">
-
-            <div class="showcase-actions">
-              <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
-            </div>
-          </div>
-
-          <div class="showcase-content" style="padding: 20px;">
-            <a href="#" class="showcase-category">perfume</a>
-            <a href="#"><h3 class="showcase-title">French Floral Fragrance 100ml</h3></a>
-            
-            <div class="showcase-rating">
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star-outline"></ion-icon>
-            </div>
-
-            <div class="price-box">
-              <p class="price">LKR 4800.00</p>
-              <del>LKR 8000.00</del>
-            </div>
-
-            <div class="deal-progress-container">
-              <div class="progress-text-flex">
-                <span>51% Claimed</span>
-                <span>49 Left</span>
-              </div>
-              <div class="progress-bar-track">
-                <div class="progress-bar-fill pulse" style="width: 51%;"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Showcase 6 -->
-        <div class="hot-showcase">
-          <span class="showcase-badge-flash">55% OFF</span>
-          <div class="showcase-banner">
-            <img src="./assets/images/products/jewellery-1.jpg" alt="Jewellery" class="product-img default" width="300">
-            <img src="./assets/images/products/jewellery-2.jpg" alt="Jewellery" class="product-img hover" width="300">
-
-            <div class="showcase-actions">
-              <button class="btn-action"><ion-icon name="heart-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="eye-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="repeat-outline"></ion-icon></button>
-              <button class="btn-action"><ion-icon name="bag-add-outline"></ion-icon></button>
-            </div>
-          </div>
-
-          <div class="showcase-content" style="padding: 20px;">
-            <a href="#" class="showcase-category">jewellery</a>
-            <a href="#"><h3 class="showcase-title">Gothic Rose Gold Necklace Set</h3></a>
-            
-            <div class="showcase-rating">
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-              <ion-icon name="star"></ion-icon>
-            </div>
-
-            <div class="price-box">
-              <p class="price">LKR 4275.00</p>
-              <del>LKR 9500.00</del>
-            </div>
-
-            <div class="deal-progress-container">
-              <div class="progress-text-flex">
-                <span>73% Claimed</span>
-                <span>27 Left</span>
-              </div>
-              <div class="progress-bar-track">
-                <div class="progress-bar-fill pulse" style="width: 73%;"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!--
-        - INTERACTIVE PROMO COUPONS
-      -->
-      <div class="coupon-section">
-        <div class="hot-section-title" style="margin-bottom: 40px;">
-          <h2>Exclusive ShopEase Coupons</h2>
-        </div>
-
-        <div class="coupon-grid">
-          <!-- Coupon 1 -->
-          <div class="coupon-card">
-            <div class="coupon-info">
-              <h3>Extra 20% OFF</h3>
-              <p>For orders above LKR 5000.00</p>
-              <span class="coupon-code" id="code20">SHOPSMART20</span>
-            </div>
-            <button class="coupon-btn" onclick="copyCouponCode('SHOPSMART20', this)">Copy Code</button>
-          </div>
-
-          <!-- Coupon 2 -->
-          <div class="coupon-card">
-            <div class="coupon-info">
-              <h3>Flat LKR 1000 OFF</h3>
-              <p>Special pink-themed launch discount</p>
-              <span class="coupon-code" id="codeFlat">PINKFRIDAY</span>
-            </div>
-            <button class="coupon-btn" onclick="copyCouponCode('PINKFRIDAY', this)">Copy Code</button>
-          </div>
-        </div>
       </div>
     </div>
   </main>
@@ -938,7 +830,6 @@
         const originalText = btn.textContent;
         btn.textContent = 'COPIED!';
         btn.style.backgroundColor = '#111';
-        btn.style.borderColor = '#111';
         btn.style.color = '#fff';
         
         // Push notification toast
@@ -953,7 +844,6 @@
         setTimeout(() => {
           btn.textContent = originalText;
           btn.style.backgroundColor = '';
-          btn.style.borderColor = '';
           btn.style.color = '';
         }, 2000);
       }).catch(err => {
@@ -961,13 +851,8 @@
       });
     }
 
-    // Dynamic countdown timer for Hot Offers
-    (function runHotOffersTimer() {
-      const displayDays = document.getElementById('timerDays');
-      const displayHours = document.getElementById('timerHours');
-      const displayMins = document.getElementById('timerMins');
-      const displaySecs = document.getElementById('timerSecs');
-
+    // Dynamic countdown timer for featured deals
+    (function runHotOffersTimers() {
       let totalSeconds = 2 * 86400 + 14 * 3600 + 36 * 60 + 5; // 2d 14h 36m 5s
 
       const timer = setInterval(() => {
@@ -982,10 +867,27 @@
         const m = Math.floor((totalSeconds % 3600) / 60);
         const s = totalSeconds % 60;
 
-        if (displayDays) displayDays.textContent = d < 10 ? '0' + d : d;
-        if (displayHours) displayHours.textContent = h < 10 ? '0' + h : h;
-        if (displayMins) displayMins.textContent = m < 10 ? '0' + m : m;
-        if (displaySecs) displaySecs.textContent = s < 10 ? '0' + s : s;
+        const pad = num => num < 10 ? '0' + num : num;
+
+        // Update Slide 1
+        const f1d = document.getElementById('feat1-days');
+        const f1h = document.getElementById('feat1-hours');
+        const f1m = document.getElementById('feat1-mins');
+        const f1s = document.getElementById('feat1-secs');
+        if (f1d) f1d.textContent = pad(d);
+        if (f1h) f1h.textContent = pad(h);
+        if (f1m) f1m.textContent = pad(m);
+        if (f1s) f1s.textContent = pad(s);
+
+        // Update Slide 2
+        const f2d = document.getElementById('feat2-days');
+        const f2h = document.getElementById('feat2-hours');
+        const f2m = document.getElementById('feat2-mins');
+        const f2s = document.getElementById('feat2-secs');
+        if (f2d) f2d.textContent = pad(d);
+        if (f2h) f2h.textContent = pad(h);
+        if (f2m) f2m.textContent = pad(m);
+        if (f2s) f2s.textContent = pad(s);
       }, 1000);
     })();
   </script>
