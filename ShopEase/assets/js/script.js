@@ -438,6 +438,7 @@ countdownElements.forEach(countdown => {
     currentProduct = { name, price, image: img };
     cartPreviewName.textContent = name;
     cartPreviewPrice.textContent = price;
+    cartPreviewPrice.setAttribute('data-original-val', price);
     cartPreviewImg.src = img;
 
     // Reset Form Config state
@@ -452,8 +453,13 @@ countdownElements.forEach(countdown => {
       el.classList.toggle('selected', el.getAttribute('data-value') === 'Black');
     });
 
-    // Reset customer fields
+    // Reset customer fields and feedback
     cartInputForm.reset();
+    const feedback = document.getElementById('promoFeedback');
+    if (feedback) {
+      feedback.textContent = '';
+      feedback.style.color = '';
+    }
 
     // Show modal
     cartInputModal.classList.add('active');
@@ -563,13 +569,31 @@ countdownElements.forEach(countdown => {
       }
 
       let discountText = '';
-      if (code === 'BUBBLE5') discountText = 'LKR 1500.00 ($5.00)';
-      else if (code === 'BUBBLE15') discountText = 'LKR 4500.00 ($15.00)';
-      else if (code === 'BUBBLE35') discountText = 'LKR 10500.00 ($35.00)';
-      else if (code === 'BUBBLE50') discountText = 'LKR 15000.00 ($50.00)';
+      let discountAmount = 0;
+      if (code === 'BUBBLE5') { discountText = 'LKR 1500.00 ($5.00)'; discountAmount = 1500; }
+      else if (code === 'BUBBLE15') { discountText = 'LKR 4500.00 ($15.00)'; discountAmount = 4500; }
+      else if (code === 'BUBBLE35') { discountText = 'LKR 10500.00 ($35.00)'; discountAmount = 10500; }
+      else if (code === 'BUBBLE50') { discountText = 'LKR 15000.00 ($50.00)'; discountAmount = 15000; }
 
       feedback.textContent = `Success! Discount of ${discountText} applied to your order.`;
       feedback.style.color = 'green';
+
+      // Real-time price reduction update in checkout preview
+      const originalPriceText = cartPreviewPrice.getAttribute('data-original-val') || currentProduct.price;
+      const originalVal = parseFloat(originalPriceText.replace(/[^\d.]/g, ''));
+      if (!isNaN(originalVal)) {
+        const isUSD = originalPriceText.includes('$');
+        let newVal = originalVal;
+        
+        if (isUSD) {
+          const usdDiscount = discountAmount / 300;
+          newVal = Math.max(0, originalVal - usdDiscount);
+          cartPreviewPrice.textContent = `$${newVal.toFixed(2)} (${code} Applied)`;
+        } else {
+          newVal = Math.max(0, originalVal - discountAmount);
+          cartPreviewPrice.textContent = `LKR ${newVal.toFixed(2)} (${code} Applied)`;
+        }
+      }
     }
   });
 

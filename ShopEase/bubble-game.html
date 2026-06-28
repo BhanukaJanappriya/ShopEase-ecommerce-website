@@ -191,6 +191,7 @@
       border-radius: var(--border-radius-sm);
       margin-bottom: 6px;
       font-size: var(--fs-8);
+      transition: all 0.4s ease;
     }
 
     .leaderboard-item:nth-child(even) {
@@ -206,6 +207,14 @@
     .leaderboard-item:nth-child(1) .leaderboard-rank { color: #f1c40f; } /* Gold */
     .leaderboard-item:nth-child(2) .leaderboard-rank { color: #95a5a6; } /* Silver */
     .leaderboard-item:nth-child(3) .leaderboard-rank { color: #d35400; } /* Bronze */
+
+    @keyframes rankUpFlash {
+      0% { background-color: rgba(255, 105, 180, 0.5); box-shadow: 0 0 12px rgba(255, 105, 180, 0.6); transform: scale(1.05); }
+      100% { background-color: transparent; box-shadow: none; transform: scale(1); }
+    }
+    .leaderboard-item.flash {
+      animation: rankUpFlash 1.2s ease-out;
+    }
 
     /* Canvas board styling */
     .game-board-wrapper {
@@ -612,6 +621,35 @@
       { text: "Won $50.00 Coupon (Legendary Marksman)" }
     ];
 
+    // Robust copy to clipboard function with secure and textarea fallbacks
+    window.copyPromoCode = function(code) {
+      const textarea = document.createElement('textarea');
+      textarea.value = code;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+      } catch (err) {}
+      document.body.removeChild(textarea);
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).catch(() => {});
+      }
+
+      // Display popup toast feedback
+      const toast = document.getElementById('winnerToast');
+      const nameEl = document.getElementById('winnerName');
+      const actionEl = document.getElementById('winnerAction');
+      if (toast && nameEl && actionEl) {
+        nameEl.textContent = "Coupon Copied! 🎉";
+        actionEl.textContent = `Use code ${code} on your next checkout!`;
+        toast.classList.add('active');
+        setTimeout(() => toast.classList.remove('active'), 3500);
+      } else {
+        alert(`Promo Code "${code}" copied to clipboard!`);
+      }
+    };
+
     function showRandomWinner() {
       const toast = document.getElementById('winnerToast');
       const nameEl = document.getElementById('winnerName');
@@ -909,6 +947,7 @@
 
         checkScoreMilestones();
         document.getElementById('gameScore').textContent = score;
+        loadLeaderboard(score);
 
         // Check level cleared
         let totalRemaining = 0;
@@ -1147,8 +1186,10 @@
       });
     }
 
-    // Leaderboard logic list
-    function loadLeaderboard() {
+    // Leaderboard logic list with active player real-time update ranking flashes
+    let previousRank = -1;
+
+    function loadLeaderboard(activeScore = -1) {
       const defaultLeaderboard = [
         { name: "Avantha K.", score: 8200 },
         { name: "Dilshan S.", score: 6400 },
@@ -1157,31 +1198,62 @@
         { name: "Sanduni M.", score: 2100 }
       ];
 
-      const board = JSON.parse(localStorage.getItem('shopEaseLeaderboard')) || defaultLeaderboard;
-      localStorage.setItem('shopEaseLeaderboard', JSON.stringify(board));
+      let board = JSON.parse(localStorage.getItem('shopEaseLeaderboard')) || defaultLeaderboard;
+      
+      // Temporarily inject YOU (Active) if playing
+      if (activeScore >= 0) {
+        board = board.filter(item => item.name !== "YOU (Active)");
+        board.push({ name: "YOU (Active)", score: activeScore });
+      }
+      
+      board.sort((a, b) => b.score - a.score);
+
+      if (activeScore === 0) {
+        previousRank = board.findIndex(item => item.name === "YOU (Active)");
+      }
 
       const listEl = document.getElementById('leaderboardList');
       if (!listEl) return;
       listEl.innerHTML = '';
+      
+      // Check rank index changes
+      const currentRank = board.findIndex(item => item.name === "YOU (Active)");
+      const rankIncreased = (activeScore > 0 && currentRank < previousRank && previousRank !== -1);
+
       board.slice(0, 5).forEach((item, index) => {
+        const isActive = item.name === "YOU (Active)";
+        const flashClass = (isActive && rankIncreased) ? 'flash' : '';
+        
         listEl.innerHTML += `
-          <li class="leaderboard-item">
+          <li class="leaderboard-item ${flashClass}" style="${isActive ? 'background: rgba(255, 105, 180, 0.12); border: 1.5px solid var(--salmon-pink-dark, #ff3366); box-shadow: 0 0 8px rgba(255, 105, 180, 0.15);' : ''}">
             <div>
               <span class="leaderboard-rank">#${index + 1}</span>
-              <span style="font-weight:600;">${item.name}</span>
+              <span style="font-weight:${isActive ? '800' : '600'}; color:${isActive ? 'var(--salmon-pink-dark)' : 'inherit'};">${item.name}</span>
             </div>
             <strong style="color:var(--salmon-pink-dark);">${item.score} pts</strong>
           </li>
         `;
       });
+
+      if (rankIncreased) {
+        playAudioFeedback(750);
+        setTimeout(() => {
+          document.querySelectorAll('.leaderboard-item').forEach(el => el.classList.remove('flash'));
+        }, 1300);
+      }
+
+      if (activeScore >= 0) {
+        previousRank = currentRank;
+      }
     }
 
     function saveToLeaderboard(name, scoreVal) {
       const board = JSON.parse(localStorage.getItem('shopEaseLeaderboard')) || [];
-      board.push({ name: name || 'Guest Player', score: scoreVal });
-      board.sort((a, b) => b.score - a.score);
-      localStorage.setItem('shopEaseLeaderboard', JSON.stringify(board.slice(0, 10)));
-      loadLeaderboard();
+      const cleanBoard = board.filter(item => item.name !== "YOU (Active)");
+      cleanBoard.push({ name: name || 'Guest Player', score: scoreVal });
+      cleanBoard.sort((a, b) => b.score - a.score);
+      localStorage.setItem('shopEaseLeaderboard', JSON.stringify(cleanBoard.slice(0, 10)));
+      loadLeaderboard(-1);
     }
 
     // Milestones check
@@ -1237,6 +1309,7 @@
 
       initGrid();
       generateNextPlayerBubble();
+      loadLeaderboard(0);
       gameLoop();
     }
 
@@ -1297,6 +1370,86 @@
       ctx.stroke();
       ctx.closePath();
       ctx.restore();
+    }
+
+    function drawGhostBubble() {
+      if (!playerBubble || isFired) return;
+      
+      let cx = playerBubble.x;
+      let cy = playerBubble.y;
+      let angle = fireAngle;
+      let dx = Math.cos(angle) * playerBubble.speed;
+      let dy = Math.sin(angle) * playerBubble.speed;
+      
+      let hit = false;
+      let dummyBubble = { x: cx, y: cy, radius: BUBBLE_RADIUS };
+      
+      let iterations = 100;
+      while (!hit && iterations > 0 && cy > 0) {
+        cx += dx;
+        cy += dy;
+        dummyBubble.x = cx;
+        dummyBubble.y = cy;
+        
+        if (cx - BUBBLE_RADIUS <= 0 || cx + BUBBLE_RADIUS >= canvas.width) {
+          dx = -dx;
+        }
+        
+        for (let r = 0; r < ROWS; r++) {
+          for (let c = 0; c < COLS; c++) {
+            if (grid[r][c] && checkCollision(dummyBubble, grid[r][c])) {
+              hit = true;
+              break;
+            }
+          }
+          if (hit) break;
+        }
+        
+        if (cy - BUBBLE_RADIUS <= 0) {
+          hit = true;
+        }
+        
+        iterations--;
+      }
+      
+      let closestRow = -1;
+      let closestCol = -1;
+      let minDist = Infinity;
+
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const coord = getGridCoord(r, c);
+          const dist = Math.hypot(cx - coord.x, cy - coord.y);
+          if (dist < minDist) {
+            minDist = dist;
+            closestRow = r;
+            closestCol = c;
+          }
+        }
+      }
+      
+      if (closestRow !== -1 && closestCol !== -1) {
+        const coord = getGridCoord(closestRow, closestCol);
+        ctx.save();
+        ctx.globalAlpha = 0.25;
+        
+        // Draw dashed outline
+        ctx.beginPath();
+        ctx.arc(coord.x, coord.y, BUBBLE_RADIUS - 1, 0, Math.PI * 2);
+        ctx.strokeStyle = playerBubble.color;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.closePath();
+        
+        // Fill with soft color
+        ctx.beginPath();
+        ctx.arc(coord.x, coord.y, BUBBLE_RADIUS - 3, 0, Math.PI * 2);
+        ctx.fillStyle = playerBubble.color;
+        ctx.fill();
+        ctx.closePath();
+        
+        ctx.restore();
+      }
     }
 
     canvas.addEventListener('mousemove', e => {
@@ -1363,8 +1516,9 @@
       ctx.font = '700 9px sans-serif';
       ctx.fillText('NEXT', 21, canvas.height - 52);
 
-      // Aim line and player bubble
+      // Aim line, ghost snap projections and player bubble
       drawAimGuide();
+      drawGhostBubble();
       
       if (playerBubble) {
         playerBubble.update();
