@@ -1369,4 +1369,497 @@ countdownElements.forEach(countdown => {
       }, 400);
     });
   });
+})();
+
+// ==========================================
+// CUSTOMIZABLE SYSTEM PREFERENCES & SETTINGS
+// ==========================================
+(function initSystemSettings() {
+  // Inject style rules for dark mode and settings dialog
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `
+    /* Settings Modal Styles */
+    .settings-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 100000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .settings-overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+    }
+    .settings-content {
+      position: relative;
+      background: #fff;
+      width: 90%;
+      max-width: 400px;
+      border-radius: var(--border-radius-md);
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      z-index: 100001;
+      animation: zoomIn 0.3s ease;
+    }
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--cultured);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .settings-header h3 {
+      font-size: var(--fs-6);
+      font-weight: var(--weight-700);
+      color: var(--eerie-black);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .settings-close-btn {
+      font-size: 24px;
+      color: var(--sonic-silver);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .settings-section {
+      margin-bottom: 20px;
+    }
+    .settings-label {
+      display: block;
+      font-size: var(--fs-8);
+      font-weight: var(--weight-700);
+      color: var(--eerie-black);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .theme-palette {
+      display: flex;
+      gap: 12px;
+    }
+    .theme-dot {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition-timing);
+    }
+    .theme-dot:hover {
+      transform: scale(1.1);
+    }
+    .theme-dot.selected {
+      border-color: #000;
+    }
+    .settings-dropdown {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--cultured);
+      border-radius: var(--border-radius-sm);
+      outline: none;
+      font-size: var(--fs-8);
+    }
+    .settings-switch-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--fs-8);
+      color: var(--onyx);
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 24px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--cultured);
+      transition: .4s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+    }
+    input:checked + .slider {
+      background-color: var(--salmon-pink);
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+    .slider.round {
+      border-radius: 24px;
+    }
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    /* Dark Mode Layout Adjustments */
+    body.dark-mode {
+      background-color: #121212 !important;
+      color: #f5f5f5 !important;
+    }
+    body.dark-mode .settings-content {
+      background-color: #1a1a1a;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    body.dark-mode .settings-header h3,
+    body.dark-mode .settings-label,
+    body.dark-mode .settings-switch-container {
+      color: #fff !important;
+    }
+    body.dark-mode .settings-dropdown {
+      background-color: #2b2b2b;
+      color: #fff;
+      border-color: #444;
+    }
+    body.dark-mode header,
+    body.dark-mode .header-main,
+    body.dark-mode footer,
+    body.dark-mode .footer-nav,
+    body.dark-mode .product-box,
+    body.dark-mode .showcase,
+    body.dark-mode .sidebar-category,
+    body.dark-mode .coupon-card,
+    body.dark-mode .tracker-box,
+    body.dark-mode .detail-card,
+    body.dark-mode .category-item,
+    body.dark-mode .policy-box-container {
+      background-color: #1e1e1e !important;
+      color: #f5f5f5 !important;
+      border-color: #2b2b2b !important;
+    }
+    body.dark-mode .showcase-title,
+    body.dark-mode .sidebar-title,
+    body.dark-mode .title,
+    body.dark-mode .menu-title,
+    body.dark-mode .nav-title,
+    body.dark-mode .product-name,
+    body.dark-mode .stock,
+    body.dark-mode .price,
+    body.dark-mode .service-title {
+      color: #ffffff !important;
+    }
+    body.dark-mode .showcase-desc,
+    body.dark-mode .service-desc,
+    body.dark-mode .footer-nav-link,
+    body.dark-mode .sidebar-menu-category-list a,
+    body.dark-mode .policy-content-text {
+      color: #b0b0b0 !important;
+    }
+    body.dark-mode .header-search-container .search-field {
+      background-color: #2b2b2b;
+      color: #fff;
+      border-color: #444;
+    }
+    body.dark-mode .header-top {
+      background-color: #121212 !important;
+      border-color: #2b2b2b !important;
+    }
+  `;
+  document.head.appendChild(styleEl);
+
+  const themeColors = {
+    pink: 'hsl(353, 100%, 78%)',
+    blue: 'hsl(203, 100%, 60%)',
+    green: 'hsl(145, 63%, 49%)',
+    gold: 'hsl(38, 95%, 55%)',
+    purple: 'hsl(270, 70%, 65%)'
+  };
+
+  const settingsModalHTML = `
+    <div class="settings-modal" id="settingsModal" style="display:none;">
+      <div class="settings-overlay" id="settingsOverlay"></div>
+      <div class="settings-content">
+        <div class="settings-header">
+          <h3><ion-icon name="cog-outline"></ion-icon> Preferences</h3>
+          <button class="settings-close-btn" id="settingsCloseBtn">&times;</button>
+        </div>
+        
+        <div class="settings-section">
+          <label class="settings-label">Color Theme Accent</label>
+          <div class="theme-palette">
+            <span class="theme-dot" data-theme="pink" style="background:#ff69b4;" title="Salmon Pink"></span>
+            <span class="theme-dot" data-theme="blue" style="background:#3399ff;" title="Ocean Blue"></span>
+            <span class="theme-dot" data-theme="green" style="background:#2ecc71;" title="Emerald Green"></span>
+            <span class="theme-dot" data-theme="gold" style="background:#f1c40f;" title="Lux Gold"></span>
+            <span class="theme-dot" data-theme="purple" style="background:#9b59b6;" title="Royal Purple"></span>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <label class="settings-label">Dark Mode Boutique</label>
+          <div class="settings-switch-container">
+            <span>Toggle Dark Mode layout</span>
+            <label class="switch">
+              <input type="checkbox" id="darkModeToggle">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <label class="settings-label">Google Font Style</label>
+          <select id="fontSelector" class="settings-dropdown">
+            <option value="Poppins">Poppins (Default)</option>
+            <option value="Inter">Inter (Clean)</option>
+            <option value="Outfit">Outfit (Fashion)</option>
+            <option value="Playfair Display">Playfair (Serif Luxury)</option>
+          </select>
+        </div>
+
+        <div class="settings-section">
+          <label class="settings-label">Sound Effects</label>
+          <div class="settings-switch-container">
+            <span>Audio interaction feedback</span>
+            <label class="switch">
+              <input type="checkbox" id="soundToggle">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <label class="settings-label">Base Currency Tag</label>
+          <select id="currencySelector" class="settings-dropdown">
+            <option value="LKR">LKR (රු)</option>
+            <option value="USD">USD ($)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Inject modal into HTML body
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = settingsModalHTML;
+  document.body.appendChild(wrapper.firstChild);
+
+  // Inject Gear Icon to Header User Actions dynamically
+  function injectGearIcon() {
+    const userActions = document.querySelector('.header-main .header-user-actions');
+    if (userActions && !document.getElementById('settingsBtn')) {
+      const settingsBtn = document.createElement('button');
+      settingsBtn.className = 'action-btn';
+      settingsBtn.id = 'settingsBtn';
+      settingsBtn.title = 'Site Settings';
+      settingsBtn.innerHTML = '<ion-icon name="settings-outline"></ion-icon>';
+      
+      // Place it as the first action item
+      userActions.insertBefore(settingsBtn, userActions.firstChild);
+    }
+  }
+
+  // Synthesis Alert sound
+  function playAlertSound() {
+    const soundOn = localStorage.getItem('shopEaseSound') !== 'false';
+    if (!soundOn) return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5 note
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.25);
+    } catch(e) {}
+  }
+
+  // Event handler routines
+  function applyColorTheme(themeName) {
+    const color = themeColors[themeName] || themeColors.pink;
+    document.documentElement.style.setProperty('--salmon-pink', color);
+    localStorage.setItem('shopEaseTheme', themeName);
+
+    document.querySelectorAll('.theme-dot').forEach(dot => {
+      dot.classList.toggle('selected', dot.getAttribute('data-theme') === themeName);
+    });
+  }
+
+  function applyDarkMode(enabled) {
+    document.body.classList.toggle('dark-mode', enabled);
+    localStorage.setItem('shopEaseDarkMode', enabled ? 'true' : 'false');
+    const toggle = document.getElementById('darkModeToggle');
+    if (toggle) toggle.checked = enabled;
+  }
+
+  function applyFont(fontName) {
+    let fontLink = document.getElementById('gFontLink');
+    if (!fontLink) {
+      fontLink = document.createElement('link');
+      fontLink.id = 'gFontLink';
+      fontLink.rel = 'stylesheet';
+      document.head.appendChild(fontLink);
+    }
+    fontLink.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(' ', '+')}:wght@300;400;500;600;700;800;900&display=swap`;
+    document.body.style.fontFamily = `"${fontName}", sans-serif`;
+    localStorage.setItem('shopEaseFont', fontName);
+
+    const fontSel = document.getElementById('fontSelector');
+    if (fontSel) fontSel.value = fontName;
+  }
+
+  function applyCurrency(currencyCode) {
+    const prev = localStorage.getItem('shopEaseCurrency') || 'LKR';
+    localStorage.setItem('shopEaseCurrency', currencyCode);
+
+    const curSel = document.getElementById('currencySelector');
+    if (curSel) curSel.value = currencyCode;
+
+    if (prev === currencyCode) return;
+
+    // Convert prices across the active document
+    const prices = document.querySelectorAll('.price-box, .price, del, .db-price');
+    prices.forEach(box => {
+      const convertText = text => {
+        if (currencyCode === 'USD' && text.includes('LKR')) {
+          const val = parseFloat(text.replace(/[^\d.]/g, ''));
+          if (!isNaN(val)) return `$${(val / 300).toFixed(2)}`;
+        } else if (currencyCode === 'LKR' && text.includes('$')) {
+          const val = parseFloat(text.replace(/[^\d.]/g, ''));
+          if (!isNaN(val)) return `LKR ${(val * 300).toFixed(2)}`;
+        }
+        return text;
+      };
+
+      if (box.children.length === 0) {
+        box.textContent = convertText(box.textContent);
+      } else {
+        Array.from(box.childNodes).forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE && (node.textContent.includes('LKR') || node.textContent.includes('$'))) {
+            node.textContent = convertText(node.textContent);
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            node.textContent = convertText(node.textContent);
+          }
+        });
+      }
+    });
+  }
+
+  // Load and apply configurations on load
+  function loadConfigs() {
+    const savedTheme = localStorage.getItem('shopEaseTheme') || 'pink';
+    applyColorTheme(savedTheme);
+
+    const savedDarkMode = localStorage.getItem('shopEaseDarkMode') === 'true';
+    applyDarkMode(savedDarkMode);
+
+    const savedFont = localStorage.getItem('shopEaseFont') || 'Poppins';
+    applyFont(savedFont);
+
+    const savedSound = localStorage.getItem('shopEaseSound') !== 'false';
+    const soundToggle = document.getElementById('soundToggle');
+    if (soundToggle) soundToggle.checked = savedSound;
+
+    const savedCurrency = localStorage.getItem('shopEaseCurrency') || 'LKR';
+    // Use timeout to let the page compile dynamic prices before conversion triggers
+    setTimeout(() => {
+      applyCurrency(savedCurrency);
+    }, 450);
+  }
+
+  // Bind settings triggers
+  function bindSettingsEvents() {
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const settingsOverlay = document.getElementById('settingsOverlay');
+    const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+
+    if (settingsBtn && settingsModal) {
+      settingsBtn.addEventListener('click', () => {
+        settingsModal.style.display = 'flex';
+        playAlertSound();
+      });
+    }
+
+    const closeSettings = () => {
+      if (settingsModal) settingsModal.style.display = 'none';
+    };
+
+    if (settingsOverlay) settingsOverlay.addEventListener('click', closeSettings);
+    if (settingsCloseBtn) settingsCloseBtn.addEventListener('click', closeSettings);
+
+    // Color theme select
+    document.querySelectorAll('.theme-dot').forEach(dot => {
+      dot.addEventListener('click', () => {
+        const theme = dot.getAttribute('data-theme');
+        applyColorTheme(theme);
+        playAlertSound();
+      });
+    });
+
+    // Dark mode toggle
+    const dmToggle = document.getElementById('darkModeToggle');
+    if (dmToggle) {
+      dmToggle.addEventListener('change', e => {
+        applyDarkMode(e.target.checked);
+        playAlertSound();
+      });
+    }
+
+    // Font family dropdown
+    const fontSel = document.getElementById('fontSelector');
+    if (fontSel) {
+      fontSel.addEventListener('change', e => {
+        applyFont(e.target.value);
+        playAlertSound();
+      });
+    }
+
+    // Sound toggle
+    const sToggle = document.getElementById('soundToggle');
+    if (sToggle) {
+      sToggle.addEventListener('change', e => {
+        localStorage.setItem('shopEaseSound', e.target.checked ? 'true' : 'false');
+        playAlertSound();
+      });
+    }
+
+    // Currency select
+    const cSel = document.getElementById('currencySelector');
+    if (cSel) {
+      cSel.addEventListener('change', e => {
+        applyCurrency(e.target.value);
+        playAlertSound();
+      });
+    }
+  }
+
+  // Execute initialization
+  setTimeout(() => {
+    injectGearIcon();
+    loadConfigs();
+    bindSettingsEvents();
+  }, 100);
+
+  // Watch for page elements re-rendering
+  setTimeout(injectGearIcon, 1000);
 })();
