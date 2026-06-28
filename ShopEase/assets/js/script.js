@@ -254,6 +254,15 @@ countdownElements.forEach(countdown => {
             </div>
           </div>
 
+          <div class="cart-form-group">
+            <label>Promo Code (Play Bubble Game to win!)</label>
+            <div style="display: flex; gap: 10px;">
+              <input type="text" id="custPromo" class="cart-input-field" placeholder="e.g. BUBBLE5" style="text-transform: uppercase; margin-bottom: 0;">
+              <button type="button" id="applyPromoBtn" class="qty-btn" style="width: auto; padding: 0 15px; font-size: var(--fs-9); height: auto; border: 1px solid var(--salmon-pink-dark);">Apply</button>
+            </div>
+            <small id="promoFeedback" style="display: block; font-size: 11px; margin-top: 4px; font-weight: 600;"></small>
+          </div>
+
           <button type="submit" class="cart-submit-btn">Confirm & Save to Database</button>
         </form>
       </div>
@@ -479,6 +488,19 @@ countdownElements.forEach(countdown => {
     const orderId = 'ORD-' + Date.now().toString().slice(-6) + '-' + Math.floor(Math.random() * 1000);
     const timestamp = new Date().toISOString();
     
+    // Check promo code validity
+    const promoField = document.getElementById('custPromo');
+    const promoCode = promoField ? promoField.value.trim().toUpperCase() : '';
+    const unlockedCoupons = JSON.parse(localStorage.getItem('shopEaseUnlockedCoupons')) || [];
+    let discountVal = 0;
+    
+    if (promoCode && unlockedCoupons.includes(promoCode)) {
+      if (promoCode === 'BUBBLE5') discountVal = 1500;
+      else if (promoCode === 'BUBBLE15') discountVal = 4500;
+      else if (promoCode === 'BUBBLE35') discountVal = 10500;
+      else if (promoCode === 'BUBBLE50') discountVal = 15000;
+    }
+
     const newOrder = {
       orderId,
       timestamp,
@@ -490,6 +512,8 @@ countdownElements.forEach(countdown => {
       quantity: selectedQty,
       size: selectedSize,
       color: selectedColor,
+      promoCode: promoCode,
+      discountVal: discountVal,
       customer: {
         name: document.getElementById('custName').value,
         email: document.getElementById('custEmail').value,
@@ -506,7 +530,47 @@ countdownElements.forEach(countdown => {
 
     closeCartModal();
     updateDatabaseViewer();
-    showNotification(`Order ${orderId} saved to database!`);
+    showNotification(`Order ${orderId} saved! ${discountVal > 0 ? 'Discount applied.' : ''}`);
+  });
+
+  // Handle Promo Code application clicks
+  document.addEventListener('click', e => {
+    if (e.target && e.target.id === 'applyPromoBtn') {
+      e.preventDefault();
+      const codeInput = document.getElementById('custPromo');
+      const feedback = document.getElementById('promoFeedback');
+      if (!codeInput || !feedback) return;
+
+      const code = codeInput.value.trim().toUpperCase();
+      if (!code) {
+        feedback.textContent = 'Please enter a code.';
+        feedback.style.color = 'red';
+        return;
+      }
+
+      // Check if unlocked in localStorage
+      const unlocked = JSON.parse(localStorage.getItem('shopEaseUnlockedCoupons')) || [];
+      if (!unlocked.includes(code)) {
+        const validCodes = ['BUBBLE5', 'BUBBLE15', 'BUBBLE35', 'BUBBLE50'];
+        if (validCodes.includes(code)) {
+          feedback.textContent = `You haven't unlocked this coupon in the Bubble Shooter game!`;
+          feedback.style.color = '#e67e22';
+        } else {
+          feedback.textContent = 'Invalid promo code.';
+          feedback.style.color = 'red';
+        }
+        return;
+      }
+
+      let discountText = '';
+      if (code === 'BUBBLE5') discountText = 'LKR 1500.00 ($5.00)';
+      else if (code === 'BUBBLE15') discountText = 'LKR 4500.00 ($15.00)';
+      else if (code === 'BUBBLE35') discountText = 'LKR 10500.00 ($35.00)';
+      else if (code === 'BUBBLE50') discountText = 'LKR 15000.00 ($50.00)';
+
+      feedback.textContent = `Success! Discount of ${discountText} applied to your order.`;
+      feedback.style.color = 'green';
+    }
   });
 
   // Open / Close Database Viewer
@@ -1721,30 +1785,50 @@ countdownElements.forEach(countdown => {
   function injectGearIconTopRight() {
     const topActions = document.querySelector('.header-top-actions');
     if (topActions) {
-      if (document.getElementById('settingsBtn')) return;
+      if (!document.getElementById('settingsBtn')) {
+        topActions.innerHTML = '';
+        
+        const settingsBtn = document.createElement('button');
+        settingsBtn.id = 'settingsBtn';
+        settingsBtn.className = 'header-top-settings-btn';
+        settingsBtn.style.cssText = `
+          background: none;
+          border: none;
+          color: var(--sonic-silver);
+          font-size: 20px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-family: inherit;
+          transition: color 0.3s;
+        `;
+        settingsBtn.innerHTML = `
+          <ion-icon name="settings-outline"></ion-icon>
+          <span style="font-size: var(--fs-9); font-weight: var(--weight-700); text-transform: uppercase; letter-spacing: 0.5px;">Settings</span>
+        `;
+        topActions.appendChild(settingsBtn);
+      }
+    }
 
-      topActions.innerHTML = '';
-      
-      const settingsBtn = document.createElement('button');
-      settingsBtn.id = 'settingsBtn';
-      settingsBtn.className = 'header-top-settings-btn';
-      settingsBtn.style.cssText = `
-        background: none;
-        border: none;
-        color: var(--sonic-silver);
-        font-size: 20px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-family: inherit;
-        transition: color 0.3s;
-      `;
-      settingsBtn.innerHTML = `
-        <ion-icon name="settings-outline"></ion-icon>
-        <span style="font-size: var(--fs-9); font-weight: var(--weight-700); text-transform: uppercase; letter-spacing: 0.5px;">Settings</span>
-      `;
-      topActions.appendChild(settingsBtn);
+    // Inject Bubble Game Link to Desktop Navigation dynamically
+    const desktopMenu = document.querySelector('.desktop-menu-category-list');
+    if (desktopMenu && !document.getElementById('bubbleGameNavItem')) {
+      const gameLi = document.createElement('li');
+      gameLi.className = 'menu-category';
+      gameLi.id = 'bubbleGameNavItem';
+      gameLi.innerHTML = `<a href="bubble-game.html" class="menu-title" style="font-weight: 700; color: var(--salmon-pink-dark);"><ion-icon name="game-controller-outline" style="margin-right: 4px; vertical-align: middle;"></ion-icon>Play & Earn</a>`;
+      desktopMenu.appendChild(gameLi);
+    }
+    
+    // Inject to Mobile Navigation dynamically
+    const mobileMenu = document.querySelector('.mobile-menu-category-list');
+    if (mobileMenu && !document.getElementById('bubbleGameMobileNavItem')) {
+      const gameLi = document.createElement('li');
+      gameLi.className = 'menu-category';
+      gameLi.id = 'bubbleGameMobileNavItem';
+      gameLi.innerHTML = `<a href="bubble-game.html" class="menu-title" style="font-weight: 700; color: var(--salmon-pink-dark);"><ion-icon name="game-controller-outline" style="margin-right: 4px; vertical-align: middle;"></ion-icon>Play & Earn</a>`;
+      mobileMenu.appendChild(gameLi);
     }
   }
 

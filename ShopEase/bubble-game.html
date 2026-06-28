@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopEase - Bubble Shooter Rewards Arena 🎮</title>
+
+  <!-- favicon-->
+  <link rel="shortcut icon" href="./assets/images/logo/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <!-- google font link -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* Winner notification cards styles */
+    .winner-toast {
+      position: fixed;
+      bottom: 25px;
+      right: -350px;
+      width: 320px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1.5px solid var(--salmon-pink-dark, hsl(353, 85%, 48%));
+      border-radius: var(--border-radius-md);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 10000;
+      transition: right 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      backdrop-filter: blur(8px);
+    }
+
+    .winner-toast.active {
+      right: 25px;
+    }
+
+    .winner-toast ion-icon {
+      font-size: 32px;
+      color: var(--salmon-pink-dark, hsl(353, 85%, 48%));
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .winner-toast-content h4 {
+      font-size: var(--fs-8);
+      font-weight: 700;
+      color: var(--eerie-black);
+      margin-bottom: 2px;
+    }
+
+    .winner-toast-content p {
+      font-size: var(--fs-9);
+      color: var(--sonic-silver);
+    }
+
+    /* Game Layout Page Styles */
+    .game-arena-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      margin: 40px 0;
+    }
+
+    @media (min-width: 992px) {
+      .game-arena-container {
+        grid-template-columns: 320px 1fr;
+      }
+    }
+
+    /* Score and statistics styling */
+    .game-stats-box {
+      background: #fff;
+      border: 1px solid var(--cultured);
+      border-radius: var(--border-radius-md);
+      padding: 25px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.01);
+    }
+
+    .game-stats-box h3 {
+      font-size: var(--fs-6);
+      font-weight: var(--weight-700);
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--cultured);
+      padding-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: var(--fs-7);
+    }
+
+    .stat-row b {
+      color: var(--salmon-pink-dark, hsl(353, 85%, 48%));
+      font-size: var(--fs-5);
+    }
+
+    /* Milestones panel */
+    .milestone-card {
+      border: 1px solid var(--cultured);
+      border-radius: var(--border-radius-sm);
+      padding: 12px;
+      margin-bottom: 12px;
+      background: #fafafa;
+      transition: var(--transition-timing);
+    }
+
+    .milestone-card.unlocked {
+      background: #f0fff4;
+      border-color: #2ecc71;
+    }
+
+    .milestone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--fs-8);
+      font-weight: 700;
+      color: var(--eerie-black);
+    }
+
+    .milestone-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #ddd;
+      color: #777;
+    }
+
+    .milestone-card.unlocked .milestone-badge {
+      background: #2ecc71;
+      color: #fff;
+    }
+
+    .milestone-reward-info {
+      font-size: var(--fs-9);
+      color: var(--sonic-silver);
+      margin-top: 6px;
+    }
+
+    /* Canvas board styling */
+    .game-board-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border: 1px solid var(--cultured);
+      border-radius: var(--border-radius-md);
+      padding: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.01);
+      position: relative;
+    }
+
+    #gameCanvas {
+      background: #111;
+      border-radius: var(--border-radius-sm);
+      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+      cursor: crosshair;
+      max-width: 100%;
+    }
+
+    .game-overlay {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      right: 30px;
+      bottom: 30px;
+      background: rgba(0, 0, 0, 0.85);
+      border-radius: var(--border-radius-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      text-align: center;
+      padding: 20px;
+      backdrop-filter: blur(8px);
+    }
+
+    .game-overlay h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .game-overlay p {
+      color: #ccc;
+      font-size: var(--fs-7);
+      margin-bottom: 25px;
+      max-width: 350px;
+    }
+
+    .start-game-btn {
+      background: var(--salmon-pink-dark, hsl(353, 85%, 48%));
+      color: #fff;
+      font-weight: 700;
+      font-size: var(--fs-7);
+      padding: 12px 35px;
+      border-radius: var(--border-radius-sm);
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
+      transition: var(--transition-timing);
+    }
+
+    .start-game-btn:hover {
+      background: #fff;
+      color: var(--eerie-black);
+      transform: scale(1.05);
+    }
+
+    .reward-copy-btn {
+      background: var(--salmon-pink, hsl(353, 100%, 82%));
+      color: var(--salmon-pink-dark, hsl(353, 85%, 48%));
+      border: 1px solid var(--salmon-pink-dark, hsl(353, 85%, 48%));
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-transform: uppercase;
+      margin-top: 4px;
+      display: inline-block;
+    }
+
+    .reward-copy-btn:hover {
+      background: var(--salmon-pink-dark, hsl(353, 85%, 48%));
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay" data-overlay></div>
+
+  <!--
+    - HEADER
+  -->
+  <header>
+    <div class="header-top">
+      <div class="container">
+        <ul class="header-social-container">
+          <li><a href="#" class="social-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-instagram"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+        </ul>
+
+        <div class="header-alert-news">
+          <p>
+            <b>Free Shipping</b>
+            This Week Order Over - LKR 2000.00
+          </p>
+        </div>
+
+        <div class="header-top-actions">
+          <!-- settingsBtn will be dynamically placed here by script.js -->
+        </div>
+      </div>
+    </div>
+
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="header-logo">
+          <img src="./assets/images/logo/logo.jpg" alt="ShopEase's logo" width="120" height="120" style="border-radius: 20px; object-fit: contain; aspect-ratio: 1 / 1;">
+        </a>
+
+        <div class="header-search-container">
+          <input type="search" name="search" class="search-field" placeholder="Enter your product name...">
+          <button class="search-btn">
+            <ion-icon name="search-outline"></ion-icon>
+          </button>
+        </div>
+
+        <div class="header-user-actions">
+          <button class="action-btn">
+            <ion-icon name="person-outline"></ion-icon>
+          </button>
+
+          <button class="action-btn">
+            <ion-icon name="heart-outline"></ion-icon>
+            <span class="count">0</span>
+          </button>
+
+          <button class="action-btn">
+            <ion-icon name="bag-handle-outline"></ion-icon>
+            <span class="count">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="desktop-navigation-menu">
+      <div class="container">
+        <ul class="desktop-menu-category-list">
+          <li class="menu-category">
+            <a href="index.html" class="menu-title">Home</a>
+          </li>
+
+          <li class="menu-category">
+            <a href="#" class="menu-title">Categories</a>
+            <div class="dropdown-panel">
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Electronics</a></li>
+                <li class="panel-list-item"><a href="#">Desktop</a></li>
+                <li class="panel-list-item"><a href="#">Laptop</a></li>
+                <li class="panel-list-item"><a href="#">Camera</a></li>
+                <li class="panel-list-item"><a href="#">Tablet</a></li>
+                <li class="panel-list-item"><a href="#">Headphone</a></li>
+              </ul>
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Men's</a></li>
+                <li class="panel-list-item"><a href="#">Formal</a></li>
+                <li class="panel-list-item"><a href="#">Casual</a></li>
+                <li class="panel-list-item"><a href="#">Sports</a></li>
+                <li class="panel-list-item"><a href="#">Jacket</a></li>
+              </ul>
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Women's</a></li>
+                <li class="panel-list-item"><a href="#">Formal</a></li>
+                <li class="panel-list-item"><a href="#">Casual</a></li>
+                <li class="panel-list-item"><a href="#">Perfume</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="menu-category">
+            <a href="blog.html" class="menu-title">Blog</a>
+          </li>
+
+          <li class="menu-category">
+            <a href="hot-offers.html" class="menu-title">Hot Offers</a>
+          </li>
+
+          <li class="menu-category">
+            <a href="track-order.html" class="menu-title">Track Order</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!--
+    - MAIN GAME LAYOUT
+  -->
+  <main style="padding: 40px 0; background: #faf9f6;">
+    <div class="container">
+      
+      <div class="game-arena-container">
+        
+        <!-- Left Stats Panel -->
+        <div class="game-stats-box">
+          <h3><ion-icon name="game-controller-outline"></ion-icon> Game Terminal</h3>
+          
+          <div class="stat-row">
+            <span>Score Count:</span>
+            <b id="gameScore">0</b>
+          </div>
+          <div class="stat-row">
+            <span>Level:</span>
+            <span style="font-weight:700;" id="gameLevel">1</span>
+          </div>
+          <div class="stat-row" style="margin-bottom:25px;">
+            <span>Shots Fired:</span>
+            <span style="font-weight:700;" id="gameShots">0</span>
+          </div>
+
+          <h3 style="margin-top:20px;"><ion-icon name="trophy-outline"></ion-icon> Difficult Milestones</h3>
+          
+          <!-- Milestone 1 -->
+          <div class="milestone-card" id="ms-500">
+            <div class="milestone-header">
+              <span>Starter Shooter</span>
+              <span class="milestone-badge" id="badge-500">500 pts</span>
+            </div>
+            <div class="milestone-reward-info">
+              Unlocks: <b>$5.00 Coupon (BUBBLE5)</b>
+              <div id="action-500"></div>
+            </div>
+          </div>
+
+          <!-- Milestone 2 -->
+          <div class="milestone-card" id="ms-1500">
+            <div class="milestone-header">
+              <span>Precision Master</span>
+              <span class="milestone-badge" id="badge-1500">1500 pts</span>
+            </div>
+            <div class="milestone-reward-info">
+              Unlocks: <b>$15.00 Coupon (BUBBLE15)</b>
+              <div id="action-1500"></div>
+            </div>
+          </div>
+
+          <!-- Milestone 3 -->
+          <div class="milestone-card" id="ms-3500">
+            <div class="milestone-header">
+              <span>Grand Champion</span>
+              <span class="milestone-badge" id="badge-3500">3500 pts</span>
+            </div>
+            <div class="milestone-reward-info">
+              Unlocks: <b>$35.00 Coupon (BUBBLE35)</b>
+              <div id="action-3500"></div>
+            </div>
+          </div>
+
+          <!-- Milestone 4 -->
+          <div class="milestone-card" id="ms-6000">
+            <div class="milestone-header">
+              <span>Legendary Marksman</span>
+              <span class="milestone-badge" id="badge-6000">6000 pts</span>
+            </div>
+            <div class="milestone-reward-info">
+              Unlocks: <b>$50.00 Coupon (BUBBLE50)</b>
+              <div id="action-6000"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Canvas Game Panel -->
+        <div class="game-board-wrapper">
+          <!-- Canvas Overlay -->
+          <div class="game-overlay" id="gameOverlay">
+            <h2 id="overlayTitle">Bubble Shooter</h2>
+            <p id="overlayDesc">Match 3 or more bubbles of the same color to clear them. Earn high scores to unlock valuable cash coupons and use them on checkouts!</p>
+            <button class="start-game-btn" id="startGameBtn">Start Mission</button>
+          </div>
+
+          <canvas id="gameCanvas" width="480" height="560"></canvas>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!--
+    - FOOTER
+  -->
+  <footer>
+    <div class="footer-nav">
+      <div class="container">
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Popular Categories</h2></li>
+          <li><a href="#" class="footer-nav-link">Fashion</a></li>
+          <li><a href="#" class="footer-nav-link">Electronic</a></li>
+          <li><a href="#" class="footer-nav-link">Cosmetic</a></li>
+          <li><a href="#" class="footer-nav-link">Jewelry</a></li>
+        </ul>
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Our Company</h2></li>
+          <li><a href="privacy-policy.html" class="footer-nav-link">Delivery Details</a></li>
+          <li><a href="privacy-policy.html#returns" class="footer-nav-link">Returns Policy</a></li>
+          <li><a href="privacy-policy.html#support" class="footer-nav-link">Customer Support</a></li>
+        </ul>
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Contact</h2></li>
+          <li class="footer-nav-item flex">
+            <div class="icon-box"><ion-icon name="location-outline"></ion-icon></div>
+            <address class="content">419 Galle Road, Colombo 03, Sri Lanka.</address>
+          </li>
+          <li class="footer-nav-item flex">
+            <div class="icon-box"><ion-icon name="call-outline"></ion-icon></div>
+            <a href="tel:+94112345678" class="footer-nav-link">+94 11 234 5678</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <img src="./assets/images/payment.png" alt="payment method" class="payment-img">
+        <p class="copyright">
+          Copyright &copy; <a href="#">ShopEase</a> all rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Social Winner Notification Card -->
+  <div class="winner-toast" id="winnerToast">
+    <ion-icon name="trophy-outline"></ion-icon>
+    <div class="winner-toast-content">
+      <h4 id="winnerName">Dilshan S.</h4>
+      <p id="winnerAction">Won $15.00 Coupon (Precision Master)</p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="./assets/js/script.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <!-- Bubble Shooter Physics Engine & Social Winner Loop -->
+  <script>
+    // Recent Winners Social Generator
+    const winnerNames = [
+      "Dilshan S. from Colombo", "Avantha K. from Suburbs", "Shehan K. from Negombo", 
+      "Priyantha D. from Kandy", "Sanduni M. from Gampaha", "Nuwan H. from Kalutara", 
+      "Nilani W. from Galle", "Fathima R. from Dehiwala", "Kavinda B. from Moratuwa",
+      "Dinuka P. from Battaramulla", "Ruwan J. from Wattala", "Tharushi N. from Malabe"
+    ];
+    const winnerRewards = [
+      { text: "Won $5.00 Coupon (Starter Shooter)", code: "BUBBLE5" },
+      { text: "Won $15.00 Coupon (Precision Master)", code: "BUBBLE15" },
+      { text: "Won $35.00 Coupon (Grand Champion)", code: "BUBBLE35" },
+      { text: "Won $50.00 Coupon (Legendary Marksman)", code: "BUBBLE50" }
+    ];
+
+    function showRandomWinner() {
+      const toast = document.getElementById('winnerToast');
+      const nameEl = document.getElementById('winnerName');
+      const actionEl = document.getElementById('winnerAction');
+
+      if (!toast || !nameEl || !actionEl) return;
+
+      const randomName = winnerNames[Math.floor(Math.random() * winnerNames.length)];
+      // Weight smaller rewards higher
+      const randIdx = Math.random() < 0.5 ? 0 : (Math.random() < 0.85 ? 1 : (Math.random() < 0.96 ? 2 : 3));
+      const reward = winnerRewards[randIdx];
+
+      nameEl.textContent = randomName;
+      actionEl.textContent = `${reward.text}!`;
+
+      toast.classList.add('active');
+
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 4500);
+    }
+
+    // Winner triggers loop
+    setInterval(showRandomWinner, 14000);
+    setTimeout(showRandomWinner, 3000);
+
+    // ==============================================
+    // HTML5 CANVAS BUBBLE SHOOTER LOGIC
+    // ==============================================
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Bubble Configuration
+    const BUBBLE_RADIUS = 18;
+    const ROWS = 13;
+    const COLS = 8;
+    const bubbleColors = [
+      '#ff69b4', // Pink
+      '#3399ff', // Blue
+      '#2ecc71', // Green
+      '#f1c40f', // Gold
+      '#9b59b6'  // Purple
+    ];
+
+    let grid = [];
+    let score = 0;
+    let shotsFired = 0;
+    let currentLevel = 1;
+    let gameActive = false;
+
+    let playerBubble = null;
+    let nextBubbleColor = '';
+    let isFired = false;
+    let fireAngle = 0;
+    let aimX = 0;
+    let aimY = 0;
+
+    class Bubble {
+      constructor(x, y, color, isPlayer = false) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.radius = BUBBLE_RADIUS;
+        this.dx = 0;
+        this.dy = 0;
+        this.speed = 10;
+        this.isPlayer = isPlayer;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        
+        // Beautiful Radial Gradient shine on bubbles
+        const grad = ctx.createRadialGradient(
+          this.x - 5, this.y - 5, 2, 
+          this.x, this.y, this.radius
+        );
+        grad.addColorStop(0, '#fff');
+        grad.addColorStop(0.3, this.color);
+        grad.addColorStop(1, '#111');
+        
+        ctx.fillStyle = grad;
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      update() {
+        if (this.isPlayer && isFired) {
+          this.x += this.dx;
+          this.y += this.dy;
+
+          // Wall bounce logic
+          if (this.x - this.radius <= 0) {
+            this.x = this.radius;
+            this.dx = -this.dx;
+          }
+          if (this.x + this.radius >= canvas.width) {
+            this.x = canvas.width - this.radius;
+            this.dx = -this.dx;
+          }
+        }
+      }
+    }
+
+    // Grid coordinates SNAPPING helpers
+    function getGridCoord(row, col) {
+      const isOdd = row % 2 !== 0;
+      const offset = isOdd ? BUBBLE_RADIUS : 0;
+      const x = col * (BUBBLE_RADIUS * 2) + BUBBLE_RADIUS + offset + 20;
+      const y = row * (BUBBLE_RADIUS * 1.7) + BUBBLE_RADIUS + 15;
+      return { x, y };
+    }
+
+    function initGrid() {
+      grid = [];
+      for (let r = 0; r < ROWS; r++) {
+        grid[r] = [];
+        for (let c = 0; c < COLS; c++) {
+          if (r < 4 + Math.min(2, Math.floor(currentLevel / 2))) {
+            const color = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+            const coord = getGridCoord(r, c);
+            grid[r][c] = new Bubble(coord.x, coord.y, color);
+          } else {
+            grid[r][c] = null;
+          }
+        }
+      }
+    }
+
+    function generateNextPlayerBubble() {
+      const color = nextBubbleColor || bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+      nextBubbleColor = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+      playerBubble = new Bubble(canvas.width / 2, canvas.height - 30, color, true);
+      isFired = false;
+    }
+
+    // BFS search connected matches
+    function getMatches(startRow, startCol, targetColor) {
+      const queue = [{r: startRow, c: startCol}];
+      const visited = new Set();
+      const matches = [];
+
+      visited.add(`${startRow},${startCol}`);
+
+      while (queue.length > 0) {
+        const curr = queue.shift();
+        const b = grid[curr.r][curr.c];
+        if (b && b.color === targetColor) {
+          matches.push(curr);
+          const neighbors = getNeighbors(curr.r, curr.c);
+          neighbors.forEach(n => {
+            const key = `${n.r},${n.c}`;
+            if (!visited.has(key) && grid[n.r][n.c] && grid[n.r][n.c].color === targetColor) {
+              visited.add(key);
+              queue.push(n);
+            }
+          });
+        }
+      }
+      return matches;
+    }
+
+    function getNeighbors(row, col) {
+      const n = [];
+      const isOdd = row % 2 !== 0;
+      const offsets = isOdd ? 
+        [{r:-1, c:0}, {r:-1, c:1}, {r:0, c:-1}, {r:0, c:1}, {r:1, c:0}, {r:1, c:1}] :
+        [{r:-1, c:-1}, {r:-1, c:0}, {r:0, c:-1}, {r:0, c:1}, {r:1, c:-1}, {r:1, c:0}];
+
+      offsets.forEach(o => {
+        const nr = row + o.r;
+        const nc = col + o.c;
+        if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+          n.push({r: nr, c: nc});
+        }
+      });
+      return n;
+    }
+
+    // Drop floating bubbles
+    function dropFloatingBubbles() {
+      const connectedToCeiling = new Set();
+      const queue = [];
+
+      // Add all top row elements
+      for (let c = 0; c < COLS; c++) {
+        if (grid[0][c]) {
+          queue.push({r: 0, c: c});
+          connectedToCeiling.add(`0,${c}`);
+        }
+      }
+
+      while (queue.length > 0) {
+        const curr = queue.shift();
+        const neighbors = getNeighbors(curr.r, curr.c);
+        neighbors.forEach(n => {
+          const key = `${n.r},${n.c}`;
+          if (!connectedToCeiling.has(key) && grid[n.r][n.c]) {
+            connectedToCeiling.add(key);
+            queue.push(n);
+          }
+        });
+      }
+
+      // Drop any bubble not in the set
+      let droppedCount = 0;
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          if (grid[r][c] && !connectedToCeiling.has(`${r},${c}`)) {
+            grid[r][c] = null;
+            droppedCount++;
+            score += 20; // 20 points per floating bubble!
+          }
+        }
+      }
+      return droppedCount;
+    }
+
+    // Find closest snap slot in grid
+    function snapToGrid(bubble) {
+      let closestRow = -1;
+      let closestCol = -1;
+      let minDist = Infinity;
+
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const coord = getGridCoord(r, c);
+          const dist = Math.hypot(bubble.x - coord.x, bubble.y - coord.y);
+          if (dist < minDist) {
+            minDist = dist;
+            closestRow = r;
+            closestCol = c;
+          }
+        }
+      }
+
+      if (closestRow !== -1 && closestCol !== -1) {
+        const coord = getGridCoord(closestRow, closestCol);
+        grid[closestRow][closestCol] = new Bubble(coord.x, coord.y, bubble.color);
+        
+        // Handle matches checking
+        const matches = getMatches(closestRow, closestCol, bubble.color);
+        if (matches.length >= 3) {
+          matches.forEach(m => {
+            grid[m.r][m.c] = null;
+            score += 10; // 10 points per matched bubble
+          });
+          dropFloatingBubbles();
+          playAudioFeedback();
+        }
+
+        checkScoreMilestones();
+        document.getElementById('gameScore').textContent = score;
+
+        // Check level cleared
+        let totalRemaining = 0;
+        for (let r = 0; r < ROWS; r++) {
+          for (let c = 0; c < COLS; c++) {
+            if (grid[r][c]) totalRemaining++;
+          }
+        }
+        
+        if (totalRemaining === 0) {
+          currentLevel++;
+          document.getElementById('gameLevel').textContent = currentLevel;
+          initGrid();
+        }
+
+        // Check game over
+        for (let c = 0; c < COLS; c++) {
+          // If bubbles reach the bottom danger line (row 11)
+          if (grid[ROWS - 2][c]) {
+            endGame(false);
+            return;
+          }
+        }
+      }
+    }
+
+    function checkCollision(b1, b2) {
+      if (!b1 || !b2) return false;
+      const dist = Math.hypot(b1.x - b2.x, b1.y - b2.y);
+      return dist < (b1.radius + b2.radius) * 0.85;
+    }
+
+    // Play pops sound using Web Audio API
+    function playAudioFeedback() {
+      const isSoundOn = localStorage.getItem('shopEaseSound') !== 'false';
+      if (!isSoundOn) return;
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime); // E5
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.15);
+      } catch(e) {}
+    }
+
+    // Check milestones and reward coupons
+    function checkScoreMilestones() {
+      const milestones = [
+        { score: 500, id: 'ms-500', badge: 'badge-500', coupon: 'BUBBLE5', actionId: 'action-500' },
+        { score: 1500, id: 'ms-1500', badge: 'badge-1500', coupon: 'BUBBLE15', actionId: 'action-1500' },
+        { score: 3500, id: 'ms-3500', badge: 'badge-3500', coupon: 'BUBBLE35', actionId: 'action-3500' },
+        { score: 6000, id: 'ms-6000', badge: 'badge-6000', coupon: 'BUBBLE50', actionId: 'action-6000' }
+      ];
+
+      const unlocked = JSON.parse(localStorage.getItem('shopEaseUnlockedCoupons')) || [];
+
+      milestones.forEach(ms => {
+        if (score >= ms.score) {
+          const card = document.getElementById(ms.id);
+          const badge = document.getElementById(ms.badge);
+          const actionBox = document.getElementById(ms.actionId);
+
+          if (card) card.classList.add('unlocked');
+          if (badge) badge.textContent = "Unlocked";
+          
+          if (!unlocked.includes(ms.coupon)) {
+            unlocked.push(ms.coupon);
+            localStorage.setItem('shopEaseUnlockedCoupons', JSON.stringify(unlocked));
+          }
+
+          if (actionBox && actionBox.children.length === 0) {
+            actionBox.innerHTML = `
+              <button class="reward-copy-btn" onclick="copyPromoCode('${ms.coupon}')">Copy Coupon</button>
+            `;
+          }
+        }
+      });
+    }
+
+    // Copy to clipboard helper
+    window.copyPromoCode = function(code) {
+      navigator.clipboard.writeText(code).then(() => {
+        // Toggle notification alert
+        const dbNotif = document.getElementById('dbNotification') || document.getElementById('winnerToast');
+        const dbMsg = document.getElementById('dbNotificationMessage');
+        
+        if (dbMsg) {
+          dbMsg.textContent = `Promo Code "${code}" copied to clipboard!`;
+          if (dbNotif) dbNotif.classList.add('active');
+          setTimeout(() => {
+            if (dbNotif) dbNotif.classList.remove('active');
+          }, 3500);
+        } else {
+          alert(`Promo Code "${code}" copied to clipboard! Use it on checkout.`);
+        }
+      });
+    };
+
+    function startNewGame() {
+      score = 0;
+      shotsFired = 0;
+      currentLevel = 1;
+      gameActive = true;
+      document.getElementById('gameScore').textContent = score;
+      document.getElementById('gameLevel').textContent = currentLevel;
+      document.getElementById('gameShots').textContent = shotsFired;
+      document.getElementById('gameOverlay').style.display = 'none';
+
+      initGrid();
+      generateNextPlayerBubble();
+      gameLoop();
+    }
+
+    function endGame(victory = false) {
+      gameActive = false;
+      const overlay = document.getElementById('gameOverlay');
+      const title = document.getElementById('overlayTitle');
+      const desc = document.getElementById('overlayDesc');
+      const btn = document.getElementById('startGameBtn');
+
+      title.textContent = "Mission Over!";
+      desc.textContent = `You scored ${score} points and fired ${shotsFired} bubbles. Keep playing to reach those difficult milestones and unlock rewards!`;
+      btn.textContent = "Deploy Again";
+      overlay.style.display = 'flex';
+    }
+
+    // Aim guide drawer
+    function drawAimGuide() {
+      if (!playerBubble || isFired) return;
+      ctx.beginPath();
+      ctx.setLineDash([4, 6]);
+      ctx.moveTo(playerBubble.x, playerBubble.y);
+      
+      // Calculate terminal aim line
+      const length = 200;
+      const targetX = playerBubble.x + Math.cos(fireAngle) * length;
+      const targetY = playerBubble.y + Math.sin(fireAngle) * length;
+      
+      ctx.lineTo(targetX, targetY);
+      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.setLineDash([]); // Reset line styles
+      ctx.closePath();
+    }
+
+    // Vector aim calculations
+    canvas.addEventListener('mousemove', e => {
+      const rect = canvas.getBoundingClientRect();
+      aimX = e.clientX - rect.left;
+      aimY = e.clientY - rect.top;
+
+      // Shooter position
+      const sx = canvas.width / 2;
+      const sy = canvas.height - 30;
+
+      fireAngle = Math.atan2(aimY - sy, aimX - sx);
+      
+      // Constrain aiming angles to upwards hemispheres
+      if (fireAngle > -0.2) fireAngle = -0.2;
+      if (fireAngle < -Math.PI + 0.2) fireAngle = -Math.PI + 0.2;
+    });
+
+    // Shooting triggers
+    canvas.addEventListener('click', e => {
+      if (!gameActive || isFired || !playerBubble) return;
+      
+      isFired = true;
+      shotsFired++;
+      document.getElementById('gameShots').textContent = shotsFired;
+
+      playerBubble.dx = Math.cos(fireAngle) * playerBubble.speed;
+      playerBubble.dy = Math.sin(fireAngle) * playerBubble.speed;
+    });
+
+    document.getElementById('startGameBtn').addEventListener('click', startNewGame);
+
+    // Main animation gameLoop
+    function gameLoop() {
+      if (!gameActive) return;
+
+      // Clear Canvas
+      ctx.fillStyle = '#111';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Render Snapped grid
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          if (grid[r][c]) {
+            grid[r][c].draw();
+          }
+        }
+      }
+
+      // Draw bottom danger line warning
+      ctx.beginPath();
+      ctx.moveTo(0, (ROWS - 2) * (BUBBLE_RADIUS * 1.7) + 15);
+      ctx.lineTo(canvas.width, (ROWS - 2) * (BUBBLE_RADIUS * 1.7) + 15);
+      ctx.strokeStyle = 'rgba(231, 76, 60, 0.4)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.closePath();
+
+      // Next ball preview
+      ctx.beginPath();
+      ctx.arc(35, canvas.height - 30, BUBBLE_RADIUS * 0.7, 0, Math.PI * 2);
+      ctx.fillStyle = nextBubbleColor || '#fff';
+      ctx.fill();
+      ctx.closePath();
+      ctx.fillStyle = '#777';
+      ctx.font = '10px sans-serif';
+      ctx.fillText('NEXT', 20, canvas.height - 48);
+
+      // Aim line and player bubble
+      drawAimGuide();
+      
+      if (playerBubble) {
+        playerBubble.update();
+        playerBubble.draw();
+
+        // Check snapping
+        if (isFired) {
+          let hit = false;
+          
+          // Collision checking
+          for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+              if (grid[r][c] && checkCollision(playerBubble, grid[r][c])) {
+                hit = true;
+                break;
+              }
+            }
+            if (hit) break;
+          }
+
+          // Ceiling collision checking
+          if (playerBubble.y - playerBubble.radius <= 0) {
+            playerBubble.y = playerBubble.radius;
+            hit = true;
+          }
+
+          if (hit) {
+            snapToGrid(playerBubble);
+            generateNextPlayerBubble();
+          }
+        }
+      }
+
+      requestAnimationFrame(gameLoop);
+    }
+  </script>
+</body>
+
+</html>
