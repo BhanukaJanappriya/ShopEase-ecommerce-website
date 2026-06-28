@@ -1274,4 +1274,99 @@ countdownElements.forEach(countdown => {
       executeSearch(searchQuery);
     }, 300);
   }
+})();
+
+// ==========================================
+// APPLE-STYLE PAGE TRANSITION SYSTEM
+// ==========================================
+(function initAppleTransition() {
+  // Inject style block
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `
+    .apple-page-transition-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      z-index: 99999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      opacity: 1;
+      transform: scale(1);
+    }
+    .apple-page-transition-overlay.fade-out {
+      opacity: 0;
+      transform: scale(1.05);
+    }
+    .morphing-shape {
+      width: 80px;
+      height: 80px;
+      background: var(--salmon-pink);
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      animation: morphAnim 3s infinite alternate ease-in-out;
+      opacity: 0.8;
+      filter: blur(8px);
+    }
+    @keyframes morphAnim {
+      0% {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        transform: rotate(0deg) scale(1);
+        background: var(--salmon-pink);
+      }
+      50% {
+        border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+        transform: rotate(180deg) scale(1.1);
+        background: #ff5588;
+      }
+      100% {
+        border-radius: 50% 50% 50% 50% / 40% 60% 40% 60%;
+        transform: rotate(360deg) scale(0.95);
+        background: var(--salmon-pink);
+      }
+    }
+    .apple-reveal {
+      opacity: 0;
+      transform: translateY(25px) scale(0.99);
+      transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .apple-reveal.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  `;
+  document.head.appendChild(styleEl);
+
+  // Inject overlay markup if not already present
+  if (!document.getElementById('pageTransitionOverlay')) {
+    const overlay = document.createElement('div');
+    overlay.className = 'apple-page-transition-overlay';
+    overlay.id = 'pageTransitionOverlay';
+    overlay.innerHTML = '<div class="morphing-shape"></div>';
+    document.body.insertBefore(overlay, document.body.firstChild);
+  }
+
+  // Trigger animations
+  window.addEventListener('load', () => {
+    const overlay = document.getElementById('pageTransitionOverlay');
+    if (overlay) {
+      setTimeout(() => {
+        overlay.classList.add('fade-out');
+        setTimeout(() => overlay.remove(), 800);
+      }, 300);
+    }
+
+    // Apply apple-reveal to major container sections on the page automatically
+    const majorElements = document.querySelectorAll('main, .banner, .category, .product-container, #page-header, footer, .tracker-box, .blog-header');
+    majorElements.forEach(el => {
+      el.classList.add('apple-reveal');
+      setTimeout(() => {
+        el.classList.add('visible');
+      }, 400);
+    });
+  });
 })();
