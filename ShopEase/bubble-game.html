@@ -76,48 +76,69 @@
 
     @media (min-width: 992px) {
       .game-arena-container {
-        grid-template-columns: 320px 1fr;
+        grid-template-columns: 320px 1fr 320px;
       }
     }
 
-    /* Score and statistics styling */
+    /* Stats & Leaderboard panels */
     .game-stats-box {
       background: #fff;
       border: 1px solid var(--cultured);
       border-radius: var(--border-radius-md);
-      padding: 25px;
+      padding: 22px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.01);
+      height: fit-content;
     }
 
     .game-stats-box h3 {
-      font-size: var(--fs-6);
+      font-size: var(--fs-7);
       font-weight: var(--weight-700);
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       border-bottom: 1px solid var(--cultured);
-      padding-bottom: 10px;
+      padding-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .stat-row {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 12px;
-      font-size: var(--fs-7);
+      margin-bottom: 10px;
+      font-size: var(--fs-8);
     }
 
     .stat-row b {
       color: var(--salmon-pink-dark, hsl(353, 85%, 48%));
-      font-size: var(--fs-5);
+      font-size: var(--fs-6);
+    }
+
+    /* Drop countdown indicator */
+    .drop-indicator-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--cultured);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 5px;
+      margin-bottom: 15px;
+    }
+
+    .drop-indicator-fill {
+      height: 100%;
+      width: 100%;
+      background: var(--salmon-pink-dark, hsl(353, 85%, 48%));
+      transition: width 0.3s ease;
     }
 
     /* Milestones panel */
     .milestone-card {
       border: 1px solid var(--cultured);
       border-radius: var(--border-radius-sm);
-      padding: 12px;
-      margin-bottom: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
       background: #fafafa;
       transition: var(--transition-timing);
     }
@@ -137,8 +158,8 @@
     }
 
     .milestone-badge {
-      font-size: 10px;
-      padding: 2px 6px;
+      font-size: 9px;
+      padding: 1px 5px;
       border-radius: 4px;
       background: #ddd;
       color: #777;
@@ -152,8 +173,39 @@
     .milestone-reward-info {
       font-size: var(--fs-9);
       color: var(--sonic-silver);
-      margin-top: 6px;
+      margin-top: 5px;
     }
+
+    /* Leaderboard Styles */
+    .leaderboard-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 6px;
+      font-size: var(--fs-8);
+    }
+
+    .leaderboard-item:nth-child(even) {
+      background: #fafafa;
+    }
+
+    .leaderboard-rank {
+      font-weight: 800;
+      color: var(--sonic-silver);
+      margin-right: 8px;
+    }
+
+    .leaderboard-item:nth-child(1) .leaderboard-rank { color: #f1c40f; } /* Gold */
+    .leaderboard-item:nth-child(2) .leaderboard-rank { color: #95a5a6; } /* Silver */
+    .leaderboard-item:nth-child(3) .leaderboard-rank { color: #d35400; } /* Bronze */
 
     /* Canvas board styling */
     .game-board-wrapper {
@@ -164,26 +216,26 @@
       background: #fff;
       border: 1px solid var(--cultured);
       border-radius: var(--border-radius-md);
-      padding: 30px;
+      padding: 25px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.01);
       position: relative;
     }
 
     #gameCanvas {
-      background: #111;
+      background: #0f0f13;
       border-radius: var(--border-radius-sm);
-      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+      box-shadow: 0 0 25px rgba(255, 105, 180, 0.06);
       cursor: crosshair;
       max-width: 100%;
     }
 
     .game-overlay {
       position: absolute;
-      top: 30px;
-      left: 30px;
-      right: 30px;
-      bottom: 30px;
-      background: rgba(0, 0, 0, 0.85);
+      top: 25px;
+      left: 25px;
+      right: 25px;
+      bottom: 25px;
+      background: rgba(15, 15, 19, 0.93);
       border-radius: var(--border-radius-sm);
       display: flex;
       flex-direction: column;
@@ -191,22 +243,24 @@
       justify-content: center;
       z-index: 10;
       text-align: center;
-      padding: 20px;
+      padding: 25px;
       backdrop-filter: blur(8px);
     }
 
     .game-overlay h2 {
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       font-weight: 800;
       color: #fff;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      text-shadow: 0 0 10px var(--salmon-pink-dark, hsl(353, 85%, 48%));
     }
 
     .game-overlay p {
-      color: #ccc;
+      color: #bbb;
       font-size: var(--fs-7);
       margin-bottom: 25px;
-      max-width: 350px;
+      max-width: 380px;
+      line-height: 1.6;
     }
 
     .start-game-btn {
@@ -246,6 +300,30 @@
     .reward-copy-btn:hover {
       background: var(--salmon-pink-dark, hsl(353, 85%, 48%));
       color: #fff;
+    }
+
+    /* Achievement popup notification */
+    .achievement-popup {
+      position: absolute;
+      top: 40px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid #2ecc71;
+      border-radius: var(--border-radius-md);
+      padding: 12px 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 15;
+      animation: slideDownFade 3s ease forwards;
+      pointer-events: none;
+    }
+
+    @keyframes slideDownFade {
+      0% { transform: translateY(-40px); opacity: 0; }
+      15% { transform: translateY(0); opacity: 1; }
+      85% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-20px); opacity: 0; }
     }
   </style>
 </head>
@@ -370,22 +448,30 @@
         
         <!-- Left Stats Panel -->
         <div class="game-stats-box">
-          <h3><ion-icon name="game-controller-outline"></ion-icon> Game Terminal</h3>
+          <h3><ion-icon name="game-controller-outline"></ion-icon> Arena Terminal</h3>
           
           <div class="stat-row">
-            <span>Score Count:</span>
+            <span>Current Score:</span>
             <b id="gameScore">0</b>
           </div>
           <div class="stat-row">
-            <span>Level:</span>
+            <span>Difficulty Level:</span>
             <span style="font-weight:700;" id="gameLevel">1</span>
           </div>
-          <div class="stat-row" style="margin-bottom:25px;">
+          <div class="stat-row">
             <span>Shots Fired:</span>
             <span style="font-weight:700;" id="gameShots">0</span>
           </div>
 
-          <h3 style="margin-top:20px;"><ion-icon name="trophy-outline"></ion-icon> Difficult Milestones</h3>
+          <div class="stat-row" style="margin-top: 15px; margin-bottom: 0;">
+            <span>Ceiling Collapse In:</span>
+            <span style="font-weight:700; color: #e74c3c;" id="shotsLeft">6 shots</span>
+          </div>
+          <div class="drop-indicator-bar">
+            <div class="drop-indicator-fill" id="dropBarFill"></div>
+          </div>
+
+          <h3 style="margin-top:25px;"><ion-icon name="trophy-outline"></ion-icon> Cash Coupons</h3>
           
           <!-- Milestone 1 -->
           <div class="milestone-card" id="ms-500">
@@ -437,15 +523,28 @@
         </div>
 
         <!-- Canvas Game Panel -->
-        <div class="game-board-wrapper">
+        <div class="game-board-wrapper" id="canvasWrapper">
           <!-- Canvas Overlay -->
           <div class="game-overlay" id="gameOverlay">
             <h2 id="overlayTitle">Bubble Shooter</h2>
-            <p id="overlayDesc">Match 3 or more bubbles of the same color to clear them. Earn high scores to unlock valuable cash coupons and use them on checkouts!</p>
+            <p id="overlayDesc">Deploy rows of pastel bubbles. Popping groups snaps level difficulties up, adding colors and collapsing ceilings. Win dollars for checkouts!</p>
             <button class="start-game-btn" id="startGameBtn">Start Mission</button>
           </div>
 
           <canvas id="gameCanvas" width="480" height="560"></canvas>
+        </div>
+
+        <!-- Right Leaderboard Panel -->
+        <div class="game-stats-box">
+          <h3><ion-icon name="ribbon-outline"></ion-icon> Top High Scores</h3>
+          <ul class="leaderboard-list" id="leaderboardList">
+            <!-- Populated via script -->
+          </ul>
+
+          <h3 style="margin-top: 25px;"><ion-icon name="medal-outline"></ion-icon> Achievements</h3>
+          <div id="achievementsList" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Render Achievements checklist -->
+          </div>
         </div>
 
       </div>
@@ -471,17 +570,6 @@
           <li><a href="privacy-policy.html" class="footer-nav-link">Delivery Details</a></li>
           <li><a href="privacy-policy.html#returns" class="footer-nav-link">Returns Policy</a></li>
           <li><a href="privacy-policy.html#support" class="footer-nav-link">Customer Support</a></li>
-        </ul>
-        <ul class="footer-nav-list">
-          <li class="footer-nav-item"><h2 class="nav-title">Contact</h2></li>
-          <li class="footer-nav-item flex">
-            <div class="icon-box"><ion-icon name="location-outline"></ion-icon></div>
-            <address class="content">419 Galle Road, Colombo 03, Sri Lanka.</address>
-          </li>
-          <li class="footer-nav-item flex">
-            <div class="icon-box"><ion-icon name="call-outline"></ion-icon></div>
-            <a href="tel:+94112345678" class="footer-nav-link">+94 11 234 5678</a>
-          </li>
         </ul>
       </div>
     </div>
@@ -511,18 +599,17 @@
 
   <!-- Bubble Shooter Physics Engine & Social Winner Loop -->
   <script>
-    // Recent Winners Social Generator
+    // Winner Social Loop details
     const winnerNames = [
       "Dilshan S. from Colombo", "Avantha K. from Suburbs", "Shehan K. from Negombo", 
       "Priyantha D. from Kandy", "Sanduni M. from Gampaha", "Nuwan H. from Kalutara", 
-      "Nilani W. from Galle", "Fathima R. from Dehiwala", "Kavinda B. from Moratuwa",
-      "Dinuka P. from Battaramulla", "Ruwan J. from Wattala", "Tharushi N. from Malabe"
+      "Nilani W. from Galle", "Fathima R. from Dehiwala", "Kavinda B. from Moratuwa"
     ];
     const winnerRewards = [
-      { text: "Won $5.00 Coupon (Starter Shooter)", code: "BUBBLE5" },
-      { text: "Won $15.00 Coupon (Precision Master)", code: "BUBBLE15" },
-      { text: "Won $35.00 Coupon (Grand Champion)", code: "BUBBLE35" },
-      { text: "Won $50.00 Coupon (Legendary Marksman)", code: "BUBBLE50" }
+      { text: "Won $5.00 Coupon (Starter Shooter)" },
+      { text: "Won $15.00 Coupon (Precision Master)" },
+      { text: "Won $35.00 Coupon (Grand Champion)" },
+      { text: "Won $50.00 Coupon (Legendary Marksman)" }
     ];
 
     function showRandomWinner() {
@@ -533,40 +620,33 @@
       if (!toast || !nameEl || !actionEl) return;
 
       const randomName = winnerNames[Math.floor(Math.random() * winnerNames.length)];
-      // Weight smaller rewards higher
-      const randIdx = Math.random() < 0.5 ? 0 : (Math.random() < 0.85 ? 1 : (Math.random() < 0.96 ? 2 : 3));
+      const randIdx = Math.random() < 0.55 ? 0 : (Math.random() < 0.85 ? 1 : (Math.random() < 0.97 ? 2 : 3));
       const reward = winnerRewards[randIdx];
 
       nameEl.textContent = randomName;
-      actionEl.textContent = `${reward.text}!`;
+      actionEl.textContent = reward.text;
 
       toast.classList.add('active');
-
-      setTimeout(() => {
-        toast.classList.remove('active');
-      }, 4500);
+      setTimeout(() => toast.classList.remove('active'), 4500);
     }
-
-    // Winner triggers loop
-    setInterval(showRandomWinner, 14000);
+    setInterval(showRandomWinner, 15000);
     setTimeout(showRandomWinner, 3000);
 
     // ==============================================
-    // HTML5 CANVAS BUBBLE SHOOTER LOGIC
+    // HTML5 CANVAS ADVANCED GAME LOGIC WITH GRAPHICS
     // ==============================================
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     
-    // Bubble Configuration
     const BUBBLE_RADIUS = 18;
     const ROWS = 13;
     const COLS = 8;
     const bubbleColors = [
-      '#ff69b4', // Pink
-      '#3399ff', // Blue
-      '#2ecc71', // Green
-      '#f1c40f', // Gold
-      '#9b59b6'  // Purple
+      '#ff69b4', // Pastel Pink
+      '#3399ff', // Soft Blue
+      '#2ecc71', // Pale Mint Green
+      '#f1c40f', // Butter Gold
+      '#9b59b6'  // Soft Lavender
     ];
 
     let grid = [];
@@ -575,12 +655,101 @@
     let currentLevel = 1;
     let gameActive = false;
 
+    // Ceiling collapse variables
+    const SHOTS_MAX = 6;
+    let shotsRemaining = SHOTS_MAX;
+
+    // Aiming and bubble firing variables
     let playerBubble = null;
     let nextBubbleColor = '';
     let isFired = false;
     let fireAngle = 0;
     let aimX = 0;
     let aimY = 0;
+
+    // Graphics arrays
+    let particles = [];
+    let appreciations = [];
+
+    // System Achievements list
+    const achievements = [
+      { id: 'first_pop', title: 'First Blood', desc: 'Pop your first bubble group', unlocked: false },
+      { id: 'wall_bounce', title: 'Sniper Shot', desc: 'Perform a wall bounce pop', unlocked: false },
+      { id: 'big_burst', title: 'Bubble Blast', desc: 'Pop 5+ bubbles in one shot', unlocked: false },
+      { id: 'sky_fall', title: 'Sky Sweep', desc: 'Drop 4+ floating bubbles', unlocked: false }
+    ];
+
+    // Particle logic
+    class Particle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.radius = Math.random() * 4 + 2;
+        this.dx = (Math.random() - 0.5) * 5;
+        this.dy = (Math.random() - 0.5) * 5;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.02 + 0.015;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+      }
+
+      update() {
+        this.x += this.dx;
+        this.y += this.dy;
+        this.alpha -= this.decay;
+        if (this.radius > 0.1) this.radius -= 0.05;
+      }
+    }
+
+    // Floating appreciations logic
+    class Appreciation {
+      constructor(text, x, y) {
+        this.text = text;
+        this.x = x;
+        this.y = y;
+        this.opacity = 1;
+        this.scale = 0.5;
+        this.dy = -1.2;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.font = '800 24px "Poppins", sans-serif';
+        ctx.textAlign = 'center';
+        
+        // Glow effect
+        ctx.shadowColor = 'var(--salmon-pink-dark, #ff3366)';
+        ctx.shadowBlur = 10;
+
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 4;
+        
+        ctx.translate(this.x, this.y);
+        ctx.scale(this.scale, this.scale);
+        
+        ctx.strokeText(this.text, 0, 0);
+        ctx.fillText(this.text, 0, 0);
+        ctx.restore();
+      }
+
+      update() {
+        this.y += this.dy;
+        this.opacity -= 0.015;
+        if (this.scale < 1.1) this.scale += 0.05;
+      }
+    }
 
     class Bubble {
       constructor(x, y, color, isPlayer = false) {
@@ -590,26 +759,34 @@
         this.radius = BUBBLE_RADIUS;
         this.dx = 0;
         this.dy = 0;
-        this.speed = 10;
+        this.speed = 12;
         this.isPlayer = isPlayer;
       }
 
       draw() {
+        ctx.save();
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         
-        // Beautiful Radial Gradient shine on bubbles
+        // Translucent bubble drop shadow
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+        ctx.shadowBlur = 6;
+        ctx.shadowOffsetY = 4;
+
+        // Premium radial gradient reflection shine
         const grad = ctx.createRadialGradient(
           this.x - 5, this.y - 5, 2, 
           this.x, this.y, this.radius
         );
-        grad.addColorStop(0, '#fff');
-        grad.addColorStop(0.3, this.color);
-        grad.addColorStop(1, '#111');
+        grad.addColorStop(0, '#ffffff');
+        grad.addColorStop(0.2, this.color);
+        grad.addColorStop(0.9, this.color);
+        grad.addColorStop(1, '#0c0c0f');
         
         ctx.fillStyle = grad;
         ctx.fill();
         ctx.closePath();
+        ctx.restore();
       }
 
       update() {
@@ -617,20 +794,22 @@
           this.x += this.dx;
           this.y += this.dy;
 
-          // Wall bounce logic
+          // Wall bounce logic & Sniper shot trigger
           if (this.x - this.radius <= 0) {
             this.x = this.radius;
             this.dx = -this.dx;
+            this.hasBounced = true;
           }
           if (this.x + this.radius >= canvas.width) {
             this.x = canvas.width - this.radius;
             this.dx = -this.dx;
+            this.hasBounced = true;
           }
         }
       }
     }
 
-    // Grid coordinates SNAPPING helpers
+    // Grid row snapping calculators
     function getGridCoord(row, col) {
       const isOdd = row % 2 !== 0;
       const offset = isOdd ? BUBBLE_RADIUS : 0;
@@ -639,13 +818,18 @@
       return { x, y };
     }
 
+    // Initialize Grid with increasing row count based on level
     function initGrid() {
       grid = [];
+      const startingRows = Math.min(8, 4 + currentLevel);
+      // Colors list expands as level increases to grow difficulty
+      const activeColorsCount = Math.min(5, 3 + (currentLevel - 1));
+
       for (let r = 0; r < ROWS; r++) {
         grid[r] = [];
         for (let c = 0; c < COLS; c++) {
-          if (r < 4 + Math.min(2, Math.floor(currentLevel / 2))) {
-            const color = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+          if (r < startingRows) {
+            const color = bubbleColors[Math.floor(Math.random() * activeColorsCount)];
             const coord = getGridCoord(r, c);
             grid[r][c] = new Bubble(coord.x, coord.y, color);
           } else {
@@ -656,18 +840,108 @@
     }
 
     function generateNextPlayerBubble() {
-      const color = nextBubbleColor || bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
-      nextBubbleColor = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
-      playerBubble = new Bubble(canvas.width / 2, canvas.height - 30, color, true);
+      const activeColorsCount = Math.min(5, 3 + (currentLevel - 1));
+      const color = nextBubbleColor || bubbleColors[Math.floor(Math.random() * activeColorsCount)];
+      nextBubbleColor = bubbleColors[Math.floor(Math.random() * activeColorsCount)];
+      playerBubble = new Bubble(canvas.width / 2, canvas.height - 35, color, true);
+      playerBubble.hasBounced = false;
       isFired = false;
     }
 
-    // BFS search connected matches
+    // Snapping bubble collision snapping snapper
+    function snapToGrid(bubble) {
+      let closestRow = -1;
+      let closestCol = -1;
+      let minDist = Infinity;
+
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const coord = getGridCoord(r, c);
+          const dist = Math.hypot(bubble.x - coord.x, bubble.y - coord.y);
+          if (dist < minDist) {
+            minDist = dist;
+            closestRow = r;
+            closestCol = c;
+          }
+        }
+      }
+
+      if (closestRow !== -1 && closestCol !== -1) {
+        const coord = getGridCoord(closestRow, closestCol);
+        grid[closestRow][closestCol] = new Bubble(coord.x, coord.y, bubble.color);
+        
+        // Matches checking
+        const matches = getMatches(closestRow, closestCol, bubble.color);
+        
+        if (matches.length >= 3) {
+          // Trigger pop particles
+          matches.forEach(m => {
+            spawnPopParticles(grid[m.r][m.c].x, grid[m.r][m.c].y, grid[m.r][m.c].color);
+            grid[m.r][m.c] = null;
+            score += 10;
+          });
+
+          // Sniper shot check
+          if (bubble.hasBounced) unlockAchievement('wall_bounce');
+          
+          // First pop check
+          unlockAchievement('first_pop');
+
+          // Big pop burst check
+          if (matches.length >= 5) {
+            unlockAchievement('big_burst');
+            appreciations.push(new Appreciation('BUBBLE BLAST!', bubble.x, bubble.y - 30));
+          } else {
+            appreciations.push(new Appreciation('GOOD POP!', bubble.x, bubble.y - 30));
+          }
+
+          const drops = dropFloatingBubbles();
+          if (drops >= 4) {
+            unlockAchievement('sky_fall');
+            appreciations.push(new Appreciation('SKY SWEEP!', canvas.width / 2, canvas.height / 2));
+          }
+          
+          playAudioFeedback(600);
+        } else {
+          // Check ceiling drop countdown drop!
+          decrementDropCountdown();
+        }
+
+        checkScoreMilestones();
+        document.getElementById('gameScore').textContent = score;
+
+        // Check level cleared
+        let totalRemaining = 0;
+        for (let r = 0; r < ROWS; r++) {
+          for (let c = 0; c < COLS; c++) {
+            if (grid[r][c]) totalRemaining++;
+          }
+        }
+        
+        if (totalRemaining === 0) {
+          currentLevel++;
+          document.getElementById('gameLevel').textContent = currentLevel;
+          appreciations.push(new Appreciation(`LEVEL ${currentLevel} REACHED!`, canvas.width / 2, canvas.height / 2));
+          shotsRemaining = SHOTS_MAX;
+          updateDropBar();
+          initGrid();
+        }
+
+        // Check game over
+        for (let c = 0; c < COLS; c++) {
+          if (grid[ROWS - 2][c]) {
+            endGame();
+            return;
+          }
+        }
+      }
+    }
+
+    // BFS neighbors grid search
     function getMatches(startRow, startCol, targetColor) {
       const queue = [{r: startRow, c: startCol}];
       const visited = new Set();
       const matches = [];
-
       visited.add(`${startRow},${startCol}`);
 
       while (queue.length > 0) {
@@ -705,16 +979,14 @@
       return n;
     }
 
-    // Drop floating bubbles
     function dropFloatingBubbles() {
-      const connectedToCeiling = new Set();
+      const connected = new Set();
       const queue = [];
 
-      // Add all top row elements
       for (let c = 0; c < COLS; c++) {
         if (grid[0][c]) {
           queue.push({r: 0, c: c});
-          connectedToCeiling.add(`0,${c}`);
+          connected.add(`0,${c}`);
         }
       }
 
@@ -723,85 +995,89 @@
         const neighbors = getNeighbors(curr.r, curr.c);
         neighbors.forEach(n => {
           const key = `${n.r},${n.c}`;
-          if (!connectedToCeiling.has(key) && grid[n.r][n.c]) {
-            connectedToCeiling.add(key);
+          if (!connected.has(key) && grid[n.r][n.c]) {
+            connected.add(key);
             queue.push(n);
           }
         });
       }
 
-      // Drop any bubble not in the set
-      let droppedCount = 0;
+      let count = 0;
       for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
-          if (grid[r][c] && !connectedToCeiling.has(`${r},${c}`)) {
+          if (grid[r][c] && !connected.has(`${r},${c}`)) {
+            spawnPopParticles(grid[r][c].x, grid[r][c].y, grid[r][c].color);
             grid[r][c] = null;
-            droppedCount++;
-            score += 20; // 20 points per floating bubble!
+            count++;
+            score += 20;
           }
         }
       }
-      return droppedCount;
+      return count;
     }
 
-    // Find closest snap slot in grid
-    function snapToGrid(bubble) {
-      let closestRow = -1;
-      let closestCol = -1;
-      let minDist = Infinity;
+    // Dropping ceiling collapse countdown decrementer
+    function decrementDropCountdown() {
+      shotsRemaining--;
+      if (shotsRemaining <= 0) {
+        // Drop the ceiling! Shift all rows down and add a new row at the top!
+        dropCeiling();
+        shotsRemaining = Math.max(3, SHOTS_MAX - Math.floor(currentLevel / 2)); // Ceiling drops faster as level snaps up!
+        appreciations.push(new Appreciation('CEILING COLLAPSED!', canvas.width / 2, 80));
+      }
+      updateDropBar();
+    }
 
-      for (let r = 0; r < ROWS; r++) {
+    function dropCeiling() {
+      // Shift grid down
+      for (let r = ROWS - 1; r > 0; r--) {
+        grid[r] = grid[r - 1];
+      }
+      // Insert new row at the top
+      grid[0] = [];
+      const activeColorsCount = Math.min(5, 3 + (currentLevel - 1));
+      for (let c = 0; c < COLS; c++) {
+        const color = bubbleColors[Math.floor(Math.random() * activeColorsCount)];
+        const coord = getGridCoord(0, c);
+        grid[0][c] = new Bubble(coord.x, coord.y, color);
+      }
+      // Readjust all y coordinates of shifted bubbles
+      for (let r = 1; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
-          const coord = getGridCoord(r, c);
-          const dist = Math.hypot(bubble.x - coord.x, bubble.y - coord.y);
-          if (dist < minDist) {
-            minDist = dist;
-            closestRow = r;
-            closestCol = c;
+          if (grid[r][c]) {
+            const coord = getGridCoord(r, c);
+            grid[r][c].x = coord.x;
+            grid[r][c].y = coord.y;
           }
         }
       }
+      playAudioFeedback(200); // Bass crash sound
+      shakeCanvas();
+    }
 
-      if (closestRow !== -1 && closestCol !== -1) {
-        const coord = getGridCoord(closestRow, closestCol);
-        grid[closestRow][closestCol] = new Bubble(coord.x, coord.y, bubble.color);
-        
-        // Handle matches checking
-        const matches = getMatches(closestRow, closestCol, bubble.color);
-        if (matches.length >= 3) {
-          matches.forEach(m => {
-            grid[m.r][m.c] = null;
-            score += 10; // 10 points per matched bubble
-          });
-          dropFloatingBubbles();
-          playAudioFeedback();
-        }
+    function shakeCanvas() {
+      const wrapper = document.getElementById('canvasWrapper');
+      if (wrapper) {
+        wrapper.style.transform = 'translate(6px, 0)';
+        setTimeout(() => wrapper.style.transform = 'translate(-6px, 0)', 50);
+        setTimeout(() => wrapper.style.transform = 'translate(4px, 0)', 100);
+        setTimeout(() => wrapper.style.transform = 'translate(-4px, 0)', 150);
+        setTimeout(() => wrapper.style.transform = '', 200);
+      }
+    }
 
-        checkScoreMilestones();
-        document.getElementById('gameScore').textContent = score;
+    function updateDropBar() {
+      document.getElementById('shotsLeft').textContent = `${shotsRemaining} shots`;
+      const fill = document.getElementById('dropBarFill');
+      if (fill) {
+        fill.style.width = `${(shotsRemaining / SHOTS_MAX) * 100}%`;
+        fill.style.backgroundColor = shotsRemaining <= 2 ? '#e74c3c' : 'var(--salmon-pink-dark, #ff3366)';
+      }
+    }
 
-        // Check level cleared
-        let totalRemaining = 0;
-        for (let r = 0; r < ROWS; r++) {
-          for (let c = 0; c < COLS; c++) {
-            if (grid[r][c]) totalRemaining++;
-          }
-        }
-        
-        if (totalRemaining === 0) {
-          currentLevel++;
-          document.getElementById('gameLevel').textContent = currentLevel;
-          initGrid();
-        }
-
-        // Check game over
-        for (let c = 0; c < COLS; c++) {
-          // If bubbles reach the bottom danger line (row 11)
-          if (grid[ROWS - 2][c]) {
-            endGame(false);
-            return;
-          }
-        }
+    function spawnPopParticles(x, y, color) {
+      for (let i = 0; i < 8; i++) {
+        particles.push(new Particle(x, y, color));
       }
     }
 
@@ -811,8 +1087,7 @@
       return dist < (b1.radius + b2.radius) * 0.85;
     }
 
-    // Play pops sound using Web Audio API
-    function playAudioFeedback() {
+    function playAudioFeedback(freq = 600) {
       const isSoundOn = localStorage.getItem('shopEaseSound') !== 'false';
       if (!isSoundOn) return;
       try {
@@ -821,15 +1096,95 @@
         const gain = audioCtx.createGain();
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime); // E5
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.15);
+        osc.stop(audioCtx.currentTime + 0.2);
       } catch(e) {}
     }
 
-    // Check milestones and reward coupons
+    // Achievements UI popups
+    function unlockAchievement(id) {
+      const ach = achievements.find(a => a.id === id);
+      if (ach && !ach.unlocked) {
+        ach.unlocked = true;
+        renderAchievementsList();
+
+        // Slide in dynamic popup toast on top of game board
+        const wrapper = document.getElementById('canvasWrapper');
+        if (wrapper) {
+          const pop = document.createElement('div');
+          pop.className = 'achievement-popup';
+          pop.innerHTML = `
+            <ion-icon name="ribbon" style="font-size:24px; color:#2ecc71;"></ion-icon>
+            <div>
+              <strong style="font-size:12px; display:block;">Achievement Unlocked!</strong>
+              <span style="font-size:10px; color:#555;">${ach.title}: ${ach.desc}</span>
+            </div>
+          `;
+          wrapper.appendChild(pop);
+          setTimeout(() => pop.remove(), 3200);
+        }
+        playAudioFeedback(880); // High pitch notification chime
+      }
+    }
+
+    function renderAchievementsList() {
+      const list = document.getElementById('achievementsList');
+      if (!list) return;
+      list.innerHTML = '';
+      achievements.forEach(ach => {
+        list.innerHTML += `
+          <div style="display:flex; align-items:center; gap:8px; font-size:11px; padding:6px; border:1px solid ${ach.unlocked ? '#2ecc71' : '#eee'}; background:${ach.unlocked ? '#f0fff4' : '#fff'}; border-radius:4px;">
+            <ion-icon name="${ach.unlocked ? 'checkbox-outline' : 'square-outline'}" style="color:${ach.unlocked ? '#2ecc71' : '#999'}; font-size:16px;"></ion-icon>
+            <div>
+              <strong style="color:${ach.unlocked ? '#1b5e20' : '#444'};">${ach.title}</strong>
+              <span style="display:block; font-size:9px; color:#777;">${ach.desc}</span>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Leaderboard logic list
+    function loadLeaderboard() {
+      const defaultLeaderboard = [
+        { name: "Avantha K.", score: 8200 },
+        { name: "Dilshan S.", score: 6400 },
+        { name: "Shehan K.", score: 4500 },
+        { name: "Priyantha D.", score: 3200 },
+        { name: "Sanduni M.", score: 2100 }
+      ];
+
+      const board = JSON.parse(localStorage.getItem('shopEaseLeaderboard')) || defaultLeaderboard;
+      localStorage.setItem('shopEaseLeaderboard', JSON.stringify(board));
+
+      const listEl = document.getElementById('leaderboardList');
+      if (!listEl) return;
+      listEl.innerHTML = '';
+      board.slice(0, 5).forEach((item, index) => {
+        listEl.innerHTML += `
+          <li class="leaderboard-item">
+            <div>
+              <span class="leaderboard-rank">#${index + 1}</span>
+              <span style="font-weight:600;">${item.name}</span>
+            </div>
+            <strong style="color:var(--salmon-pink-dark);">${item.score} pts</strong>
+          </li>
+        `;
+      });
+    }
+
+    function saveToLeaderboard(name, scoreVal) {
+      const board = JSON.parse(localStorage.getItem('shopEaseLeaderboard')) || [];
+      board.push({ name: name || 'Guest Player', score: scoreVal });
+      board.sort((a, b) => b.score - a.score);
+      localStorage.setItem('shopEaseLeaderboard', JSON.stringify(board.slice(0, 10)));
+      loadLeaderboard();
+    }
+
+    // Milestones check
     function checkScoreMilestones() {
       const milestones = [
         { score: 500, id: 'ms-500', badge: 'badge-500', coupon: 'BUBBLE5', actionId: 'action-500' },
@@ -863,94 +1218,102 @@
       });
     }
 
-    // Copy to clipboard helper
-    window.copyPromoCode = function(code) {
-      navigator.clipboard.writeText(code).then(() => {
-        // Toggle notification alert
-        const dbNotif = document.getElementById('dbNotification') || document.getElementById('winnerToast');
-        const dbMsg = document.getElementById('dbNotificationMessage');
-        
-        if (dbMsg) {
-          dbMsg.textContent = `Promo Code "${code}" copied to clipboard!`;
-          if (dbNotif) dbNotif.classList.add('active');
-          setTimeout(() => {
-            if (dbNotif) dbNotif.classList.remove('active');
-          }, 3500);
-        } else {
-          alert(`Promo Code "${code}" copied to clipboard! Use it on checkout.`);
-        }
-      });
-    };
-
     function startNewGame() {
       score = 0;
       shotsFired = 0;
       currentLevel = 1;
+      shotsRemaining = SHOTS_MAX;
       gameActive = true;
+
       document.getElementById('gameScore').textContent = score;
       document.getElementById('gameLevel').textContent = currentLevel;
       document.getElementById('gameShots').textContent = shotsFired;
       document.getElementById('gameOverlay').style.display = 'none';
+      updateDropBar();
+
+      // Reset achievements state
+      achievements.forEach(a => a.unlocked = false);
+      renderAchievementsList();
 
       initGrid();
       generateNextPlayerBubble();
       gameLoop();
     }
 
-    function endGame(victory = false) {
+    function endGame() {
       gameActive = false;
       const overlay = document.getElementById('gameOverlay');
       const title = document.getElementById('overlayTitle');
       const desc = document.getElementById('overlayDesc');
       const btn = document.getElementById('startGameBtn');
 
-      title.textContent = "Mission Over!";
-      desc.textContent = `You scored ${score} points and fired ${shotsFired} bubbles. Keep playing to reach those difficult milestones and unlock rewards!`;
+      title.textContent = "Ceiling collapsed!";
+      desc.textContent = `Excellent effort! You scored ${score} points and reached Level ${currentLevel}.`;
+
+      // Prompt winner name if high score is achieved
+      const board = JSON.parse(localStorage.getItem('shopEaseLeaderboard')) || [];
+      const isHighScore = board.length < 5 || score > board[4].score;
+      
+      if (isHighScore && score > 0) {
+        setTimeout(() => {
+          const pName = prompt("New High Score! Enter your name for the leaderboard:");
+          saveToLeaderboard(pName, score);
+        }, 800);
+      }
+
       btn.textContent = "Deploy Again";
       overlay.style.display = 'flex';
     }
 
-    // Aim guide drawer
+    // Laser aim guide drawer
     function drawAimGuide() {
       if (!playerBubble || isFired) return;
+      ctx.save();
       ctx.beginPath();
-      ctx.setLineDash([4, 6]);
       ctx.moveTo(playerBubble.x, playerBubble.y);
+
+      // Cast trace vector
+      let cx = playerBubble.x;
+      let cy = playerBubble.y;
+      let angle = fireAngle;
+      const step = 10;
+      let limit = 40;
+
+      ctx.strokeStyle = 'rgba(255, 105, 180, 0.4)';
+      ctx.lineWidth = 1.5;
       
-      // Calculate terminal aim line
-      const length = 200;
-      const targetX = playerBubble.x + Math.cos(fireAngle) * length;
-      const targetY = playerBubble.y + Math.sin(fireAngle) * length;
-      
-      ctx.lineTo(targetX, targetY);
-      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-      ctx.lineWidth = 2;
+      while (limit > 0 && cy > 0) {
+        cx += Math.cos(angle) * step;
+        cy += Math.sin(angle) * step;
+
+        // Bounce tracing
+        if (cx <= BUBBLE_RADIUS || cx >= canvas.width - BUBBLE_RADIUS) {
+          angle = Math.PI - angle;
+        }
+
+        ctx.lineTo(cx, cy);
+        limit--;
+      }
       ctx.stroke();
-      ctx.setLineDash([]); // Reset line styles
       ctx.closePath();
+      ctx.restore();
     }
 
-    // Vector aim calculations
     canvas.addEventListener('mousemove', e => {
       const rect = canvas.getBoundingClientRect();
       aimX = e.clientX - rect.left;
       aimY = e.clientY - rect.top;
 
-      // Shooter position
       const sx = canvas.width / 2;
-      const sy = canvas.height - 30;
+      const sy = canvas.height - 35;
 
       fireAngle = Math.atan2(aimY - sy, aimX - sx);
-      
-      // Constrain aiming angles to upwards hemispheres
       if (fireAngle > -0.2) fireAngle = -0.2;
       if (fireAngle < -Math.PI + 0.2) fireAngle = -Math.PI + 0.2;
     });
 
-    // Shooting triggers
     canvas.addEventListener('click', e => {
       if (!gameActive || isFired || !playerBubble) return;
-      
       isFired = true;
       shotsFired++;
       document.getElementById('gameShots').textContent = shotsFired;
@@ -965,8 +1328,11 @@
     function gameLoop() {
       if (!gameActive) return;
 
-      // Clear Canvas
-      ctx.fillStyle = '#111';
+      // Draw beautiful dark linear background gradient
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      bgGrad.addColorStop(0, '#0c0c10');
+      bgGrad.addColorStop(1, '#1b1b22');
+      ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Render Snapped grid
@@ -983,19 +1349,19 @@
       ctx.moveTo(0, (ROWS - 2) * (BUBBLE_RADIUS * 1.7) + 15);
       ctx.lineTo(canvas.width, (ROWS - 2) * (BUBBLE_RADIUS * 1.7) + 15);
       ctx.strokeStyle = 'rgba(231, 76, 60, 0.4)';
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 1.5;
       ctx.stroke();
       ctx.closePath();
 
       // Next ball preview
       ctx.beginPath();
-      ctx.arc(35, canvas.height - 30, BUBBLE_RADIUS * 0.7, 0, Math.PI * 2);
+      ctx.arc(35, canvas.height - 35, BUBBLE_RADIUS * 0.7, 0, Math.PI * 2);
       ctx.fillStyle = nextBubbleColor || '#fff';
       ctx.fill();
       ctx.closePath();
-      ctx.fillStyle = '#777';
-      ctx.font = '10px sans-serif';
-      ctx.fillText('NEXT', 20, canvas.height - 48);
+      ctx.fillStyle = '#999';
+      ctx.font = '700 9px sans-serif';
+      ctx.fillText('NEXT', 21, canvas.height - 52);
 
       // Aim line and player bubble
       drawAimGuide();
@@ -1004,11 +1370,9 @@
         playerBubble.update();
         playerBubble.draw();
 
-        // Check snapping
+        // Snap check
         if (isFired) {
           let hit = false;
-          
-          // Collision checking
           for (let r = 0; r < ROWS; r++) {
             for (let c = 0; c < COLS; c++) {
               if (grid[r][c] && checkCollision(playerBubble, grid[r][c])) {
@@ -1019,7 +1383,6 @@
             if (hit) break;
           }
 
-          // Ceiling collision checking
           if (playerBubble.y - playerBubble.radius <= 0) {
             playerBubble.y = playerBubble.radius;
             hit = true;
@@ -1032,8 +1395,30 @@
         }
       }
 
+      // Render and update particles
+      particles.forEach((p, idx) => {
+        p.update();
+        p.draw();
+        if (p.alpha <= 0 || p.radius <= 0.1) {
+          particles.splice(idx, 1);
+        }
+      });
+
+      // Render and update appreciations
+      appreciations.forEach((a, idx) => {
+        a.update();
+        a.draw();
+        if (a.opacity <= 0) {
+          appreciations.splice(idx, 1);
+        }
+      });
+
       requestAnimationFrame(gameLoop);
     }
+
+    // Load initial configurations
+    loadLeaderboard();
+    renderAchievementsList();
   </script>
 </body>
 
