@@ -1714,14 +1714,15 @@ countdownElements.forEach(countdown => {
 
   // Inject modal into HTML body
   const wrapper = document.createElement('div');
-  wrapper.innerHTML = settingsModalHTML;
-  document.body.appendChild(wrapper.firstChild);
+  wrapper.innerHTML = settingsModalHTML.trim();
+  document.body.appendChild(wrapper.firstElementChild);
 
   // Inject Gear Icon to Top Right Header and Clear Language selectors
   function injectGearIconTopRight() {
     const topActions = document.querySelector('.header-top-actions');
     if (topActions) {
-      // Clear original dropdown selectors (currency is in settings, language is in settings modal)
+      if (document.getElementById('settingsBtn')) return;
+
       topActions.innerHTML = '';
       
       const settingsBtn = document.createElement('button');
@@ -1800,6 +1801,7 @@ countdownElements.forEach(countdown => {
     if (fontSel) fontSel.value = fontName;
   }
 
+  // Convert prices across the active document
   function applyCurrency(currencyCode) {
     const prev = localStorage.getItem('shopEaseCurrency') || 'LKR';
     localStorage.setItem('shopEaseCurrency', currencyCode);
@@ -1809,7 +1811,6 @@ countdownElements.forEach(countdown => {
 
     if (prev === currencyCode) return;
 
-    // Convert prices across the active document
     const prices = document.querySelectorAll('.price-box, .price, del, .db-price');
     prices.forEach(box => {
       const convertText = text => {
@@ -1865,80 +1866,58 @@ countdownElements.forEach(countdown => {
     applyLanguage(savedLanguage);
   }
 
-  // Bind settings triggers
+  // Bind settings triggers via global event delegation (immune to re-renders)
   function bindSettingsEvents() {
-    const settingsBtn = document.getElementById('settingsBtn');
-    const settingsModal = document.getElementById('settingsModal');
-    const settingsOverlay = document.getElementById('settingsOverlay');
-    const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+    document.addEventListener('click', (e) => {
+      const settingsBtn = e.target.closest('#settingsBtn');
+      if (settingsBtn) {
+        e.preventDefault();
+        const settingsModal = document.getElementById('settingsModal');
+        if (settingsModal) {
+          settingsModal.style.display = 'flex';
+          playAlertSound();
+        }
+        return;
+      }
 
-    if (settingsBtn && settingsModal) {
-      settingsBtn.addEventListener('click', () => {
-        settingsModal.style.display = 'flex';
-        playAlertSound();
-      });
-    }
+      const closeBtn = e.target.closest('#settingsCloseBtn') || e.target.closest('#settingsOverlay');
+      if (closeBtn) {
+        e.preventDefault();
+        const settingsModal = document.getElementById('settingsModal');
+        if (settingsModal) {
+          settingsModal.style.display = 'none';
+        }
+        return;
+      }
 
-    const closeSettings = () => {
-      if (settingsModal) settingsModal.style.display = 'none';
-    };
-
-    if (settingsOverlay) settingsOverlay.addEventListener('click', closeSettings);
-    if (settingsCloseBtn) settingsCloseBtn.addEventListener('click', closeSettings);
-
-    // Color theme select
-    document.querySelectorAll('.theme-dot').forEach(dot => {
-      dot.addEventListener('click', () => {
+      // Theme dot selection click
+      const dot = e.target.closest('.theme-dot');
+      if (dot) {
         const theme = dot.getAttribute('data-theme');
         applyColorTheme(theme);
         playAlertSound();
-      });
+      }
     });
 
-    // Dark mode toggle
-    const dmToggle = document.getElementById('darkModeToggle');
-    if (dmToggle) {
-      dmToggle.addEventListener('change', e => {
+    // Form element updates delegation
+    document.addEventListener('change', (e) => {
+      if (e.target.id === 'darkModeToggle') {
         applyDarkMode(e.target.checked);
         playAlertSound();
-      });
-    }
-
-    // Font family dropdown
-    const fontSel = document.getElementById('fontSelector');
-    if (fontSel) {
-      fontSel.addEventListener('change', e => {
+      } else if (e.target.id === 'fontSelector') {
         applyFont(e.target.value);
         playAlertSound();
-      });
-    }
-
-    // Sound toggle
-    const sToggle = document.getElementById('soundToggle');
-    if (sToggle) {
-      sToggle.addEventListener('change', e => {
+      } else if (e.target.id === 'soundToggle') {
         localStorage.setItem('shopEaseSound', e.target.checked ? 'true' : 'false');
         playAlertSound();
-      });
-    }
-
-    // Currency select
-    const cSel = document.getElementById('currencySelector');
-    if (cSel) {
-      cSel.addEventListener('change', e => {
+      } else if (e.target.id === 'currencySelector') {
         applyCurrency(e.target.value);
         playAlertSound();
-      });
-    }
-
-    // Language select
-    const lSel = document.getElementById('languageSelector');
-    if (lSel) {
-      lSel.addEventListener('change', e => {
+      } else if (e.target.id === 'languageSelector') {
         applyLanguage(e.target.value);
         playAlertSound();
-      });
-    }
+      }
+    });
   }
 
   // Execute initialization
