@@ -254,6 +254,15 @@ countdownElements.forEach(countdown => {
             </div>
           </div>
 
+          <div class="cart-form-group">
+            <label>Promo Code (Play Bubble Game to win!)</label>
+            <div style="display: flex; gap: 10px;">
+              <input type="text" id="custPromo" class="cart-input-field" placeholder="e.g. BUBBLE5" style="text-transform: uppercase; margin-bottom: 0;">
+              <button type="button" id="applyPromoBtn" class="qty-btn" style="width: auto; padding: 0 15px; font-size: var(--fs-9); height: auto; border: 1px solid var(--salmon-pink-dark);">Apply</button>
+            </div>
+            <small id="promoFeedback" style="display: block; font-size: 11px; margin-top: 4px; font-weight: 600;"></small>
+          </div>
+
           <button type="submit" class="cart-submit-btn">Confirm & Save to Database</button>
         </form>
       </div>
@@ -429,6 +438,7 @@ countdownElements.forEach(countdown => {
     currentProduct = { name, price, image: img };
     cartPreviewName.textContent = name;
     cartPreviewPrice.textContent = price;
+    cartPreviewPrice.setAttribute('data-original-val', price);
     cartPreviewImg.src = img;
 
     // Reset Form Config state
@@ -443,8 +453,13 @@ countdownElements.forEach(countdown => {
       el.classList.toggle('selected', el.getAttribute('data-value') === 'Black');
     });
 
-    // Reset customer fields
+    // Reset customer fields and feedback
     cartInputForm.reset();
+    const feedback = document.getElementById('promoFeedback');
+    if (feedback) {
+      feedback.textContent = '';
+      feedback.style.color = '';
+    }
 
     // Show modal
     cartInputModal.classList.add('active');
@@ -479,6 +494,19 @@ countdownElements.forEach(countdown => {
     const orderId = 'ORD-' + Date.now().toString().slice(-6) + '-' + Math.floor(Math.random() * 1000);
     const timestamp = new Date().toISOString();
     
+    // Check promo code validity
+    const promoField = document.getElementById('custPromo');
+    const promoCode = promoField ? promoField.value.trim().toUpperCase() : '';
+    const unlockedCoupons = JSON.parse(localStorage.getItem('shopEaseUnlockedCoupons')) || [];
+    let discountVal = 0;
+    
+    if (promoCode && unlockedCoupons.includes(promoCode)) {
+      if (promoCode === 'BUBBLE5') discountVal = 1500;
+      else if (promoCode === 'BUBBLE15') discountVal = 4500;
+      else if (promoCode === 'BUBBLE35') discountVal = 10500;
+      else if (promoCode === 'BUBBLE50') discountVal = 15000;
+    }
+
     const newOrder = {
       orderId,
       timestamp,
@@ -490,6 +518,8 @@ countdownElements.forEach(countdown => {
       quantity: selectedQty,
       size: selectedSize,
       color: selectedColor,
+      promoCode: promoCode,
+      discountVal: discountVal,
       customer: {
         name: document.getElementById('custName').value,
         email: document.getElementById('custEmail').value,
@@ -506,7 +536,65 @@ countdownElements.forEach(countdown => {
 
     closeCartModal();
     updateDatabaseViewer();
-    showNotification(`Order ${orderId} saved to database!`);
+    showNotification(`Order ${orderId} saved! ${discountVal > 0 ? 'Discount applied.' : ''}`);
+  });
+
+  // Handle Promo Code application clicks
+  document.addEventListener('click', e => {
+    if (e.target && e.target.id === 'applyPromoBtn') {
+      e.preventDefault();
+      const codeInput = document.getElementById('custPromo');
+      const feedback = document.getElementById('promoFeedback');
+      if (!codeInput || !feedback) return;
+
+      const code = codeInput.value.trim().toUpperCase();
+      if (!code) {
+        feedback.textContent = 'Please enter a code.';
+        feedback.style.color = 'red';
+        return;
+      }
+
+      // Check if unlocked in localStorage
+      const unlocked = JSON.parse(localStorage.getItem('shopEaseUnlockedCoupons')) || [];
+      if (!unlocked.includes(code)) {
+        const validCodes = ['BUBBLE5', 'BUBBLE15', 'BUBBLE35', 'BUBBLE50'];
+        if (validCodes.includes(code)) {
+          feedback.textContent = `You haven't unlocked this coupon in the Bubble Shooter game!`;
+          feedback.style.color = '#e67e22';
+        } else {
+          feedback.textContent = 'Invalid promo code.';
+          feedback.style.color = 'red';
+        }
+        return;
+      }
+
+      let discountText = '';
+      let discountAmount = 0;
+      if (code === 'BUBBLE5') { discountText = 'LKR 1500.00 ($5.00)'; discountAmount = 1500; }
+      else if (code === 'BUBBLE15') { discountText = 'LKR 4500.00 ($15.00)'; discountAmount = 4500; }
+      else if (code === 'BUBBLE35') { discountText = 'LKR 10500.00 ($35.00)'; discountAmount = 10500; }
+      else if (code === 'BUBBLE50') { discountText = 'LKR 15000.00 ($50.00)'; discountAmount = 15000; }
+
+      feedback.textContent = `Success! Discount of ${discountText} applied to your order.`;
+      feedback.style.color = 'green';
+
+      // Real-time price reduction update in checkout preview
+      const originalPriceText = cartPreviewPrice.getAttribute('data-original-val') || currentProduct.price;
+      const originalVal = parseFloat(originalPriceText.replace(/[^\d.]/g, ''));
+      if (!isNaN(originalVal)) {
+        const isUSD = originalPriceText.includes('$');
+        let newVal = originalVal;
+        
+        if (isUSD) {
+          const usdDiscount = discountAmount / 300;
+          newVal = Math.max(0, originalVal - usdDiscount);
+          cartPreviewPrice.textContent = `$${newVal.toFixed(2)} (${code} Applied)`;
+        } else {
+          newVal = Math.max(0, originalVal - discountAmount);
+          cartPreviewPrice.textContent = `LKR ${newVal.toFixed(2)} (${code} Applied)`;
+        }
+      }
+    }
   });
 
   // Open / Close Database Viewer
@@ -1274,4 +1362,728 @@ countdownElements.forEach(countdown => {
       executeSearch(searchQuery);
     }, 300);
   }
+})();
+
+// ==========================================
+// APPLE-STYLE PAGE TRANSITION SYSTEM
+// ==========================================
+(function initAppleTransition() {
+  // Inject style block
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `
+    .apple-page-transition-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      z-index: 99999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      opacity: 1;
+      transform: scale(1);
+    }
+    .apple-page-transition-overlay.fade-out {
+      opacity: 0;
+      transform: scale(1.05);
+    }
+    .morphing-shape {
+      width: 80px;
+      height: 80px;
+      background: var(--salmon-pink);
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      animation: morphAnim 3s infinite alternate ease-in-out;
+      opacity: 0.8;
+      filter: blur(8px);
+    }
+    @keyframes morphAnim {
+      0% {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        transform: rotate(0deg) scale(1);
+        background: var(--salmon-pink);
+      }
+      50% {
+        border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+        transform: rotate(180deg) scale(1.1);
+        background: #ff5588;
+      }
+      100% {
+        border-radius: 50% 50% 50% 50% / 40% 60% 40% 60%;
+        transform: rotate(360deg) scale(0.95);
+        background: var(--salmon-pink);
+      }
+    }
+    .apple-reveal {
+      opacity: 0;
+      transform: translateY(25px) scale(0.99);
+      transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .apple-reveal.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  `;
+  document.head.appendChild(styleEl);
+
+  // Inject overlay markup if not already present
+  if (!document.getElementById('pageTransitionOverlay')) {
+    const overlay = document.createElement('div');
+    overlay.className = 'apple-page-transition-overlay';
+    overlay.id = 'pageTransitionOverlay';
+    overlay.innerHTML = '<div class="morphing-shape"></div>';
+    document.body.insertBefore(overlay, document.body.firstChild);
+  }
+
+  // Trigger animations
+  window.addEventListener('load', () => {
+    const overlay = document.getElementById('pageTransitionOverlay');
+    if (overlay) {
+      setTimeout(() => {
+        overlay.classList.add('fade-out');
+        setTimeout(() => overlay.remove(), 800);
+      }, 300);
+    }
+
+    // Apply apple-reveal to major container sections on the page automatically
+    const majorElements = document.querySelectorAll('main, .banner, .category, .product-container, #page-header, footer, .tracker-box, .blog-header');
+    majorElements.forEach(el => {
+      el.classList.add('apple-reveal');
+      setTimeout(() => {
+        el.classList.add('visible');
+      }, 400);
+    });
+  });
+})();
+
+// ==========================================
+// CUSTOMIZABLE SYSTEM PREFERENCES & SETTINGS
+// ==========================================
+(function initSystemSettings() {
+  // Inject style rules for dark mode and settings dialog
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `
+    /* Settings Modal Styles */
+    .settings-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 100000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .settings-overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+    }
+    .settings-content {
+      position: relative;
+      background: #fff;
+      width: 90%;
+      max-width: 400px;
+      border-radius: var(--border-radius-md);
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      z-index: 100001;
+      animation: zoomIn 0.3s ease;
+    }
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--cultured);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .settings-header h3 {
+      font-size: var(--fs-6);
+      font-weight: var(--weight-700);
+      color: var(--eerie-black);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .settings-close-btn {
+      font-size: 24px;
+      color: var(--sonic-silver);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .settings-section {
+      margin-bottom: 20px;
+    }
+    .settings-label {
+      display: block;
+      font-size: var(--fs-8);
+      font-weight: var(--weight-700);
+      color: var(--eerie-black);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .theme-palette {
+      display: flex;
+      gap: 12px;
+    }
+    .theme-dot {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition-timing);
+    }
+    .theme-dot:hover {
+      transform: scale(1.1);
+    }
+    .theme-dot.selected {
+      border-color: #000;
+    }
+    .settings-dropdown {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--cultured);
+      border-radius: var(--border-radius-sm);
+      outline: none;
+      font-size: var(--fs-8);
+    }
+    .settings-switch-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--fs-8);
+      color: var(--onyx);
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 24px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--cultured);
+      transition: .4s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+    }
+    input:checked + .slider {
+      background-color: var(--salmon-pink-dark);
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+    .slider.round {
+      border-radius: 24px;
+    }
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    /* Light colors overrides and accessibility contrast helpers */
+    .search-btn:hover,
+    .action-btn:hover,
+    .footer-nav-link:hover,
+    .desktop-menu-category-list .menu-category > .menu-title:hover,
+    .panel-list-item a:hover,
+    .dropdown-list .dropdown-item a:hover,
+    .sidebar-menu-category-list a:hover,
+    .showcase-rating ion-icon,
+    .showcase-title:hover,
+    .product-minimal .showcase-category:hover,
+    .showcase-category:hover,
+    .showcase-status-bar,
+    .progress-bar-fill,
+    .sidebar-accordion-menu:hover p,
+    .sidebar-submenu-title:hover p {
+      color: var(--salmon-pink-dark) !important;
+    }
+
+    .banner-btn,
+    .btn-newsletter,
+    .showcase-badge.pink,
+    .clear-filter-btn {
+      background-color: var(--salmon-pink) !important;
+      color: var(--salmon-pink-dark) !important;
+      border-color: var(--salmon-pink-dark) !important;
+      font-weight: 700 !important;
+    }
+    
+    .banner-btn:hover,
+    .btn-newsletter:hover,
+    .clear-filter-btn:hover {
+      background-color: var(--salmon-pink-dark) !important;
+      color: #fff !important;
+    }
+
+    .showcase-actions button:hover,
+    .policy-box-container:hover,
+    .settings-modal .settings-content {
+      border-color: var(--salmon-pink-dark) !important;
+    }
+
+    /* Top header settings button styles */
+    .header-top-settings-btn:hover {
+      color: var(--salmon-pink-dark) !important;
+    }
+
+    /* Dark Mode Layout Adjustments */
+    body.dark-mode {
+      background-color: #121212 !important;
+      color: #f5f5f5 !important;
+    }
+    body.dark-mode .settings-content {
+      background-color: #1a1a1a;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    body.dark-mode .settings-header h3,
+    body.dark-mode .settings-label,
+    body.dark-mode .settings-switch-container {
+      color: #fff !important;
+    }
+    body.dark-mode .settings-dropdown {
+      background-color: #2b2b2b;
+      color: #fff;
+      border-color: #444;
+    }
+    body.dark-mode header,
+    body.dark-mode .header-main,
+    body.dark-mode footer,
+    body.dark-mode .footer-nav,
+    body.dark-mode .product-box,
+    body.dark-mode .showcase,
+    body.dark-mode .sidebar-category,
+    body.dark-mode .coupon-card,
+    body.dark-mode .tracker-box,
+    body.dark-mode .detail-card,
+    body.dark-mode .category-item,
+    body.dark-mode .policy-box-container {
+      background-color: #1e1e1e !important;
+      color: #f5f5f5 !important;
+      border-color: #2b2b2b !important;
+    }
+    body.dark-mode .showcase-title,
+    body.dark-mode .sidebar-title,
+    body.dark-mode .title,
+    body.dark-mode .menu-title,
+    body.dark-mode .nav-title,
+    body.dark-mode .product-name,
+    body.dark-mode .stock,
+    body.dark-mode .price,
+    body.dark-mode .service-title {
+      color: #ffffff !important;
+    }
+    body.dark-mode .showcase-desc,
+    body.dark-mode .service-desc,
+    body.dark-mode .footer-nav-link,
+    body.dark-mode .sidebar-menu-category-list a,
+    body.dark-mode .policy-content-text {
+      color: #b0b0b0 !important;
+    }
+    body.dark-mode .header-search-container .search-field {
+      background-color: #2b2b2b;
+      color: #fff;
+      border-color: #444;
+    }
+    body.dark-mode .header-top {
+      background-color: #121212 !important;
+      border-color: #2b2b2b !important;
+    }
+  `;
+  document.head.appendChild(styleEl);
+
+  // Light/Pastel theme colors mapping (light background, dark text)
+  const themeColors = {
+    pink: { light: 'hsl(353, 100%, 82%)', dark: 'hsl(353, 85%, 48%)' },
+    blue: { light: 'hsl(195, 100%, 82%)', dark: 'hsl(195, 90%, 42%)' },
+    green: { light: 'hsl(134, 61%, 82%)', dark: 'hsl(134, 75%, 32%)' },
+    gold: { light: 'hsl(47, 95%, 82%)', dark: 'hsl(40, 85%, 38%)' },
+    purple: { light: 'hsl(264, 75%, 85%)', dark: 'hsl(264, 65%, 45%)' }
+  };
+
+  const settingsModalHTML = `
+    <div class="settings-modal" id="settingsModal" style="display:none;">
+      <div class="settings-overlay" id="settingsOverlay"></div>
+      <div class="settings-content">
+        <div class="settings-header">
+          <h3><ion-icon name="cog-outline"></ion-icon> Preferences</h3>
+          <button class="settings-close-btn" id="settingsCloseBtn">&times;</button>
+        </div>
+        
+        <div class="settings-section">
+          <label class="settings-label">Color Theme Accent (Light)</label>
+          <div class="theme-palette">
+            <span class="theme-dot" data-theme="pink" style="background:hsl(353, 100%, 82%);" title="Pastel Pink"></span>
+            <span class="theme-dot" data-theme="blue" style="background:hsl(195, 100%, 82%);" title="Soft Blue"></span>
+            <span class="theme-dot" data-theme="green" style="background:hsl(134, 61%, 82%);" title="Mint Green"></span>
+            <span class="theme-dot" data-theme="gold" style="background:hsl(47, 95%, 82%);" title="Butter Gold"></span>
+            <span class="theme-dot" data-theme="purple" style="background:hsl(264, 75%, 85%);" title="Soft Lavender"></span>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <label class="settings-label">Dark Mode Boutique</label>
+          <div class="settings-switch-container">
+            <span>Toggle Dark Mode layout</span>
+            <label class="switch">
+              <input type="checkbox" id="darkModeToggle">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <label class="settings-label">Google Font Style</label>
+          <select id="fontSelector" class="settings-dropdown">
+            <option value="Poppins">Poppins (Default)</option>
+            <option value="Inter">Inter (Clean)</option>
+            <option value="Outfit">Outfit (Fashion)</option>
+            <option value="Playfair Display">Playfair (Serif Luxury)</option>
+          </select>
+        </div>
+
+        <div class="settings-section">
+          <label class="settings-label">Language / භාෂාව</label>
+          <select id="languageSelector" class="settings-dropdown">
+            <option value="en-US">English</option>
+            <option value="si">Sinhala (සිංහල)</option>
+            <option value="ta">Tamil (தமிழ்)</option>
+          </select>
+        </div>
+
+        <div class="settings-section">
+          <label class="settings-label">Sound Effects</label>
+          <div class="settings-switch-container">
+            <span>Audio interaction feedback</span>
+            <label class="switch">
+              <input type="checkbox" id="soundToggle">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <label class="settings-label">Base Currency Tag</label>
+          <select id="currencySelector" class="settings-dropdown">
+            <option value="LKR">LKR (රු)</option>
+            <option value="USD">USD ($)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Inject modal into HTML body
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = settingsModalHTML.trim();
+  document.body.appendChild(wrapper.firstElementChild);
+
+  // Inject Gear Icon to Top Right Header and Clear Language selectors
+  function injectGearIconTopRight() {
+    const topActions = document.querySelector('.header-top-actions');
+    if (topActions) {
+      if (!document.getElementById('settingsBtn')) {
+        topActions.innerHTML = '';
+        
+        const settingsBtn = document.createElement('button');
+        settingsBtn.id = 'settingsBtn';
+        settingsBtn.className = 'header-top-settings-btn';
+        settingsBtn.style.cssText = `
+          background: none;
+          border: none;
+          color: var(--sonic-silver);
+          font-size: 20px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-family: inherit;
+          transition: color 0.3s;
+        `;
+        settingsBtn.innerHTML = `
+          <ion-icon name="settings-outline"></ion-icon>
+          <span style="font-size: var(--fs-9); font-weight: var(--weight-700); text-transform: uppercase; letter-spacing: 0.5px;">Settings</span>
+        `;
+        topActions.appendChild(settingsBtn);
+      }
+    }
+
+    // Inject Bubble Game Link to Desktop Navigation dynamically
+    const desktopMenu = document.querySelector('.desktop-menu-category-list');
+    if (desktopMenu && !document.getElementById('bubbleGameNavItem')) {
+      const gameLi = document.createElement('li');
+      gameLi.className = 'menu-category';
+      gameLi.id = 'bubbleGameNavItem';
+      gameLi.innerHTML = `<a href="bubble-game.html" class="menu-title" style="font-weight: 700; color: var(--salmon-pink-dark);"><ion-icon name="game-controller-outline" style="margin-right: 4px; vertical-align: middle;"></ion-icon>Play & Earn</a>`;
+      desktopMenu.appendChild(gameLi);
+    }
+    
+    // Inject to Mobile Navigation dynamically
+    const mobileMenu = document.querySelector('.mobile-menu-category-list');
+    if (mobileMenu && !document.getElementById('bubbleGameMobileNavItem')) {
+      const gameLi = document.createElement('li');
+      gameLi.className = 'menu-category';
+      gameLi.id = 'bubbleGameMobileNavItem';
+      gameLi.innerHTML = `<a href="bubble-game.html" class="menu-title" style="font-weight: 700; color: var(--salmon-pink-dark);"><ion-icon name="game-controller-outline" style="margin-right: 4px; vertical-align: middle;"></ion-icon>Play & Earn</a>`;
+      mobileMenu.appendChild(gameLi);
+    }
+  }
+
+  // Synthesis Alert sound
+  function playAlertSound() {
+    const soundOn = localStorage.getItem('shopEaseSound') !== 'false';
+    if (!soundOn) return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5 note
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.25);
+    } catch(e) {}
+  }
+
+  // Event handler routines
+  function applyColorTheme(themeName) {
+    const theme = themeColors[themeName] || themeColors.pink;
+    document.documentElement.style.setProperty('--salmon-pink', theme.light);
+    document.documentElement.style.setProperty('--salmon-pink-dark', theme.dark);
+    localStorage.setItem('shopEaseTheme', themeName);
+
+    document.querySelectorAll('.theme-dot').forEach(dot => {
+      dot.classList.toggle('selected', dot.getAttribute('data-theme') === themeName);
+    });
+  }
+
+  function applyDarkMode(enabled) {
+    document.body.classList.toggle('dark-mode', enabled);
+    localStorage.setItem('shopEaseDarkMode', enabled ? 'true' : 'false');
+    const toggle = document.getElementById('darkModeToggle');
+    if (toggle) toggle.checked = enabled;
+  }
+
+  function applyFont(fontName) {
+    let fontLink = document.getElementById('gFontLink');
+    if (!fontLink) {
+      fontLink = document.createElement('link');
+      fontLink.id = 'gFontLink';
+      fontLink.rel = 'stylesheet';
+      document.head.appendChild(fontLink);
+    }
+    fontLink.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(' ', '+')}:wght@300;400;500;600;700;800;900&display=swap`;
+    document.body.style.fontFamily = `"${fontName}", sans-serif`;
+    localStorage.setItem('shopEaseFont', fontName);
+
+    const fontSel = document.getElementById('fontSelector');
+    if (fontSel) fontSel.value = fontName;
+  }
+
+  // Convert prices across the active document
+  function applyCurrency(currencyCode) {
+    const prev = localStorage.getItem('shopEaseCurrency') || 'LKR';
+    localStorage.setItem('shopEaseCurrency', currencyCode);
+
+    const curSel = document.getElementById('currencySelector');
+    if (curSel) curSel.value = currencyCode;
+
+    if (prev === currencyCode) return;
+
+    const prices = document.querySelectorAll('.price-box, .price, del, .db-price');
+    prices.forEach(box => {
+      const convertText = text => {
+        if (currencyCode === 'USD' && text.includes('LKR')) {
+          const val = parseFloat(text.replace(/[^\d.]/g, ''));
+          if (!isNaN(val)) return `$${(val / 300).toFixed(2)}`;
+        } else if (currencyCode === 'LKR' && text.includes('$')) {
+          const val = parseFloat(text.replace(/[^\d.]/g, ''));
+          if (!isNaN(val)) return `LKR ${(val * 300).toFixed(2)}`;
+        }
+        return text;
+      };
+
+      if (box.children.length === 0) {
+        box.textContent = convertText(box.textContent);
+      } else {
+        Array.from(box.childNodes).forEach(node => {
+          if (node.nodeType === Node.TEXT_NODE && (node.textContent.includes('LKR') || node.textContent.includes('$'))) {
+            node.textContent = convertText(node.textContent);
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            node.textContent = convertText(node.textContent);
+          }
+        });
+      }
+    });
+  }
+
+  function applyLanguage(langCode) {
+    localStorage.setItem('shopEaseLanguage', langCode);
+    const langSel = document.getElementById('languageSelector');
+    if (langSel) langSel.value = langCode;
+  }
+
+  // Load and apply configurations on load
+  function loadConfigs() {
+    const savedTheme = localStorage.getItem('shopEaseTheme') || 'pink';
+    applyColorTheme(savedTheme);
+
+    const savedDarkMode = localStorage.getItem('shopEaseDarkMode') === 'true';
+    applyDarkMode(savedDarkMode);
+
+    const savedFont = localStorage.getItem('shopEaseFont') || 'Poppins';
+    applyFont(savedFont);
+
+    const savedSound = localStorage.getItem('shopEaseSound') !== 'false';
+    const soundToggle = document.getElementById('soundToggle');
+    if (soundToggle) soundToggle.checked = savedSound;
+
+    const savedCurrency = localStorage.getItem('shopEaseCurrency') || 'LKR';
+    setTimeout(() => applyCurrency(savedCurrency), 450);
+
+    const savedLanguage = localStorage.getItem('shopEaseLanguage') || 'en-US';
+    applyLanguage(savedLanguage);
+  }
+
+  // Bind settings triggers via global event delegation (immune to re-renders)
+  function bindSettingsEvents() {
+    document.addEventListener('click', (e) => {
+      const settingsBtn = e.target.closest('#settingsBtn');
+      if (settingsBtn) {
+        e.preventDefault();
+        const settingsModal = document.getElementById('settingsModal');
+        if (settingsModal) {
+          settingsModal.style.display = 'flex';
+          playAlertSound();
+        }
+        return;
+      }
+
+      const closeBtn = e.target.closest('#settingsCloseBtn') || e.target.closest('#settingsOverlay');
+      if (closeBtn) {
+        e.preventDefault();
+        const settingsModal = document.getElementById('settingsModal');
+        if (settingsModal) {
+          settingsModal.style.display = 'none';
+        }
+        return;
+      }
+
+      // Theme dot selection click
+      const dot = e.target.closest('.theme-dot');
+      if (dot) {
+        const theme = dot.getAttribute('data-theme');
+        applyColorTheme(theme);
+        playAlertSound();
+      }
+    });
+
+    // Form element updates delegation
+    document.addEventListener('change', (e) => {
+      if (e.target.id === 'darkModeToggle') {
+        applyDarkMode(e.target.checked);
+        playAlertSound();
+      } else if (e.target.id === 'fontSelector') {
+        applyFont(e.target.value);
+        playAlertSound();
+      } else if (e.target.id === 'soundToggle') {
+        localStorage.setItem('shopEaseSound', e.target.checked ? 'true' : 'false');
+        playAlertSound();
+      } else if (e.target.id === 'currencySelector') {
+        applyCurrency(e.target.value);
+        playAlertSound();
+      } else if (e.target.id === 'languageSelector') {
+        applyLanguage(e.target.value);
+        playAlertSound();
+      }
+    });
+  }
+
+  // Game Daily Ranking calculations for Homepage widget display
+  function initHomeGameStats() {
+    const rankEl = document.getElementById('homeGameRank');
+    const scoreEl = document.getElementById('homeGameScore');
+    const dateEl = document.getElementById('homeGameDate');
+    if (!rankEl || !scoreEl || !dateEl) return;
+
+    // Get current date string: YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Get daily score from localStorage
+    const dailyScoreObj = JSON.parse(localStorage.getItem('shopEaseUserDailyScore')) || { date: '', score: 0 };
+    let todayScore = 0;
+    if (dailyScoreObj.date === today) {
+      todayScore = dailyScoreObj.score;
+    }
+
+    scoreEl.textContent = todayScore;
+    dateEl.textContent = today; // Secured date label
+
+    // Compute rank position from leaderboard database
+    const defaultLeaderboard = [
+      { name: "Avantha K.", score: 8200 },
+      { name: "Dilshan S.", score: 6400 },
+      { name: "Shehan K.", score: 4500 },
+      { name: "Priyantha D.", score: 3200 },
+      { name: "Sanduni M.", score: 2100 }
+    ];
+    
+    let board = JSON.parse(localStorage.getItem('shopEaseLeaderboard')) || defaultLeaderboard;
+    // Clean and recheck active entries
+    board = board.filter(item => item.name !== "YOU (Active)");
+    if (todayScore > 0) {
+      board.push({ name: "YOU (Active)", score: todayScore });
+    }
+    board.sort((a, b) => b.score - a.score);
+
+    const userIndex = board.findIndex(item => item.name === "YOU (Active)");
+    if (userIndex !== -1 && todayScore > 0) {
+      rankEl.textContent = `#${userIndex + 1}`;
+    } else {
+      rankEl.textContent = "#--";
+    }
+  }
+
+  // Execute initialization
+  setTimeout(() => {
+    injectGearIconTopRight();
+    loadConfigs();
+    bindSettingsEvents();
+    initHomeGameStats();
+  }, 100);
+
+  // Watch for page elements re-rendering
+  setTimeout(() => {
+    injectGearIconTopRight();
+    initHomeGameStats();
+  }, 1000);
 })();
