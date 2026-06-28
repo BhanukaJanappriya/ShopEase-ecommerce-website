@@ -1507,7 +1507,7 @@ countdownElements.forEach(countdown => {
       transition: .4s;
     }
     input:checked + .slider {
-      background-color: var(--salmon-pink);
+      background-color: var(--salmon-pink-dark);
     }
     input:checked + .slider:before {
       transform: translateX(22px);
@@ -1517,6 +1517,53 @@ countdownElements.forEach(countdown => {
     }
     .slider.round:before {
       border-radius: 50%;
+    }
+
+    /* Light colors overrides and accessibility contrast helpers */
+    .search-btn:hover,
+    .action-btn:hover,
+    .footer-nav-link:hover,
+    .desktop-menu-category-list .menu-category > .menu-title:hover,
+    .panel-list-item a:hover,
+    .dropdown-list .dropdown-item a:hover,
+    .sidebar-menu-category-list a:hover,
+    .showcase-rating ion-icon,
+    .showcase-title:hover,
+    .product-minimal .showcase-category:hover,
+    .showcase-category:hover,
+    .showcase-status-bar,
+    .progress-bar-fill,
+    .sidebar-accordion-menu:hover p,
+    .sidebar-submenu-title:hover p {
+      color: var(--salmon-pink-dark) !important;
+    }
+
+    .banner-btn,
+    .btn-newsletter,
+    .showcase-badge.pink,
+    .clear-filter-btn {
+      background-color: var(--salmon-pink) !important;
+      color: var(--salmon-pink-dark) !important;
+      border-color: var(--salmon-pink-dark) !important;
+      font-weight: 700 !important;
+    }
+    
+    .banner-btn:hover,
+    .btn-newsletter:hover,
+    .clear-filter-btn:hover {
+      background-color: var(--salmon-pink-dark) !important;
+      color: #fff !important;
+    }
+
+    .showcase-actions button:hover,
+    .policy-box-container:hover,
+    .settings-modal .settings-content {
+      border-color: var(--salmon-pink-dark) !important;
+    }
+
+    /* Top header settings button styles */
+    .header-top-settings-btn:hover {
+      color: var(--salmon-pink-dark) !important;
     }
 
     /* Dark Mode Layout Adjustments */
@@ -1584,12 +1631,13 @@ countdownElements.forEach(countdown => {
   `;
   document.head.appendChild(styleEl);
 
+  // Light/Pastel theme colors mapping (light background, dark text)
   const themeColors = {
-    pink: 'hsl(353, 100%, 78%)',
-    blue: 'hsl(203, 100%, 60%)',
-    green: 'hsl(145, 63%, 49%)',
-    gold: 'hsl(38, 95%, 55%)',
-    purple: 'hsl(270, 70%, 65%)'
+    pink: { light: 'hsl(353, 100%, 82%)', dark: 'hsl(353, 85%, 48%)' },
+    blue: { light: 'hsl(195, 100%, 82%)', dark: 'hsl(195, 90%, 42%)' },
+    green: { light: 'hsl(134, 61%, 82%)', dark: 'hsl(134, 75%, 32%)' },
+    gold: { light: 'hsl(47, 95%, 82%)', dark: 'hsl(40, 85%, 38%)' },
+    purple: { light: 'hsl(264, 75%, 85%)', dark: 'hsl(264, 65%, 45%)' }
   };
 
   const settingsModalHTML = `
@@ -1602,13 +1650,13 @@ countdownElements.forEach(countdown => {
         </div>
         
         <div class="settings-section">
-          <label class="settings-label">Color Theme Accent</label>
+          <label class="settings-label">Color Theme Accent (Light)</label>
           <div class="theme-palette">
-            <span class="theme-dot" data-theme="pink" style="background:#ff69b4;" title="Salmon Pink"></span>
-            <span class="theme-dot" data-theme="blue" style="background:#3399ff;" title="Ocean Blue"></span>
-            <span class="theme-dot" data-theme="green" style="background:#2ecc71;" title="Emerald Green"></span>
-            <span class="theme-dot" data-theme="gold" style="background:#f1c40f;" title="Lux Gold"></span>
-            <span class="theme-dot" data-theme="purple" style="background:#9b59b6;" title="Royal Purple"></span>
+            <span class="theme-dot" data-theme="pink" style="background:hsl(353, 100%, 82%);" title="Pastel Pink"></span>
+            <span class="theme-dot" data-theme="blue" style="background:hsl(195, 100%, 82%);" title="Soft Blue"></span>
+            <span class="theme-dot" data-theme="green" style="background:hsl(134, 61%, 82%);" title="Mint Green"></span>
+            <span class="theme-dot" data-theme="gold" style="background:hsl(47, 95%, 82%);" title="Butter Gold"></span>
+            <span class="theme-dot" data-theme="purple" style="background:hsl(264, 75%, 85%);" title="Soft Lavender"></span>
           </div>
         </div>
 
@@ -1630,6 +1678,15 @@ countdownElements.forEach(countdown => {
             <option value="Inter">Inter (Clean)</option>
             <option value="Outfit">Outfit (Fashion)</option>
             <option value="Playfair Display">Playfair (Serif Luxury)</option>
+          </select>
+        </div>
+
+        <div class="settings-section">
+          <label class="settings-label">Language / භාෂාව</label>
+          <select id="languageSelector" class="settings-dropdown">
+            <option value="en-US">English</option>
+            <option value="si">Sinhala (සිංහල)</option>
+            <option value="ta">Tamil (தமிழ்)</option>
           </select>
         </div>
 
@@ -1660,18 +1717,33 @@ countdownElements.forEach(countdown => {
   wrapper.innerHTML = settingsModalHTML;
   document.body.appendChild(wrapper.firstChild);
 
-  // Inject Gear Icon to Header User Actions dynamically
-  function injectGearIcon() {
-    const userActions = document.querySelector('.header-main .header-user-actions');
-    if (userActions && !document.getElementById('settingsBtn')) {
-      const settingsBtn = document.createElement('button');
-      settingsBtn.className = 'action-btn';
-      settingsBtn.id = 'settingsBtn';
-      settingsBtn.title = 'Site Settings';
-      settingsBtn.innerHTML = '<ion-icon name="settings-outline"></ion-icon>';
+  // Inject Gear Icon to Top Right Header and Clear Language selectors
+  function injectGearIconTopRight() {
+    const topActions = document.querySelector('.header-top-actions');
+    if (topActions) {
+      // Clear original dropdown selectors (currency is in settings, language is in settings modal)
+      topActions.innerHTML = '';
       
-      // Place it as the first action item
-      userActions.insertBefore(settingsBtn, userActions.firstChild);
+      const settingsBtn = document.createElement('button');
+      settingsBtn.id = 'settingsBtn';
+      settingsBtn.className = 'header-top-settings-btn';
+      settingsBtn.style.cssText = `
+        background: none;
+        border: none;
+        color: var(--sonic-silver);
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: inherit;
+        transition: color 0.3s;
+      `;
+      settingsBtn.innerHTML = `
+        <ion-icon name="settings-outline"></ion-icon>
+        <span style="font-size: var(--fs-9); font-weight: var(--weight-700); text-transform: uppercase; letter-spacing: 0.5px;">Settings</span>
+      `;
+      topActions.appendChild(settingsBtn);
     }
   }
 
@@ -1695,8 +1767,9 @@ countdownElements.forEach(countdown => {
 
   // Event handler routines
   function applyColorTheme(themeName) {
-    const color = themeColors[themeName] || themeColors.pink;
-    document.documentElement.style.setProperty('--salmon-pink', color);
+    const theme = themeColors[themeName] || themeColors.pink;
+    document.documentElement.style.setProperty('--salmon-pink', theme.light);
+    document.documentElement.style.setProperty('--salmon-pink-dark', theme.dark);
     localStorage.setItem('shopEaseTheme', themeName);
 
     document.querySelectorAll('.theme-dot').forEach(dot => {
@@ -1764,6 +1837,12 @@ countdownElements.forEach(countdown => {
     });
   }
 
+  function applyLanguage(langCode) {
+    localStorage.setItem('shopEaseLanguage', langCode);
+    const langSel = document.getElementById('languageSelector');
+    if (langSel) langSel.value = langCode;
+  }
+
   // Load and apply configurations on load
   function loadConfigs() {
     const savedTheme = localStorage.getItem('shopEaseTheme') || 'pink';
@@ -1780,10 +1859,10 @@ countdownElements.forEach(countdown => {
     if (soundToggle) soundToggle.checked = savedSound;
 
     const savedCurrency = localStorage.getItem('shopEaseCurrency') || 'LKR';
-    // Use timeout to let the page compile dynamic prices before conversion triggers
-    setTimeout(() => {
-      applyCurrency(savedCurrency);
-    }, 450);
+    setTimeout(() => applyCurrency(savedCurrency), 450);
+
+    const savedLanguage = localStorage.getItem('shopEaseLanguage') || 'en-US';
+    applyLanguage(savedLanguage);
   }
 
   // Bind settings triggers
@@ -1851,15 +1930,24 @@ countdownElements.forEach(countdown => {
         playAlertSound();
       });
     }
+
+    // Language select
+    const lSel = document.getElementById('languageSelector');
+    if (lSel) {
+      lSel.addEventListener('change', e => {
+        applyLanguage(e.target.value);
+        playAlertSound();
+      });
+    }
   }
 
   // Execute initialization
   setTimeout(() => {
-    injectGearIcon();
+    injectGearIconTopRight();
     loadConfigs();
     bindSettingsEvents();
   }, 100);
 
   // Watch for page elements re-rendering
-  setTimeout(injectGearIcon, 1000);
+  setTimeout(injectGearIconTopRight, 1000);
 })();
