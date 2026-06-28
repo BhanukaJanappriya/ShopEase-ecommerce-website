@@ -2028,13 +2028,62 @@ countdownElements.forEach(countdown => {
     });
   }
 
+  // Game Daily Ranking calculations for Homepage widget display
+  function initHomeGameStats() {
+    const rankEl = document.getElementById('homeGameRank');
+    const scoreEl = document.getElementById('homeGameScore');
+    const dateEl = document.getElementById('homeGameDate');
+    if (!rankEl || !scoreEl || !dateEl) return;
+
+    // Get current date string: YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Get daily score from localStorage
+    const dailyScoreObj = JSON.parse(localStorage.getItem('shopEaseUserDailyScore')) || { date: '', score: 0 };
+    let todayScore = 0;
+    if (dailyScoreObj.date === today) {
+      todayScore = dailyScoreObj.score;
+    }
+
+    scoreEl.textContent = todayScore;
+    dateEl.textContent = today; // Secured date label
+
+    // Compute rank position from leaderboard database
+    const defaultLeaderboard = [
+      { name: "Avantha K.", score: 8200 },
+      { name: "Dilshan S.", score: 6400 },
+      { name: "Shehan K.", score: 4500 },
+      { name: "Priyantha D.", score: 3200 },
+      { name: "Sanduni M.", score: 2100 }
+    ];
+    
+    let board = JSON.parse(localStorage.getItem('shopEaseLeaderboard')) || defaultLeaderboard;
+    // Clean and recheck active entries
+    board = board.filter(item => item.name !== "YOU (Active)");
+    if (todayScore > 0) {
+      board.push({ name: "YOU (Active)", score: todayScore });
+    }
+    board.sort((a, b) => b.score - a.score);
+
+    const userIndex = board.findIndex(item => item.name === "YOU (Active)");
+    if (userIndex !== -1 && todayScore > 0) {
+      rankEl.textContent = `#${userIndex + 1}`;
+    } else {
+      rankEl.textContent = "#--";
+    }
+  }
+
   // Execute initialization
   setTimeout(() => {
     injectGearIconTopRight();
     loadConfigs();
     bindSettingsEvents();
+    initHomeGameStats();
   }, 100);
 
   // Watch for page elements re-rendering
-  setTimeout(injectGearIconTopRight, 1000);
+  setTimeout(() => {
+    injectGearIconTopRight();
+    initHomeGameStats();
+  }, 1000);
 })();

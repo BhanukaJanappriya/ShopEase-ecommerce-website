@@ -1323,6 +1323,13 @@
       title.textContent = "Ceiling collapsed!";
       desc.textContent = `Excellent effort! You scored ${score} points and reached Level ${currentLevel}.`;
 
+      // Save daily score
+      const today = new Date().toISOString().split('T')[0];
+      const dailyScoreObj = JSON.parse(localStorage.getItem('shopEaseUserDailyScore')) || { date: '', score: 0 };
+      if (dailyScoreObj.date !== today || score > dailyScoreObj.score) {
+        localStorage.setItem('shopEaseUserDailyScore', JSON.stringify({ date: today, score: score }));
+      }
+
       // Prompt winner name if high score is achieved
       const board = JSON.parse(localStorage.getItem('shopEaseLeaderboard')) || [];
       const isHighScore = board.length < 5 || score > board[4].score;
