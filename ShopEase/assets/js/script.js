@@ -1115,40 +1115,92 @@ countdownElements.forEach(countdown => {
   const clearFilterBtn = document.getElementById('clearCategoryFilterBtn');
   const productGrid = document.querySelector('.product-grid');
   
-  if (!productMain || !productGrid) return;
+  const isHomepage = !!(productMain && productGrid);
   
-  const showcases = productGrid.querySelectorAll('.showcase');
-
   // Category mapping to product showcase categories (all lowercase match)
   const categoryMap = {
+    // Fashion
+    "t-shirt": ["shirt", "t-shirt", "t-shirts", "tee", "clothes"],
+    "t-shirts": ["shirt", "t-shirt", "t-shirts", "tee", "clothes"],
+    "shirts": ["shirt", "shirts", "clothes"],
+    "shorts & jeans": ["shorts", "jeans", "shorts & jeans", "clothes"],
+    "jacket": ["jacket", "jackets", "winter wear", "coat", "clothes"],
     "dress & frock": ["skirt", "party wear", "dress & frock", "clothes"],
-    "winter wear": ["jacket", "jackets", "winter wear", "coat"],
-    "glasses & lens": ["glasses", "lens", "sunglasses", "glasses & lens"],
-    "shorts & jeans": ["shorts", "jeans", "shorts & jeans"],
-    "t-shirts": ["shirt", "t-shirt", "t-shirts", "tee"],
-    "jacket": ["jacket", "jackets"],
-    "watch": ["watch", "watches"],
-    "hat & caps": ["hat", "caps", "hat & caps"]
+    "winter wear": ["jacket", "jackets", "winter wear", "coat", "clothes"],
+    
+    // Footwear
+    "sport": ["sports", "footwear"],
+    "formal": ["formal", "footwear"],
+    "boots": ["boots", "footwear"],
+    "casual": ["casual", "footwear"],
+    
+    // Jewellery
+    "necklace": ["jewellery", "jewelry", "necklace"],
+    "earrings": ["jewellery", "jewelry", "earring", "earrings"],
+    "couple rings": ["jewellery", "jewelry", "ring", "couple rings"],
+    "pendants": ["jewellery", "jewelry", "pendant"],
+    "crystal": ["jewellery", "jewelry", "crystal"],
+    "bangles": ["jewellery", "jewelry", "bangle"],
+    "bracelets": ["jewellery", "jewelry", "bracelet"],
+    
+    // Cosmetics / Perfume
+    "shampoo": ["cosmetics", "shampoo"],
+    "bodywash": ["cosmetics", "bodywash"],
+    "facewash": ["cosmetics", "facewash"],
+    "makeup kit": ["cosmetics", "makeup kit"],
+    "liner": ["cosmetics", "liner"],
+    "lipstick": ["cosmetics", "lipstick"],
+    "prefume": ["perfume"],
+    "perfume": ["perfume"],
+    "sunscreen": ["cosmetics", "sunscreen"],
+    "skin loson": ["cosmetics", "lotion", "loson"],
+    "skin lotion": ["cosmetics", "lotion"]
   };
 
+  // Helper function to check singular/plural or substring matches
+  function isWordMatch(text, query) {
+    if (!text || !query) return false;
+    text = text.toLowerCase().trim();
+    query = query.toLowerCase().trim();
+    if (text.includes(query) || query.includes(text)) return true;
+    
+    // Singularize query if it ends in 's'
+    if (query.endsWith('s') && query.length > 1) {
+      const qSingular = query.slice(0, -1);
+      if (text.includes(qSingular)) return true;
+    }
+    // Singularize text if it ends in 's'
+    if (text.endsWith('s') && text.length > 1) {
+      const tSingular = text.slice(0, -1);
+      if (tSingular.includes(query) || query.includes(tSingular)) return true;
+    }
+    return false;
+  }
+
   function applyCategoryFilter(categoryName) {
+    if (!isHomepage) return;
+    
     const query = categoryName.toLowerCase().trim();
     const targetCategories = categoryMap[query] || [query];
+    const showcases = productGrid.querySelectorAll('.showcase');
 
     showcases.forEach(showcase => {
       const catEl = showcase.querySelector('.showcase-category');
-      if (catEl) {
-        const productCat = catEl.textContent.trim().toLowerCase();
-        const isMatch = targetCategories.some(target => productCat.includes(target) || target.includes(productCat));
-        
-        if (isMatch) {
-          showcase.style.display = 'block';
-          // Ensure fade-in animation triggers
-          showcase.classList.remove('aos-active');
-          setTimeout(() => showcase.classList.add('aos-active'), 50);
-        } else {
-          showcase.style.display = 'none';
-        }
+      const titleEl = showcase.querySelector('.showcase-title');
+      
+      const productCat = catEl ? catEl.textContent.trim().toLowerCase() : '';
+      const productTitle = titleEl ? titleEl.textContent.trim().toLowerCase() : '';
+      
+      // Match if the category matches or if the title contains the keyword
+      const matchesCategory = targetCategories.some(target => isWordMatch(productCat, target));
+      const matchesTitle = isWordMatch(productTitle, query);
+      
+      if (matchesCategory || matchesTitle) {
+        showcase.style.display = 'block';
+        showcase.classList.remove('aos-active');
+        setTimeout(() => showcase.classList.add('aos-active'), 50);
+      } else {
+        showcase.style.display = 'none';
       }
     });
 
@@ -1164,6 +1216,9 @@ countdownElements.forEach(countdown => {
   }
 
   function resetCategoryFilter() {
+    if (!isHomepage) return;
+    
+    const showcases = productGrid.querySelectorAll('.showcase');
     showcases.forEach(showcase => {
       showcase.style.display = 'block';
     });
@@ -1176,41 +1231,66 @@ countdownElements.forEach(countdown => {
     }
   }
 
-  // Bind click events to category slider cards
-  categoryItems.forEach(item => {
-    const titleEl = item.querySelector('.category-item-title');
-    const categoryName = titleEl ? titleEl.textContent.trim() : '';
-    
-    item.style.cursor = 'pointer';
-    item.addEventListener('click', (e) => {
-      if (e.target.tagName === 'A' || e.target.classList.contains('category-btn')) {
+  // Bind footer category links
+  const footerCategoryLinks = document.querySelectorAll('.footer-category-link');
+  footerCategoryLinks.forEach(link => {
+    const keyword = link.textContent.trim();
+    if (isHomepage) {
+      link.addEventListener('click', (e) => {
         e.preventDefault();
-      }
-      if (categoryName) {
-        applyCategoryFilter(categoryName);
-      }
-    });
+        applyCategoryFilter(keyword);
+      });
+    } else {
+      link.setAttribute('href', `index.html?category=${encodeURIComponent(keyword)}`);
+    }
   });
 
-  // Bind click event to Clear Filter button
-  if (clearFilterBtn) {
-    clearFilterBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      resetCategoryFilter();
+  if (isHomepage) {
+    // Bind click events to category slider cards
+    categoryItems.forEach(item => {
+      const titleEl = item.querySelector('.category-item-title');
+      const categoryName = titleEl ? titleEl.textContent.trim() : '';
+      
+      item.style.cursor = 'pointer';
+      item.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A' || e.target.classList.contains('category-btn')) {
+          e.preventDefault();
+        }
+        if (categoryName) {
+          applyCategoryFilter(categoryName);
+        }
+      });
     });
+
+    // Bind click event to Clear Filter button
+    if (clearFilterBtn) {
+      clearFilterBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        resetCategoryFilter();
+      });
+    }
+
+    // Bind clicking sidebar category links or other menu links
+    const sidebarSubmenus = document.querySelectorAll('.sidebar-submenu-title');
+    sidebarSubmenus.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const nameEl = link.querySelector('.product-name');
+        if (nameEl) {
+          applyCategoryFilter(nameEl.textContent.trim());
+        }
+      });
+    });
+
+    // Handle URL query parameter on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    if (categoryParam) {
+      setTimeout(() => {
+        applyCategoryFilter(categoryParam);
+      }, 300);
+    }
   }
-
-  // Bind clicking sidebar category links or other menu links
-  const sidebarSubmenus = document.querySelectorAll('.sidebar-submenu-title');
-  sidebarSubmenus.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const nameEl = link.querySelector('.product-name');
-      if (nameEl) {
-        applyCategoryFilter(nameEl.textContent.trim());
-      }
-    });
-  });
 })();
 
 // ==========================================
