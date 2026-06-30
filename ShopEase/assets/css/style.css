@@ -4262,4 +4262,117 @@ footer {
 
 .showcase-rating ion-icon {
   transition: transform 0.15s ease, color 0.15s ease;
+}
+
+/* Add to Cart Stepwise Wizard Styles */
+.cart-modal-steps-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.step-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  flex: 1;
+}
+
+.step-indicator .step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--cultured);
+  color: var(--sonic-silver);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.step-indicator .step-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--sonic-silver);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.step-line {
+  height: 2px;
+  background: var(--cultured);
+  flex-grow: 1;
+  margin-top: -15px; /* align with numbers */
+  transition: all 0.3s ease;
+}
+
+.step-indicator.active .step-num {
+  background: var(--white);
+  color: var(--salmon-pink);
+  border-color: var(--salmon-pink);
+  box-shadow: 0 0 10px rgba(255, 127, 143, 0.2);
+}
+
+.step-indicator.active .step-label {
+  color: var(--salmon-pink);
+  font-weight: 700;
+}
+
+.step-indicator.completed .step-num {
+  background: var(--salmon-pink);
+  color: var(--white);
+  border-color: var(--salmon-pink);
+}
+
+.step-indicator.completed .step-label {
+  color: var(--eerie-black);
+}
+
+.step-line.active {
+  background: var(--salmon-pink);
+}
+
+.cart-wizard-step {
+  display: none;
+}
+
+.cart-wizard-step.active {
+  display: block;
+  animation: wizardFadeIn 0.4s ease;
+}
+
+@keyframes wizardFadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hover effects for Minimal Showcase links */
+.product-minimal .showcase-img-box {
+  overflow: hidden;
+  border-radius: var(--border-radius-sm);
+  display: block;
+}
+
+.product-minimal .showcase-img {
+  transition: transform 0.3s ease;
+}
+
+.product-minimal .showcase:hover .showcase-img {
+  transform: scale(1.08);
+}
+
+.product-minimal .showcase-title {
+  transition: color 0.2s ease;
+}
+
+.product-minimal .showcase:hover .showcase-title {
+  color: var(--salmon-pink);
 }
