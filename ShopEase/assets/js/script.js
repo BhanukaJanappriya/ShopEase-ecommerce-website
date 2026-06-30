@@ -172,6 +172,29 @@ countdownElements.forEach(countdown => {
           <button class="cart-modal-close-btn" id="cartModalCloseBtn">&times;</button>
         </div>
         
+        <!-- Step Progress Indicator -->
+        <div class="cart-modal-steps-indicator">
+          <div class="step-indicator active" data-step="1">
+            <span class="step-num">1</span>
+            <span class="step-label">Config</span>
+          </div>
+          <div class="step-line" id="stepLine1"></div>
+          <div class="step-indicator" data-step="2">
+            <span class="step-num">2</span>
+            <span class="step-label">Contact</span>
+          </div>
+          <div class="step-line" id="stepLine2"></div>
+          <div class="step-indicator" data-step="3">
+            <span class="step-num">3</span>
+            <span class="step-label">Shipping</span>
+          </div>
+          <div class="step-line" id="stepLine3"></div>
+          <div class="step-indicator" data-step="4">
+            <span class="step-num">4</span>
+            <span class="step-label">Confirm</span>
+          </div>
+        </div>
+
         <div class="cart-product-preview">
           <img src="" alt="Product Image" id="cartPreviewImg">
           <div class="cart-product-info">
@@ -181,89 +204,132 @@ countdownElements.forEach(countdown => {
         </div>
 
         <form id="cartInputForm">
-          <!-- Configuration Options -->
-          <div class="cart-form-row">
-            <div class="cart-form-group">
-              <label>Select Size</label>
-              <div class="options-selector-list" id="sizeSelectorList">
-                <span class="option-badge selected" data-value="M">M</span>
-                <span class="option-badge" data-value="L">L</span>
-                <span class="option-badge" data-value="XL">XL</span>
-                <span class="option-badge" data-value="XXL">XXL</span>
+          <!-- Step 1: Configure Options -->
+          <div class="cart-wizard-step active" data-step="1">
+            <div class="cart-form-row">
+              <div class="cart-form-group">
+                <label>Select Size</label>
+                <div class="options-selector-list" id="sizeSelectorList">
+                  <span class="option-badge selected" data-value="M">M</span>
+                  <span class="option-badge" data-value="L">L</span>
+                  <span class="option-badge" data-value="XL">XL</span>
+                  <span class="option-badge" data-value="XXL">XXL</span>
+                </div>
+              </div>
+              
+              <div class="cart-form-group">
+                <label>Select Color</label>
+                <div class="options-selector-list" id="colorSelectorList">
+                  <span class="color-dot selected" data-value="Black" style="background-color: #111;"></span>
+                  <span class="color-dot" data-value="Navy Blue" style="background-color: #1b365d;"></span>
+                  <span class="color-dot" data-value="Salmon Pink" style="background-color: #ff7f8f;"></span>
+                  <span class="color-dot" data-value="Off White" style="background-color: #faf9f6;"></span>
+                </div>
               </div>
             </div>
-            
+
             <div class="cart-form-group">
-              <label>Select Color</label>
-              <div class="options-selector-list" id="colorSelectorList">
-                <span class="color-dot selected" data-value="Black" style="background-color: #111;"></span>
-                <span class="color-dot" data-value="Navy Blue" style="background-color: #1b365d;"></span>
-                <span class="color-dot" data-value="Salmon Pink" style="background-color: #ff7f8f;"></span>
-                <span class="color-dot" data-value="Off White" style="background-color: #faf9f6;"></span>
+              <label>Quantity</label>
+              <div class="qty-selector">
+                <button type="button" class="qty-btn" id="qtyMinusBtn">-</button>
+                <span class="qty-val" id="qtyVal">1</span>
+                <button type="button" class="qty-btn" id="qtyPlusBtn">+</button>
               </div>
             </div>
           </div>
 
-          <div class="cart-form-group">
-            <label>Quantity</label>
-            <div class="qty-selector">
-              <button type="button" class="qty-btn" id="qtyMinusBtn">-</button>
-              <span class="qty-val" id="qtyVal">1</span>
-              <button type="button" class="qty-btn" id="qtyPlusBtn">+</button>
-            </div>
-          </div>
-
-          <!-- Customer Data Input Section -->
-          <div class="cart-form-group">
-            <label>Customer Name</label>
-            <input type="text" id="custName" class="cart-input-field" placeholder="e.g. John Doe" required>
-          </div>
-
-          <div class="cart-form-row">
+          <!-- Step 2: Contact Details -->
+          <div class="cart-wizard-step" data-step="2">
             <div class="cart-form-group">
-              <label>Email Address</label>
-              <input type="email" id="custEmail" class="cart-input-field" placeholder="e.g. john@example.com" required>
+              <label>Customer Name</label>
+              <input type="text" id="custName" class="cart-input-field" placeholder="e.g. John Doe" required>
             </div>
+
+            <div class="cart-form-row">
+              <div class="cart-form-group">
+                <label>Email Address</label>
+                <input type="email" id="custEmail" class="cart-input-field" placeholder="e.g. john@example.com" required>
+              </div>
+              <div class="cart-form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="custPhone" class="cart-input-field" placeholder="e.g. +94 77 123 4567" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Shipping & Payment -->
+          <div class="cart-wizard-step" data-step="3">
             <div class="cart-form-group">
-              <label>Phone Number</label>
-              <input type="tel" id="custPhone" class="cart-input-field" placeholder="e.g. +94 77 123 4567" required>
+              <label>Shipping Address</label>
+              <input type="text" id="custAddress" class="cart-input-field" placeholder="e.g. 123, Galle Road, Colombo 03" required>
+            </div>
+
+            <div class="cart-form-row">
+              <div class="cart-form-group">
+                <label>Delivery Method</label>
+                <select id="custDelivery" class="cart-input-field">
+                  <option value="Standard (LKR 350)">Standard (3-5 Days)</option>
+                  <option value="Express (LKR 600)">Express (1-2 Days)</option>
+                  <option value="Same Day (LKR 1000)">Same Day Delivery</option>
+                </select>
+              </div>
+              <div class="cart-form-group">
+                <label>Payment Method</label>
+                <select id="custPayment" class="cart-input-field">
+                  <option value="Cash On Delivery">Cash on Delivery</option>
+                  <option value="Credit / Debit Card">Credit / Debit Card</option>
+                  <option value="Koko Installments">Koko Installments</option>
+                </select>
+              </div>
             </div>
           </div>
 
-          <div class="cart-form-group">
-            <label>Shipping Address</label>
-            <input type="text" id="custAddress" class="cart-input-field" placeholder="e.g. 123, Galle Road, Colombo 03" required>
-          </div>
+          <!-- Step 4: Confirm Order -->
+          <div class="cart-wizard-step" data-step="4">
+            <div class="order-summary-box" style="background: var(--cultured); padding: 12px; border-radius: var(--border-radius-sm); margin-bottom: 12px; font-size: var(--fs-8);">
+              <h4 style="font-weight: 700; margin-bottom: 8px; border-bottom: 1px dashed #ccc; padding-bottom: 4px;">Order Summary</h4>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span style="color: var(--sonic-silver);">Product:</span>
+                <span id="summaryProdName" style="font-weight: 600; color: var(--eerie-black);">-</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span style="color: var(--sonic-silver);">Configuration:</span>
+                <span id="summaryConfig" style="font-weight: 600; color: var(--eerie-black);">-</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span style="color: var(--sonic-silver);">Quantity:</span>
+                <span id="summaryQty" style="font-weight: 600; color: var(--eerie-black);">1</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span style="color: var(--sonic-silver);">Shipping to:</span>
+                <span id="summaryAddress" style="font-weight: 600; color: var(--eerie-black); text-align: right; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">-</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span style="color: var(--sonic-silver);">Payment:</span>
+                <span id="summaryPayment" style="font-weight: 600; color: var(--eerie-black);">-</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-weight: 700; border-top: 1px dashed #ccc; padding-top: 4px; margin-top: 4px; color: var(--salmon-pink);">
+                <span>Total Price:</span>
+                <span id="summaryPrice">-</span>
+              </div>
+            </div>
 
-          <div class="cart-form-row">
             <div class="cart-form-group">
-              <label>Delivery Method</label>
-              <select id="custDelivery" class="cart-input-field">
-                <option value="Standard (LKR 350)">Standard (3-5 Days)</option>
-                <option value="Express (LKR 600)">Express (1-2 Days)</option>
-                <option value="Same Day (LKR 1000)">Same Day Delivery</option>
-              </select>
-            </div>
-            <div class="cart-form-group">
-              <label>Payment Method</label>
-              <select id="custPayment" class="cart-input-field">
-                <option value="Cash On Delivery">Cash on Delivery</option>
-                <option value="Credit / Debit Card">Credit / Debit Card</option>
-                <option value="Koko Installments">Koko Installments</option>
-              </select>
+              <label>Promo Code (Play Bubble Game to win!)</label>
+              <div style="display: flex; gap: 10px;">
+                <input type="text" id="custPromo" class="cart-input-field" placeholder="e.g. BUBBLE5" style="text-transform: uppercase; margin-bottom: 0;">
+                <button type="button" id="applyPromoBtn" class="qty-btn" style="width: auto; padding: 0 15px; font-size: var(--fs-9); height: auto; border: 1px solid var(--salmon-pink-dark);">Apply</button>
+              </div>
+              <small id="promoFeedback" style="display: block; font-size: 11px; margin-top: 4px; font-weight: 600;"></small>
             </div>
           </div>
 
-          <div class="cart-form-group">
-            <label>Promo Code (Play Bubble Game to win!)</label>
-            <div style="display: flex; gap: 10px;">
-              <input type="text" id="custPromo" class="cart-input-field" placeholder="e.g. BUBBLE5" style="text-transform: uppercase; margin-bottom: 0;">
-              <button type="button" id="applyPromoBtn" class="qty-btn" style="width: auto; padding: 0 15px; font-size: var(--fs-9); height: auto; border: 1px solid var(--salmon-pink-dark);">Apply</button>
-            </div>
-            <small id="promoFeedback" style="display: block; font-size: 11px; margin-top: 4px; font-weight: 600;"></small>
+          <!-- Wizard Navigation -->
+          <div class="cart-wizard-navigation" style="display: flex; justify-content: space-between; margin-top: 15px; gap: 10px;">
+            <button type="button" class="qty-btn" id="wizardBackBtn" style="width: auto; padding: 0 20px; font-weight: 600; display: none;">Back</button>
+            <button type="button" class="cart-submit-btn" id="wizardNextBtn" style="margin-top: 0; flex: 1;">Next</button>
+            <button type="submit" class="cart-submit-btn" id="wizardSubmitBtn" style="margin-top: 0; flex: 1; display: none;">Confirm & Save to Database</button>
           </div>
-
-          <button type="submit" class="cart-submit-btn">Confirm & Save to Database</button>
         </form>
       </div>
     </div>
@@ -402,6 +468,120 @@ countdownElements.forEach(countdown => {
   let selectedColor = 'Black';
   let selectedQty = 1;
 
+  // Wizard Navigation DOM elements
+  const wizardBackBtn = document.getElementById('wizardBackBtn');
+  const wizardNextBtn = document.getElementById('wizardNextBtn');
+  const wizardSubmitBtn = document.getElementById('wizardSubmitBtn');
+
+  // Order Summary elements
+  const summaryProdName = document.getElementById('summaryProdName');
+  const summaryConfig = document.getElementById('summaryConfig');
+  const summaryQty = document.getElementById('summaryQty');
+  const summaryAddress = document.getElementById('summaryAddress');
+  const summaryPayment = document.getElementById('summaryPayment');
+  const summaryPrice = document.getElementById('summaryPrice');
+
+  // Wizard state management
+  let currentStep = 1;
+
+  function updateStepDisplay() {
+    for (let i = 1; i <= 4; i++) {
+      const stepEl = document.querySelector(`.cart-wizard-step[data-step="${i}"]`);
+      const indicatorEl = document.querySelector(`.step-indicator[data-step="${i}"]`);
+      
+      if (stepEl) {
+        if (i === currentStep) {
+          stepEl.classList.add('active');
+        } else {
+          stepEl.classList.remove('active');
+        }
+      }
+
+      if (indicatorEl) {
+        if (i < currentStep) {
+          indicatorEl.classList.add('completed');
+          indicatorEl.classList.remove('active');
+        } else if (i === currentStep) {
+          indicatorEl.classList.add('active');
+          indicatorEl.classList.remove('completed');
+        } else {
+          indicatorEl.classList.remove('active', 'completed');
+        }
+      }
+
+      if (i < 4) {
+        const lineEl = document.getElementById(`stepLine${i}`);
+        if (lineEl) {
+          if (i < currentStep) {
+            lineEl.classList.add('active');
+          } else {
+            lineEl.classList.remove('active');
+          }
+        }
+      }
+    }
+
+    if (currentStep === 1) {
+      if (wizardBackBtn) wizardBackBtn.style.display = 'none';
+      if (wizardNextBtn) wizardNextBtn.style.display = 'block';
+      if (wizardSubmitBtn) wizardSubmitBtn.style.display = 'none';
+    } else if (currentStep === 4) {
+      if (wizardBackBtn) wizardBackBtn.style.display = 'block';
+      if (wizardNextBtn) wizardNextBtn.style.display = 'none';
+      if (wizardSubmitBtn) wizardSubmitBtn.style.display = 'block';
+      
+      if (summaryProdName) summaryProdName.textContent = currentProduct.name;
+      if (summaryConfig) summaryConfig.textContent = `Size: ${selectedSize} | Color: ${selectedColor}`;
+      if (summaryQty) summaryQty.textContent = selectedQty;
+      
+      const addrInput = document.getElementById('custAddress');
+      if (summaryAddress && addrInput) summaryAddress.textContent = addrInput.value;
+      
+      const paymentInput = document.getElementById('custPayment');
+      if (summaryPayment && paymentInput) summaryPayment.textContent = paymentInput.value;
+      
+      if (summaryPrice) summaryPrice.textContent = cartPreviewPrice.textContent;
+    } else {
+      if (wizardBackBtn) wizardBackBtn.style.display = 'block';
+      if (wizardNextBtn) wizardNextBtn.style.display = 'block';
+      if (wizardSubmitBtn) wizardSubmitBtn.style.display = 'none';
+    }
+  }
+
+  if (wizardNextBtn) {
+    wizardNextBtn.addEventListener('click', e => {
+      e.preventDefault();
+      if (currentStep === 1) {
+        currentStep = 2;
+        updateStepDisplay();
+      } else if (currentStep === 2) {
+        const custName = document.getElementById('custName');
+        const custEmail = document.getElementById('custEmail');
+        const custPhone = document.getElementById('custPhone');
+        if (custName.reportValidity() && custEmail.reportValidity() && custPhone.reportValidity()) {
+          currentStep = 3;
+          updateStepDisplay();
+        }
+      } else if (currentStep === 3) {
+        const custAddress = document.getElementById('custAddress');
+        if (custAddress.reportValidity()) {
+          currentStep = 4;
+          updateStepDisplay();
+        }
+      }
+    });
+  }
+
+  if (wizardBackBtn) {
+    wizardBackBtn.addEventListener('click', e => {
+      e.preventDefault();
+      if (currentStep > 1) {
+        currentStep--;
+        updateStepDisplay();
+      }
+    });
+  }
+
   // Option Selections (Sizes)
   sizeSelectorList.addEventListener('click', e => {
     if (e.target.classList.contains('option-badge')) {
@@ -460,6 +640,10 @@ countdownElements.forEach(countdown => {
       feedback.textContent = '';
       feedback.style.color = '';
     }
+
+    // Reset wizard steps
+    currentStep = 1;
+    updateStepDisplay();
 
     // Show modal
     cartInputModal.classList.add('active');
@@ -788,6 +972,40 @@ countdownElements.forEach(countdown => {
 
           openCartModal(title, price, img);
         });
+      }
+    });
+
+    // 3. New arrivals, Trending, Top Rated image and title click triggers
+    document.querySelectorAll('.product-minimal .showcase').forEach(showcase => {
+      const imgLink = showcase.querySelector('.showcase-img-box');
+      const titleLink = showcase.querySelector('.showcase-title')?.closest('a');
+
+      const handleProductClick = e => {
+        e.preventDefault();
+
+        const titleEl = showcase.querySelector('.showcase-title');
+        const priceEl = showcase.querySelector('.price-box .price') || showcase.querySelector('.price');
+        const imgEl = showcase.querySelector('img');
+
+        const title = titleEl ? titleEl.textContent.trim() : 'Premium Product';
+        const price = priceEl ? priceEl.textContent.trim() : 'LKR 0.00';
+        const img = imgEl ? imgEl.getAttribute('src') : './assets/images/products/clothes-1.jpg';
+
+        openCartModal(title, price, img);
+      };
+
+      if (imgLink) {
+        if (!imgLink.getAttribute('data-db-bound')) {
+          imgLink.setAttribute('data-db-bound', 'true');
+          imgLink.addEventListener('click', handleProductClick);
+        }
+      }
+
+      if (titleLink) {
+        if (!titleLink.getAttribute('data-db-bound')) {
+          titleLink.setAttribute('data-db-bound', 'true');
+          titleLink.addEventListener('click', handleProductClick);
+        }
       }
     });
   }
@@ -1119,6 +1337,17 @@ countdownElements.forEach(countdown => {
   
   // Category mapping to product showcase categories (all lowercase match)
   const categoryMap = {
+    // Parent Categories
+    "men's": ["mens fashion", "menswear", "mens wear", "mens", "men's", "clothes", "shirt", "jacket", "shorts", "jeans"],
+    "women's": ["womens fashion", "womenswear", "womens wear", "womens", "women's", "clothes", "skirt", "dress & frock", "jewellery", "jewelry", "perfume", "cosmetics"],
+    "jewelry": ["jewellery", "jewelry", "earring", "earrings", "ring", "couple rings", "necklace", "bracelets", "bangle", "bangles", "crystal", "pendant", "pendants"],
+    "jewellery": ["jewellery", "jewelry", "earring", "earrings", "ring", "couple rings", "necklace", "bracelets", "bangle", "bangles", "crystal", "pendant", "pendants"],
+    "electronics": ["electronics", "smart watch", "watch", "watches", "desktop", "laptop", "camera", "tablet", "headphone", "mouse", "keyboard", "microphone", "tv"],
+    "watch": ["watch", "watches", "smart watch"],
+    "watches": ["watch", "watches", "smart watch"],
+    "smart watch": ["watch", "watches", "smart watch"],
+    "cosmetics": ["cosmetics", "shampoo", "bodywash", "facewash", "makeup kit", "liner", "lipstick", "sunscreen", "lotion", "loson"],
+
     // Fashion
     "t-shirt": ["shirt", "t-shirt", "t-shirts", "tee", "clothes"],
     "t-shirts": ["shirt", "t-shirt", "t-shirts", "tee", "clothes"],
@@ -1239,6 +1468,30 @@ countdownElements.forEach(countdown => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         applyCategoryFilter(keyword);
+      });
+    } else {
+      link.setAttribute('href', `index.html?category=${encodeURIComponent(keyword)}`);
+    }
+  });
+
+  // Bind desktop & mobile navigation category links
+  const menuCategoryLinks = document.querySelectorAll('.desktop-navigation-menu a, .mobile-navigation-menu a');
+  menuCategoryLinks.forEach(link => {
+    const keyword = link.textContent.trim();
+    const ignoreList = ['home', 'categories', 'blog', 'hot offers', 'pages', 'track order', 'privacy policy', 'contact', 'menu'];
+    if (!keyword || ignoreList.includes(keyword.toLowerCase())) return;
+    if (link.querySelector('img')) return;
+
+    if (isHomepage) {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        applyCategoryFilter(keyword);
+
+        // Close mobile menu and overlay if open
+        const mobileMenus = document.querySelectorAll('[data-mobile-menu]');
+        mobileMenus.forEach(menu => menu.classList.remove('active'));
+        const overlay = document.querySelector('[data-overlay]');
+        if (overlay) overlay.classList.remove('active');
       });
     } else {
       link.setAttribute('href', `index.html?category=${encodeURIComponent(keyword)}`);
