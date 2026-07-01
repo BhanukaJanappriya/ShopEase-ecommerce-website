@@ -104,6 +104,8 @@
     }
 
     .policy-box-container {
+      position: relative;
+      z-index: 2;
       margin-bottom: 40px;
       padding: 30px;
       background: #fff;
@@ -167,12 +169,117 @@
     }
     
     .testi-card {
+      position: relative;
+      z-index: 2;
       transition: all 0.3s ease;
     }
     .testi-card:hover {
       transform: translateY(-5px);
       border-color: var(--salmon-pink) !important;
       box-shadow: 0 10px 25px rgba(255, 105, 180, 0.06) !important;
+    }
+
+    .testi-card > div:first-of-type {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .dev-card {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Animated Background Graphics styling */
+    body {
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    .animated-bg-graphics {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.1;
+      animation: floatShape 20s infinite alternate ease-in-out;
+    }
+
+    .shape-1 {
+      top: 10%;
+      left: -5%;
+      width: 350px;
+      height: 350px;
+      background: var(--salmon-pink);
+      animation-duration: 25s;
+    }
+
+    .shape-2 {
+      bottom: 15%;
+      right: -5%;
+      width: 400px;
+      height: 400px;
+      background: #4cc9f0;
+      animation-duration: 30s;
+      animation-delay: -5s;
+    }
+
+    .shape-3 {
+      top: 50%;
+      left: 60%;
+      width: 250px;
+      height: 250px;
+      background: #7209b7;
+      animation-duration: 20s;
+      animation-delay: -10s;
+    }
+
+    @keyframes floatShape {
+      0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+      }
+      50% {
+        transform: translate(50px, 30px) scale(1.15) rotate(90deg);
+      }
+      100% {
+        transform: translate(-30px, -50px) scale(0.9) rotate(180deg);
+      }
+    }
+
+    .floating-icon {
+      position: absolute;
+      color: var(--salmon-pink);
+      opacity: 0.05;
+      font-size: 80px;
+      animation: floatIcon 18s infinite linear;
+    }
+
+    .icon-bag { top: 25%; left: 8%; animation-duration: 22s; }
+    .icon-cart { top: 75%; left: 12%; animation-duration: 28s; animation-delay: -4s; }
+    .icon-heart { top: 15%; right: 10%; animation-duration: 25s; animation-delay: -8s; }
+    .icon-star { top: 60%; right: 15%; animation-duration: 20s; animation-delay: -2s; }
+    .icon-sparkles { top: 40%; left: 50%; animation-duration: 35s; animation-delay: -12s; }
+
+    @keyframes floatIcon {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-40px) rotate(180deg);
+      }
+      100% {
+        transform: translateY(0) rotate(360deg);
+      }
     }
   </style>
 </head>
@@ -184,6 +291,18 @@
   </div>
 
   <div class="overlay" data-overlay></div>
+
+  <!-- Animated Background Graphics -->
+  <div class="animated-bg-graphics">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+    <div class="floating-icon icon-bag"><ion-icon name="bag-handle-outline"></ion-icon></div>
+    <div class="floating-icon icon-cart"><ion-icon name="cart-outline"></ion-icon></div>
+    <div class="floating-icon icon-heart"><ion-icon name="heart-outline"></ion-icon></div>
+    <div class="floating-icon icon-star"><ion-icon name="star-outline"></ion-icon></div>
+    <div class="floating-icon icon-sparkles"><ion-icon name="sparkles-outline"></ion-icon></div>
+  </div>
 
   <!--
     - HEADER
@@ -402,7 +521,7 @@
   <!--
     - MAIN CONTENT
   -->
-  <main style="padding: 60px 0; background: #faf9f6;">
+  <main style="padding: 60px 0; background: transparent; position: relative; z-index: 1;">
     <div class="container">
       
       <!-- Company Overview -->
