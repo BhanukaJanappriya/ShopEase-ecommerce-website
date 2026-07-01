@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ShopEase - Privacy & Policies 🛡️</title>
+  <title>ShopEase - About Us 🌟</title>
 
   <!-- favicon-->
   <link rel="shortcut icon" href="./assets/images/logo/favicon.ico" type="image/x-icon">
@@ -111,7 +111,6 @@
       border-radius: var(--border-radius-md);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.01);
       transition: box-shadow 0.3s ease, border-color 0.3s ease;
-      scroll-margin-top: 100px; /* Offset for header when hash scrolling */
     }
 
     .policy-box-container:hover {
@@ -146,16 +145,6 @@
       margin-bottom: 15px;
     }
 
-    .policy-list {
-      margin-left: 20px;
-      margin-bottom: 15px;
-      list-style-type: square;
-    }
-
-    .policy-list li {
-      margin-bottom: 8px;
-    }
-
     .policy-badge {
       display: inline-block;
       background: var(--cultured);
@@ -166,6 +155,24 @@
       padding: 3px 8px;
       border-radius: var(--border-radius-sm);
       margin-bottom: 10px;
+    }
+
+    .dev-card {
+      transition: all 0.3s ease;
+    }
+    .dev-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--salmon-pink) !important;
+      box-shadow: 0 10px 25px rgba(255, 105, 180, 0.08) !important;
+    }
+    
+    .testi-card {
+      transition: all 0.3s ease;
+    }
+    .testi-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--salmon-pink) !important;
+      box-shadow: 0 10px 25px rgba(255, 105, 180, 0.06) !important;
     }
   </style>
 </head>
@@ -383,138 +390,168 @@
   </header>
 
   <!--
-    - POLICIES HEADER
+    - ABOUT US HEADER
   -->
   <section class="policy-header apple-reveal">
     <div class="container">
-      <h1>Privacy & Policy details</h1>
-      <p>Your guide to shipping limits, returns, refunds, support hours, and trust criteria.</p>
+      <h1>About ShopEase 🌟</h1>
+      <p>Learn more about our premium platform, core values, developers, and testimonials.</p>
     </div>
   </section>
 
   <!--
-    - MAIN CONTAINER
+    - MAIN CONTENT
   -->
   <main style="padding: 60px 0; background: #faf9f6;">
-    <div class="product-container">
-      <div class="container">
-        
-        <!--
-          - SIDEBAR
-        -->
-        <div class="sidebar has-scrollbar" data-mobile-menu>
-          <div class="sidebar-category">
-            <div class="sidebar-top">
-              <h2 class="sidebar-title">Policies Index</h2>
-            </div>
-            <ul class="sidebar-menu-category-list" style="padding: 10px 0;">
-              <li style="margin-bottom: 12px;"><a href="#delivery" style="color: var(--eerie-black); font-size: var(--fs-7); font-weight: 600; display: flex; align-items: center; gap: 8px;"><ion-icon name="boat-outline" style="color: var(--salmon-pink);"></ion-icon> Islandwide Delivery</a></li>
-              <li style="margin-bottom: 12px;"><a href="#next-day" style="color: var(--eerie-black); font-size: var(--fs-7); font-weight: 600; display: flex; align-items: center; gap: 8px;"><ion-icon name="rocket-outline" style="color: var(--salmon-pink);"></ion-icon> Next Day Delivery</a></li>
-              <li style="margin-bottom: 12px;"><a href="#support" style="color: var(--eerie-black); font-size: var(--fs-7); font-weight: 600; display: flex; align-items: center; gap: 8px;"><ion-icon name="call-outline" style="color: var(--salmon-pink);"></ion-icon> Online Customer Support</a></li>
-              <li style="margin-bottom: 12px;"><a href="#returns" style="color: var(--eerie-black); font-size: var(--fs-7); font-weight: 600; display: flex; align-items: center; gap: 8px;"><ion-icon name="arrow-undo-outline" style="color: var(--salmon-pink);"></ion-icon> Return & Refund Policy</a></li>
-              <li style="margin-bottom: 12px;"><a href="#money-back" style="color: var(--eerie-black); font-size: var(--fs-7); font-weight: 600; display: flex; align-items: center; gap: 8px;"><ion-icon name="ticket-outline" style="color: var(--salmon-pink);"></ion-icon> Money Back Guarantees</a></li>
-            </ul>
-          </div>
+    <div class="container">
+      
+      <!-- Company Overview -->
+      <div class="policy-box-container apple-reveal">
+        <span class="policy-badge">Company Overview</span>
+        <h3 class="policy-box-title">
+          <ion-icon name="rocket-outline"></ion-icon>
+          Our Story, Mission & Vision
+        </h3>
+        <div class="policy-content-text">
+          <p>At ShopEase, our mission is to empower customers globally by providing an unparalleled e-commerce experience that blends style, simplicity, and quality. We believe that online shopping should be seamless, enjoyable, and accessible to everyone, everywhere.</p>
+          <p>Founded in 2026, we have grown from a local boutique provider to a trusted digital marketplace, offering only handpicked, high-quality garments, watches, cosmetics, and lifestyle accessories. Our vision is to shape the future of digital retail through innovative customer-first service, sustainable packaging, and community-driven rewards.</p>
         </div>
-
-        <!--
-          - POLICY BOXES
-        -->
-        <div class="product-box apple-reveal" style="box-shadow: none; padding: 0; background: transparent;">
-          
-          <!-- Islandwide Delivery -->
-          <div class="policy-box-container" id="delivery">
-            <span class="policy-badge">Shipping Policy</span>
-            <h3 class="policy-box-title">
-              <ion-icon name="boat-outline"></ion-icon>
-              Islandwide Delivery Services
-            </h3>
-            <div class="policy-content-text">
-              <p>ShopEase provides comprehensive delivery coverage across all districts of Sri Lanka. We partner with premier logistics carriers to ensure that your parcels are handled carefully and delivered in optimal timeframes.</p>
-              <p><strong>Minimum Order Thresholds:</strong></p>
-              <ul class="policy-list">
-                <li>Orders exceeding <strong>LKR 2000.00</strong> qualify for <strong>FREE islandwide shipping</strong>.</li>
-                <li>For orders under LKR 2000.00, a standard shipping fee of LKR 350.00 applies.</li>
-              </ul>
-              <p>Delivery timeframes vary between <strong>2 to 5 business days</strong> depending on the destination province (Western, Central, Southern, etc.). All shipments are fully trackable using our digital delivery status board.</p>
-            </div>
-          </div>
-
-          <!-- Next Day Delivery -->
-          <div class="policy-box-container" id="next-day">
-            <span class="policy-badge">Express Shipping</span>
-            <h3 class="policy-box-title">
-              <ion-icon name="rocket-outline"></ion-icon>
-              Next Day Delivery
-            </h3>
-            <div class="policy-content-text">
-              <p>For urgent customer orders, we offer an express shipment program which guarantees delivery by the subsequent business day.</p>
-              <p><strong>Conditions & Geographic Boundaries:</strong></p>
-              <ul class="policy-list">
-                <li>Available strictly for delivery addresses inside the <strong>Colombo District (Zones 1-15 and immediate suburbs)</strong>.</li>
-                <li>Orders must be placed and checked out before the daily cutoff limit of <strong>3:00 PM</strong> to qualify for next-day shipping.</li>
-                <li>A flat express processing fee of LKR 500.00 applies, regardless of order value.</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Customer Support -->
-          <div class="policy-box-container" id="support">
-            <span class="policy-badge">Service Hours</span>
-            <h3 class="policy-box-title">
-              <ion-icon name="call-outline"></ion-icon>
-              Best Online Support Guarantee
-            </h3>
-            <div class="policy-content-text">
-              <p>We are dedicated to providing you with standard-setting support and resolution. Our agents are available on live chat and telephone lines to resolve order queries, refunds, and payment issues.</p>
-              <p><strong>Fulfillment Hours:</strong></p>
-              <ul class="policy-list">
-                <li>Support operations are active daily between <strong>8:00 AM and 11:00 PM (IST)</strong>.</li>
-                <li>Ticket inquiries logged outside these hours are guaranteed a priority response by 9:00 AM the next day.</li>
-                <li>Average chat queue response time is under 2 minutes.</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Return Policy -->
-          <div class="policy-box-container" id="returns">
-            <span class="policy-badge">Returns policy</span>
-            <h3 class="policy-box-title">
-              <ion-icon name="arrow-undo-outline"></ion-icon>
-              Return & Replacement Policy
-            </h3>
-            <div class="policy-content-text">
-              <p>If you are not completely satisfied with your purchase, ShopEase permits easy and hassle-free returns within <strong>14 days of package reception</strong>.</p>
-              <p><strong>Key Requirements for Free Returns:</strong></p>
-              <ul class="policy-list">
-                <li>Products must remain unused, unwashed, and in their original packaging with tags intact.</li>
-                <li>Undergarments, custom jewelry, cosmetics, and swimwear cannot be returned due to hygiene policies.</li>
-                <li>Return shipping is entirely <strong>FREE</strong> when scheduled via our partner courier drop-off centers.</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Money Back -->
-          <div class="policy-box-container" id="money-back">
-            <span class="policy-badge">Cashback Guarantee</span>
-            <h3 class="policy-box-title">
-              <ion-icon name="ticket-outline"></ion-icon>
-              30% Money Back Promotion
-            </h3>
-            <div class="policy-content-text">
-              <p>As part of our commitment to user loyalty, we run select promotional cashback guarantees on high-value checkouts.</p>
-              <p><strong>Promo Conditions:</strong></p>
-              <ul class="policy-list">
-                <li>Applicable strictly for cart values exceeding <strong>LKR 5000.00</strong>.</li>
-                <li>A 30% refund of the checkout total is returned as a digital coupon store credit, usable on subsequent checkouts.</li>
-                <li>Store credit has a validity period of 90 days from the date of coupon issuance.</li>
-              </ul>
-            </div>
-          </div>
-
-        </div>
-
       </div>
+
+      <!-- Core Developers Portfolio -->
+      <div class="policy-box-container apple-reveal">
+        <span class="policy-badge">Meet the Creators</span>
+        <h3 class="policy-box-title">
+          <ion-icon name="people-outline"></ion-icon>
+          Core Development Team
+        </h3>
+        <div class="policy-content-text" style="margin-bottom: 25px;">
+          <p>The innovation and passion behind ShopEase are driven by our exceptionally talented core design and development team. We build with performance, elegance, and user delight in mind.</p>
+        </div>
+        
+        <div class="dev-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+          
+          <!-- Developer 1 -->
+          <div class="dev-card" style="background: #faf9f6; border: 1px solid var(--cultured); border-radius: var(--border-radius-md); padding: 30px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+            <div style="width: 120px; height: 120px; margin: 0 auto 18px; border-radius: 50%; overflow: hidden; border: 4px solid var(--salmon-pink); box-shadow: 0 5px 15px rgba(255,127,143,0.25);">
+              <img src="./assets/images/developer1.jpg" alt="Bhanuka Janappriya" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <h4 style="font-size: var(--fs-6); font-weight: 700; color: var(--eerie-black); margin-bottom: 4px;">Bhanuka Janappriya</h4>
+            <p style="font-size: var(--fs-9); color: var(--salmon-pink); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Founder & Lead Developer</p>
+            <p style="font-size: var(--fs-8); color: var(--sonic-silver); line-height: 1.5; margin-bottom: 18px;">Full-stack architect with a passion for designing slick user interfaces and high-performance databases.</p>
+            <div style="display: flex; justify-content: center; gap: 15px; font-size: 20px;">
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="logo-github"></ion-icon></a>
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="logo-linkedin"></ion-icon></a>
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="mail-outline"></ion-icon></a>
+            </div>
+          </div>
+
+          <!-- Developer 2 -->
+          <div class="dev-card" style="background: #faf9f6; border: 1px solid var(--cultured); border-radius: var(--border-radius-md); padding: 30px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+            <div style="width: 120px; height: 120px; margin: 0 auto 18px; border-radius: 50%; overflow: hidden; border: 4px solid var(--salmon-pink); box-shadow: 0 5px 15px rgba(255,127,143,0.25);">
+              <img src="./assets/images/developer2.jpg" alt="Sarah Connor" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <h4 style="font-size: var(--fs-6); font-weight: 700; color: var(--eerie-black); margin-bottom: 4px;">Sarah Connor</h4>
+            <p style="font-size: var(--fs-9); color: var(--salmon-pink); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Backend Engineer</p>
+            <p style="font-size: var(--fs-8); color: var(--sonic-silver); line-height: 1.5; margin-bottom: 18px;">API expert, scaling microservices, and optimizing database configurations to speed up order execution.</p>
+            <div style="display: flex; justify-content: center; gap: 15px; font-size: 20px;">
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="logo-github"></ion-icon></a>
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="logo-linkedin"></ion-icon></a>
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="mail-outline"></ion-icon></a>
+            </div>
+          </div>
+
+          <!-- Developer 3 -->
+          <div class="dev-card" style="background: #faf9f6; border: 1px solid var(--cultured); border-radius: var(--border-radius-md); padding: 30px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+            <div style="width: 120px; height: 120px; margin: 0 auto 18px; border-radius: 50%; overflow: hidden; border: 4px solid var(--salmon-pink); box-shadow: 0 5px 15px rgba(255,127,143,0.25);">
+              <img src="./assets/images/developer3.jpg" alt="Marcus Wright" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <h4 style="font-size: var(--fs-6); font-weight: 700; color: var(--eerie-black); margin-bottom: 4px;">Marcus Wright</h4>
+            <p style="font-size: var(--fs-9); color: var(--salmon-pink); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">UI/UX Designer</p>
+            <p style="font-size: var(--fs-8); color: var(--sonic-silver); line-height: 1.5; margin-bottom: 18px;">Creator of high-end branding visuals, color palettes, wireframes, and modern fluid animations.</p>
+            <div style="display: flex; justify-content: center; gap: 15px; font-size: 20px;">
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="logo-github"></ion-icon></a>
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="logo-linkedin"></ion-icon></a>
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="mail-outline"></ion-icon></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="policy-box-container apple-reveal">
+        <span class="policy-badge">Customer Voice</span>
+        <h3 class="policy-box-title">
+          <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+          User Testimonials
+        </h3>
+        <div class="policy-content-text" style="margin-bottom: 25px;">
+          <p>Here is what our shoppers from Western Province and beyond say about their experience using ShopEase:</p>
+        </div>
+        
+        <div class="testimonials-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+          
+          <!-- Testimonial 1 -->
+          <div class="testi-card" style="background: var(--white); border: 1px solid var(--cultured); border-radius: var(--border-radius-md); padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.01);">
+            <div style="color: #ffb800; font-size: 16px; margin-bottom: 12px;">
+              <ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon>
+            </div>
+            <p style="font-size: var(--fs-7); color: var(--onyx); font-style: italic; line-height: 1.6; margin-bottom: 20px;">
+              "The stepwise checkout modal is by far the smoothest shopping cart experience I have ever used online! Ordering clothes for my family took less than a minute. Highly recommend ShopEase!"
+            </p>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 45px; height: 45px; border-radius: 50%; background: #e0f2f1; display: flex; justify-content: center; align-items: center; font-weight: 700; color: #00796b;">
+                JD
+              </div>
+              <div>
+                <h5 style="font-size: var(--fs-8); font-weight: 700; color: var(--eerie-black);">John Doe</h5>
+                <p style="font-size: var(--fs-9); color: var(--sonic-silver);">Verified Customer</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="testi-card" style="background: var(--white); border: 1px solid var(--cultured); border-radius: var(--border-radius-md); padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.01);">
+            <div style="color: #ffb800; font-size: 16px; margin-bottom: 12px;">
+              <ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon>
+            </div>
+            <p style="font-size: var(--fs-7); color: var(--onyx); font-style: italic; line-height: 1.6; margin-bottom: 20px;">
+              "I love the category navigation filters! Clicking on jewelry or cosmetics smoothly slides down to the product section and instantly filters out exactly what I am looking for."
+            </p>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 45px; height: 45px; border-radius: 50%; background: #fce4ec; display: flex; justify-content: center; align-items: center; font-weight: 700; color: #c2185b;">
+                AS
+              </div>
+              <div>
+                <h5 style="font-size: var(--fs-8); font-weight: 700; color: var(--eerie-black);">Amali Silva</h5>
+                <p style="font-size: var(--fs-9); color: var(--sonic-silver);">Loyal shopper</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="testi-card" style="background: var(--white); border: 1px solid var(--cultured); border-radius: var(--border-radius-md); padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.01);">
+            <div style="color: #ffb800; font-size: 16px; margin-bottom: 12px;">
+              <ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star-half"></ion-icon>
+            </div>
+            <p style="font-size: var(--fs-7); color: var(--onyx); font-style: italic; line-height: 1.6; margin-bottom: 20px;">
+              "Amazing customer service and prompt delivery. I used the express shipping option for same-day delivery inside Colombo and my parcel arrived in less than 4 hours!"
+            </p>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 45px; height: 45px; border-radius: 50%; background: #efebe9; display: flex; justify-content: center; align-items: center; font-weight: 700; color: #5d4037;">
+                RP
+              </div>
+              <div>
+                <h5 style="font-size: var(--fs-8); font-weight: 700; color: var(--eerie-black);">Roshan Perera</h5>
+                <p style="font-size: var(--fs-9); color: var(--sonic-silver);">Business Manager</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </main>
 
@@ -599,39 +636,6 @@
       setTimeout(() => {
         reveals.forEach(el => el.classList.add('visible'));
       }, 500);
-
-      // Handle hash navigation smoothly on load
-      if (window.location.hash) {
-        const targetId = window.location.hash;
-        setTimeout(() => {
-          const targetEl = document.querySelector(targetId);
-          if (targetEl) {
-            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            targetEl.style.borderColor = 'var(--salmon-pink)';
-            targetEl.style.boxShadow = '0 10px 25px rgba(255, 105, 180, 0.12)';
-          }
-        }, 700);
-      }
-    });
-
-    // Smooth scroll for internal links
-    document.querySelectorAll('.sidebar-menu-category-list a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href');
-        const targetEl = document.querySelector(targetId);
-        if (targetEl) {
-          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          
-          // Flash animation
-          document.querySelectorAll('.policy-box-container').forEach(el => {
-            el.style.borderColor = '';
-            el.style.boxShadow = '';
-          });
-          targetEl.style.borderColor = 'var(--salmon-pink)';
-          targetEl.style.boxShadow = '0 10px 25px rgba(255, 105, 180, 0.12)';
-        }
-      });
     });
   </script>
 </body>
