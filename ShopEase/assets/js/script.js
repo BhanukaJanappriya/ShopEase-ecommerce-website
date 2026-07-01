@@ -2419,4 +2419,35 @@ countdownElements.forEach(countdown => {
     injectGearIconTopRight();
     initHomeGameStats();
   }, 1000);
+})();
+
+// ==========================================
+// DYNAMIC GLOBAL ANIMATED BACKGROUND INJECTOR
+// ==========================================
+(function injectGlobalAnimatedBackground() {
+  const inject = () => {
+    // Avoid double injection
+    if (document.querySelector('.animated-bg-graphics')) return;
+
+    const bgContainer = document.createElement('div');
+    bgContainer.className = 'animated-bg-graphics';
+    bgContainer.innerHTML = `
+      <div class="bg-shape shape-1"></div>
+      <div class="bg-shape shape-2"></div>
+      <div class="bg-shape shape-3"></div>
+      <div class="floating-icon icon-bag"><ion-icon name="bag-handle-outline"></ion-icon></div>
+      <div class="floating-icon icon-cart"><ion-icon name="cart-outline"></ion-icon></div>
+      <div class="floating-icon icon-heart"><ion-icon name="heart-outline"></ion-icon></div>
+      <div class="floating-icon icon-star"><ion-icon name="star-outline"></ion-icon></div>
+      <div class="floating-icon icon-sparkles"><ion-icon name="sparkles-outline"></ion-icon></div>
+    `;
+
+    document.body.appendChild(bgContainer);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inject);
+  } else {
+    inject();
+  }
 })();
