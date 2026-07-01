@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopEase - About Us 🌟</title>
+
+  <!-- favicon-->
+  <link rel="shortcut icon" href="./assets/images/logo/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <!-- google font link -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* Apple-style Morphing Loader Overlay */
+    .apple-page-transition-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      z-index: 99999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    .apple-page-transition-overlay.fade-out {
+      opacity: 0;
+      transform: scale(1.05);
+    }
+    
+    .morphing-shape {
+      width: 80px;
+      height: 80px;
+      background: var(--salmon-pink);
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      animation: morphAnim 3s infinite alternate ease-in-out;
+      opacity: 0.8;
+      filter: blur(8px);
+    }
+    
+    @keyframes morphAnim {
+      0% {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        transform: rotate(0deg) scale(1);
+        background: var(--salmon-pink);
+      }
+      50% {
+        border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+        transform: rotate(180deg) scale(1.1);
+        background: #ff5588;
+      }
+      100% {
+        border-radius: 50% 50% 50% 50% / 40% 60% 40% 60%;
+        transform: rotate(360deg) scale(0.95);
+        background: var(--salmon-pink);
+      }
+    }
+
+    .apple-reveal {
+      opacity: 0;
+      transform: translateY(25px) scale(0.99);
+      transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    
+    .apple-reveal.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Policy Layout Styles */
+    .policy-header {
+      background: #faf9f6;
+      border-bottom: 1px solid var(--cultured);
+      padding: 50px 0;
+      text-align: center;
+    }
+
+    .policy-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--eerie-black);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .policy-header p {
+      font-size: var(--fs-6);
+      color: var(--sonic-silver);
+    }
+
+    .policy-box-container {
+      position: relative;
+      z-index: 2;
+      margin-bottom: 40px;
+      padding: 30px;
+      background: #fff;
+      border: 1px solid var(--cultured);
+      border-radius: var(--border-radius-md);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.01);
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .policy-box-container:hover {
+      box-shadow: 0 10px 25px rgba(255, 105, 180, 0.08);
+      border-color: var(--salmon-pink);
+    }
+
+    .policy-box-title {
+      font-size: var(--fs-4);
+      font-weight: var(--weight-700);
+      color: var(--eerie-black);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--cultured);
+      padding-bottom: 12px;
+    }
+
+    .policy-box-title ion-icon {
+      color: var(--salmon-pink);
+      font-size: 28px;
+    }
+
+    .policy-content-text {
+      font-size: var(--fs-7);
+      color: var(--onyx);
+      line-height: 1.7;
+    }
+
+    .policy-content-text p {
+      margin-bottom: 15px;
+    }
+
+    .policy-badge {
+      display: inline-block;
+      background: var(--cultured);
+      color: var(--sonic-silver);
+      font-size: var(--fs-9);
+      font-weight: var(--weight-600);
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 10px;
+    }
+
+    .dev-card {
+      transition: all 0.3s ease;
+    }
+    .dev-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--salmon-pink) !important;
+      box-shadow: 0 10px 25px rgba(255, 105, 180, 0.08) !important;
+    }
+    
+    .testi-card {
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+    .testi-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--salmon-pink) !important;
+      box-shadow: 0 10px 25px rgba(255, 105, 180, 0.06) !important;
+    }
+
+    .testi-card > div:first-of-type {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .dev-card {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Animated Background Graphics styling */
+    body {
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    .animated-bg-graphics {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.1;
+      animation: floatShape 20s infinite alternate ease-in-out;
+    }
+
+    .shape-1 {
+      top: 10%;
+      left: -5%;
+      width: 350px;
+      height: 350px;
+      background: var(--salmon-pink);
+      animation-duration: 25s;
+    }
+
+    .shape-2 {
+      bottom: 15%;
+      right: -5%;
+      width: 400px;
+      height: 400px;
+      background: #4cc9f0;
+      animation-duration: 30s;
+      animation-delay: -5s;
+    }
+
+    .shape-3 {
+      top: 50%;
+      left: 60%;
+      width: 250px;
+      height: 250px;
+      background: #7209b7;
+      animation-duration: 20s;
+      animation-delay: -10s;
+    }
+
+    @keyframes floatShape {
+      0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+      }
+      50% {
+        transform: translate(50px, 30px) scale(1.15) rotate(90deg);
+      }
+      100% {
+        transform: translate(-30px, -50px) scale(0.9) rotate(180deg);
+      }
+    }
+
+    .floating-icon {
+      position: absolute;
+      color: var(--salmon-pink);
+      opacity: 0.05;
+      font-size: 80px;
+      animation: floatIcon 18s infinite linear;
+    }
+
+    .icon-bag { top: 25%; left: 8%; animation-duration: 22s; }
+    .icon-cart { top: 75%; left: 12%; animation-duration: 28s; animation-delay: -4s; }
+    .icon-heart { top: 15%; right: 10%; animation-duration: 25s; animation-delay: -8s; }
+    .icon-star { top: 60%; right: 15%; animation-duration: 20s; animation-delay: -2s; }
+    .icon-sparkles { top: 40%; left: 50%; animation-duration: 35s; animation-delay: -12s; }
+
+    @keyframes floatIcon {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-40px) rotate(180deg);
+      }
+      100% {
+        transform: translateY(0) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Apple Transition Screen -->
+  <div class="apple-page-transition-overlay" id="pageTransitionOverlay">
+    <div class="morphing-shape"></div>
+  </div>
+
+  <div class="overlay" data-overlay></div>
+
+  <!-- Animated Background Graphics -->
+  <div class="animated-bg-graphics">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+    <div class="floating-icon icon-bag"><ion-icon name="bag-handle-outline"></ion-icon></div>
+    <div class="floating-icon icon-cart"><ion-icon name="cart-outline"></ion-icon></div>
+    <div class="floating-icon icon-heart"><ion-icon name="heart-outline"></ion-icon></div>
+    <div class="floating-icon icon-star"><ion-icon name="star-outline"></ion-icon></div>
+    <div class="floating-icon icon-sparkles"><ion-icon name="sparkles-outline"></ion-icon></div>
+  </div>
+
+  <!--
+    - HEADER
+  -->
+  <header>
+    <div class="header-top">
+      <div class="container">
+        <ul class="header-social-container">
+          <li><a href="#" class="social-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-instagram"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+        </ul>
+
+        <div class="header-alert-news">
+          <p>
+            <b>Free Shipping</b>
+            This Week Order Over - LKR 2000.00
+          </p>
+        </div>
+
+        <div class="header-top-actions">
+          <select name="currency">
+            <option value="lkr">LKR රු</option>
+            <option value="usd">USD &dollar;</option>
+          </select>
+
+          <select name="language">
+            <option value="en-US">English</option>
+            <option value="si">Sinhala</option>
+            <option value="ta">Tamil</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-main">
+      <div class="container">
+        <a href="index.html" class="header-logo">
+          <img src="./assets/images/logo/logo.jpg" alt="ShopEase's logo" width="120" height="120" style="border-radius: 20px; object-fit: contain; aspect-ratio: 1 / 1;">
+        </a>
+
+        <div class="header-search-container">
+          <input type="search" name="search" class="search-field" placeholder="Enter your product name...">
+          <button class="search-btn">
+            <ion-icon name="search-outline"></ion-icon>
+          </button>
+        </div>
+
+        <div class="header-user-actions">
+          <button class="action-btn">
+            <ion-icon name="person-outline"></ion-icon>
+          </button>
+
+          <button class="action-btn">
+            <ion-icon name="heart-outline"></ion-icon>
+            <span class="count">0</span>
+          </button>
+
+          <button class="action-btn">
+            <ion-icon name="bag-handle-outline"></ion-icon>
+            <span class="count">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="desktop-navigation-menu">
+      <div class="container">
+        <ul class="desktop-menu-category-list">
+          <li class="menu-category">
+            <a href="index.html" class="menu-title">Home</a>
+          </li>
+
+          <li class="menu-category">
+            <a href="#" class="menu-title">Categories</a>
+            <div class="dropdown-panel">
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Electronics</a></li>
+                <li class="panel-list-item"><a href="#">Desktop</a></li>
+                <li class="panel-list-item"><a href="#">Laptop</a></li>
+                <li class="panel-list-item"><a href="#">Camera</a></li>
+                <li class="panel-list-item"><a href="#">Tablet</a></li>
+                <li class="panel-list-item"><a href="#">Headphone</a></li>
+                <li class="panel-list-item">
+                  <a href="#">
+                    <img src="./assets/images/banner-2.jpg" alt="headphone collection" width="250" height="119" />
+                  </a>
+                </li>
+              </ul>
+
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Men's</a></li>
+                <li class="panel-list-item"><a href="#">Formal</a></li>
+                <li class="panel-list-item"><a href="#">Casual</a></li>
+                <li class="panel-list-item"><a href="#">Sports</a></li>
+                <li class="panel-list-item"><a href="#">Jacket</a></li>
+                <li class="panel-list-item"><a href="#">Sunglasses</a></li>
+                <li class="panel-list-item">
+                  <a href="#">
+                    <img src="./assets/images/mens-banner.jpg" alt="men's fashion" width="250" height="119" />
+                  </a>
+                </li>
+              </ul>
+
+              <ul class="dropdown-panel-list">
+                <li class="menu-title"><a href="#">Women's</a></li>
+                <li class="panel-list-item"><a href="#">Formal</a></li>
+                <li class="panel-list-item"><a href="#">Casual</a></li>
+                <li class="panel-list-item"><a href="#">Perfume</a></li>
+                <li class="panel-list-item"><a href="#">Cosmetics</a></li>
+                <li class="panel-list-item"><a href="#">Bags</a></li>
+                <li class="panel-list-item">
+                  <a href="#">
+                    <img src="./assets/images/womens-banner.jpg" alt="women's fashion" width="250" height="119" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="menu-category">
+            <a href="blog.html" class="menu-title">Blog</a>
+          </li>
+
+          <li class="menu-category">
+            <a href="hot-offers.html" class="menu-title">Hot Offers</a>
+          </li>
+
+          <li class="menu-category">
+            <a href="track-order.html" class="menu-title">Track Order</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-bottom-navigation">
+      <button class="action-btn" data-mobile-menu-open-btn>
+        <ion-icon name="menu-outline"></ion-icon>
+      </button>
+
+      <button class="action-btn">
+        <ion-icon name="bag-handle-outline"></ion-icon>
+        <span class="count">0</span>
+      </button>
+
+      <button class="action-btn">
+        <ion-icon name="home-outline"></ion-icon>
+      </button>
+
+      <button class="action-btn">
+        <ion-icon name="heart-outline"></ion-icon>
+        <span class="count">0</span>
+      </button>
+
+      <button class="action-btn" data-mobile-menu-open-btn>
+        <ion-icon name="grid-outline"></ion-icon>
+      </button>
+    </div>
+
+    <div class="mobile-navigation-menu  has-scrollbar" data-mobile-menu>
+      <div class="menu-top">
+        <h2 class="menu-title">Menu</h2>
+        <button class="menu-close-btn" data-mobile-menu-close-btn>
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+
+      <ul class="mobile-menu-category-list">
+        <li class="menu-category">
+          <a href="index.html" class="menu-title">Home</a>
+        </li>
+
+        <li class="menu-category">
+          <button class="accordion-menu" data-accordion-btn>
+            <p class="menu-title">Categories</p>
+            <div>
+              <ion-icon name="add-outline" class="add-icon"></ion-icon>
+              <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+            </div>
+          </button>
+
+          <ul class="submenu-category-list" data-accordion>
+            <li class="submenu-category"><a href="#" class="submenu-title">Electronics</a></li>
+            <li class="submenu-category"><a href="#" class="submenu-title">Men's Fashion</a></li>
+            <li class="submenu-category"><a href="#" class="submenu-title">Women's Fashion</a></li>
+          </ul>
+        </li>
+
+        <li class="menu-category">
+          <a href="blog.html" class="menu-title">Blog</a>
+        </li>
+
+        <li class="menu-category">
+          <a href="hot-offers.html" class="menu-title">Hot Offers</a>
+        </li>
+
+        <li class="menu-category">
+          <a href="track-order.html" class="menu-title">Track Order</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!--
+    - ABOUT US HEADER
+  -->
+  <section class="policy-header apple-reveal">
+    <div class="container">
+      <h1>About ShopEase 🌟</h1>
+      <p>Learn more about our premium platform, core values, developers, and testimonials.</p>
+    </div>
+  </section>
+
+  <!--
+    - MAIN CONTENT
+  -->
+  <main style="padding: 60px 0; background: transparent; position: relative; z-index: 1;">
+    <div class="container">
+      
+      <!-- Company Overview -->
+      <div class="policy-box-container apple-reveal">
+        <span class="policy-badge">Company Overview</span>
+        <h3 class="policy-box-title">
+          <ion-icon name="rocket-outline"></ion-icon>
+          Our Story, Mission & Vision
+        </h3>
+        <div class="policy-content-text">
+          <p>At ShopEase, our mission is to empower customers globally by providing an unparalleled e-commerce experience that blends style, simplicity, and quality. We believe that online shopping should be seamless, enjoyable, and accessible to everyone, everywhere.</p>
+          <p>Founded in 2026, we have grown from a local boutique provider to a trusted digital marketplace, offering only handpicked, high-quality garments, watches, cosmetics, and lifestyle accessories. Our vision is to shape the future of digital retail through innovative customer-first service, sustainable packaging, and community-driven rewards.</p>
+        </div>
+      </div>
+
+      <!-- Core Developers Portfolio -->
+      <div class="policy-box-container apple-reveal">
+        <span class="policy-badge">Meet the Creators</span>
+        <h3 class="policy-box-title">
+          <ion-icon name="people-outline"></ion-icon>
+          Core Development Team
+        </h3>
+        <div class="policy-content-text" style="margin-bottom: 25px;">
+          <p>The innovation and passion behind ShopEase are driven by our exceptionally talented core design and development team. We build with performance, elegance, and user delight in mind.</p>
+        </div>
+        
+        <div class="dev-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+          
+          <!-- Developer 1 -->
+          <div class="dev-card" style="background: #faf9f6; border: 1px solid var(--cultured); border-radius: var(--border-radius-md); padding: 30px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+            <div style="width: 120px; height: 120px; margin: 0 auto 18px; border-radius: 50%; overflow: hidden; border: 4px solid var(--salmon-pink); box-shadow: 0 5px 15px rgba(255,127,143,0.25);">
+              <img src="./assets/images/developer1.jpg" alt="Bhanuka Janappriya" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <h4 style="font-size: var(--fs-6); font-weight: 700; color: var(--eerie-black); margin-bottom: 4px;">Bhanuka Janappriya</h4>
+            <p style="font-size: var(--fs-9); color: var(--salmon-pink); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Founder & Lead Developer</p>
+            <p style="font-size: var(--fs-8); color: var(--sonic-silver); line-height: 1.5; margin-bottom: 18px;">Full-stack architect with a passion for designing slick user interfaces and high-performance databases.</p>
+            <div style="display: flex; justify-content: center; gap: 15px; font-size: 20px;">
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="logo-github"></ion-icon></a>
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="logo-linkedin"></ion-icon></a>
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="mail-outline"></ion-icon></a>
+            </div>
+          </div>
+
+          <!-- Developer 2 -->
+          <div class="dev-card" style="background: #faf9f6; border: 1px solid var(--cultured); border-radius: var(--border-radius-md); padding: 30px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+            <div style="width: 120px; height: 120px; margin: 0 auto 18px; border-radius: 50%; overflow: hidden; border: 4px solid var(--salmon-pink); box-shadow: 0 5px 15px rgba(255,127,143,0.25);">
+              <img src="./assets/images/developer2.jpg" alt="Sarah Connor" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <h4 style="font-size: var(--fs-6); font-weight: 700; color: var(--eerie-black); margin-bottom: 4px;">Sarah Connor</h4>
+            <p style="font-size: var(--fs-9); color: var(--salmon-pink); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Backend Engineer</p>
+            <p style="font-size: var(--fs-8); color: var(--sonic-silver); line-height: 1.5; margin-bottom: 18px;">API expert, scaling microservices, and optimizing database configurations to speed up order execution.</p>
+            <div style="display: flex; justify-content: center; gap: 15px; font-size: 20px;">
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="logo-github"></ion-icon></a>
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="logo-linkedin"></ion-icon></a>
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="mail-outline"></ion-icon></a>
+            </div>
+          </div>
+
+          <!-- Developer 3 -->
+          <div class="dev-card" style="background: #faf9f6; border: 1px solid var(--cultured); border-radius: var(--border-radius-md); padding: 30px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">
+            <div style="width: 120px; height: 120px; margin: 0 auto 18px; border-radius: 50%; overflow: hidden; border: 4px solid var(--salmon-pink); box-shadow: 0 5px 15px rgba(255,127,143,0.25);">
+              <img src="./assets/images/developer3.jpg" alt="Marcus Wright" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <h4 style="font-size: var(--fs-6); font-weight: 700; color: var(--eerie-black); margin-bottom: 4px;">Marcus Wright</h4>
+            <p style="font-size: var(--fs-9); color: var(--salmon-pink); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">UI/UX Designer</p>
+            <p style="font-size: var(--fs-8); color: var(--sonic-silver); line-height: 1.5; margin-bottom: 18px;">Creator of high-end branding visuals, color palettes, wireframes, and modern fluid animations.</p>
+            <div style="display: flex; justify-content: center; gap: 15px; font-size: 20px;">
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="logo-github"></ion-icon></a>
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="logo-linkedin"></ion-icon></a>
+              <a href="#" style="color: var(--sonic-silver); transition: color 0.2s;" onmouseover="this.style.color='var(--salmon-pink)'" onmouseout="this.style.color='var(--sonic-silver)'"><ion-icon name="mail-outline"></ion-icon></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="policy-box-container apple-reveal">
+        <span class="policy-badge">Customer Voice</span>
+        <h3 class="policy-box-title">
+          <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+          User Testimonials
+        </h3>
+        <div class="policy-content-text" style="margin-bottom: 25px;">
+          <p>Here is what our shoppers from Western Province and beyond say about their experience using ShopEase:</p>
+        </div>
+        
+        <div class="testimonials-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+          
+          <!-- Testimonial 1 -->
+          <div class="testi-card" style="background: var(--white); border: 1px solid var(--cultured); border-radius: var(--border-radius-md); padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.01);">
+            <div style="color: #ffb800; font-size: 16px; margin-bottom: 12px;">
+              <ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon>
+            </div>
+            <p style="font-size: var(--fs-7); color: var(--onyx); font-style: italic; line-height: 1.6; margin-bottom: 20px;">
+              "The stepwise checkout modal is by far the smoothest shopping cart experience I have ever used online! Ordering clothes for my family took less than a minute. Highly recommend ShopEase!"
+            </p>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 45px; height: 45px; border-radius: 50%; background: #e0f2f1; display: flex; justify-content: center; align-items: center; font-weight: 700; color: #00796b;">
+                JD
+              </div>
+              <div>
+                <h5 style="font-size: var(--fs-8); font-weight: 700; color: var(--eerie-black);">John Doe</h5>
+                <p style="font-size: var(--fs-9); color: var(--sonic-silver);">Verified Customer</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="testi-card" style="background: var(--white); border: 1px solid var(--cultured); border-radius: var(--border-radius-md); padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.01);">
+            <div style="color: #ffb800; font-size: 16px; margin-bottom: 12px;">
+              <ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon>
+            </div>
+            <p style="font-size: var(--fs-7); color: var(--onyx); font-style: italic; line-height: 1.6; margin-bottom: 20px;">
+              "I love the category navigation filters! Clicking on jewelry or cosmetics smoothly slides down to the product section and instantly filters out exactly what I am looking for."
+            </p>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 45px; height: 45px; border-radius: 50%; background: #fce4ec; display: flex; justify-content: center; align-items: center; font-weight: 700; color: #c2185b;">
+                AS
+              </div>
+              <div>
+                <h5 style="font-size: var(--fs-8); font-weight: 700; color: var(--eerie-black);">Amali Silva</h5>
+                <p style="font-size: var(--fs-9); color: var(--sonic-silver);">Loyal shopper</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="testi-card" style="background: var(--white); border: 1px solid var(--cultured); border-radius: var(--border-radius-md); padding: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.01);">
+            <div style="color: #ffb800; font-size: 16px; margin-bottom: 12px;">
+              <ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star"></ion-icon><ion-icon name="star-half"></ion-icon>
+            </div>
+            <p style="font-size: var(--fs-7); color: var(--onyx); font-style: italic; line-height: 1.6; margin-bottom: 20px;">
+              "Amazing customer service and prompt delivery. I used the express shipping option for same-day delivery inside Colombo and my parcel arrived in less than 4 hours!"
+            </p>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 45px; height: 45px; border-radius: 50%; background: #efebe9; display: flex; justify-content: center; align-items: center; font-weight: 700; color: #5d4037;">
+                RP
+              </div>
+              <div>
+                <h5 style="font-size: var(--fs-8); font-weight: 700; color: var(--eerie-black);">Roshan Perera</h5>
+                <p style="font-size: var(--fs-9); color: var(--sonic-silver);">Business Manager</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!--
+    - FOOTER
+  -->
+  <footer>
+    <div class="footer-nav">
+      <div class="container">
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Popular Categories</h2></li>
+          <li><a href="#" class="footer-nav-link">Fashion</a></li>
+          <li><a href="#" class="footer-nav-link">Electronic</a></li>
+          <li><a href="#" class="footer-nav-link">Cosmetic</a></li>
+          <li><a href="#" class="footer-nav-link">Jewelry</a></li>
+        </ul>
+
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Our Company</h2></li>
+          <li><a href="#" class="footer-nav-link">Delivery</a></li>
+          <li><a href="about-us.html" class="footer-nav-link">About us</a></li>
+          <li><a href="#" class="footer-nav-link">Secure payment</a></li>
+          <li><a href="#" class="footer-nav-link">Contact us</a></li>
+        </ul>
+
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Contact</h2></li>
+          <li class="footer-nav-item flex">
+            <div class="icon-box"><ion-icon name="location-outline"></ion-icon></div>
+            <address class="content">419 Galle Road, Colombo 03, Sri Lanka.</address>
+          </li>
+          <li class="footer-nav-item flex">
+            <div class="icon-box"><ion-icon name="call-outline"></ion-icon></div>
+            <a href="tel:+94112345678" class="footer-nav-link">+94 11 234 5678</a>
+          </li>
+          <li class="footer-nav-item flex">
+            <div class="icon-box"><ion-icon name="mail-outline"></ion-icon></div>
+            <a href="mailto:contact@company.lk" class="footer-nav-link">contact@company.lk</a>
+          </li>
+        </ul>
+
+        <ul class="footer-nav-list">
+          <li class="footer-nav-item"><h2 class="nav-title">Follow Us</h2></li>
+          <li>
+            <ul class="social-link">
+              <li class="footer-nav-item"><a href="#" class="footer-nav-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+              <li class="footer-nav-item"><a href="#" class="footer-nav-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+              <li class="footer-nav-item"><a href="#" class="footer-nav-link"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+              <li class="footer-nav-item"><a href="#" class="footer-nav-link"><ion-icon name="logo-instagram"></ion-icon></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <img src="./assets/images/payment.png" alt="payment method" class="payment-img">
+        <p class="copyright">
+          Copyright &copy; <a href="#">ShopEase</a> all rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="./assets/js/script.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <script>
+    // Apple page morph load transition
+    window.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('pageTransitionOverlay');
+      if (overlay) {
+        setTimeout(() => {
+          overlay.classList.add('fade-out');
+        }, 400);
+      }
+      
+      const reveals = document.querySelectorAll('.apple-reveal');
+      setTimeout(() => {
+        reveals.forEach(el => el.classList.add('visible'));
+      }, 500);
+    });
+  </script>
+</body>
+
+</html>
