@@ -29,7 +29,6 @@
 * **CSS3:** Styling and design, including CSS custom properties (variables), responsive layout grids, flexbox, glassmorphic effects, and transitions.
 * **JavaScript:** Interactivity, modals, dynamic checkout forms, local database storage, and navigation routing.
 * **Ionicons:** Modern SVG icon pack used across the interface.
-* **Google Fonts (Poppins):** Premium clean typography.
 
 ---
 
